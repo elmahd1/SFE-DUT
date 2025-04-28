@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+          "-//Hibernate/Hibernate Configuration DTD 5.3//EN"
+          "http://hibernate.org/dtd/hibernate-configuration-5.3.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+
+        <!-- Database connection settings -->
+        <property name="hibernate.connection.driver_class">org.sqlite.JDBC</property>
+        <property name="hibernate.connection.url">jdbc:sqlite:db.sqlite</property>
+<property name="hibernate.dialect">org.hibernate.dialect.SQLiteDialect</property>
+
+
+        <!-- JDBC connection pool (optional) -->
+        <property name="hibernate.connection.pool_size">1</property>
+
+        <!-- Hibernate settings -->
+        <property name="hibernate.show_sql">true</property>
+        <property name="hibernate.format_sql">true</property>
+        <property name="hibernate.hbm2ddl.auto">update</property> 
+        <!-- update: creates tables if not exist and keeps data -->
+
+        <!-- List your Entity classes -->
+        <mapping class="ccis.models.DemarcheAdministratif" />
+                <mapping class="ccis.models.EspaceEntreprise" />
+
+    </session-factory>
+</hibernate-configuration>

@@ -1,0 +1,40 @@
+2025-04-25 11:55:20.692337+01:00 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "SELECT * FROM DEMARCHE_ADMINISTRATIF INFORMATION_SCHEMA[*].COLUMNS"; SQL statement:
+SELECT * FROM DEMARCHE_ADMINISTRATIF INFORMATION_SCHEMA.COLUMNS [42000-232]
+2025-04-25 11:55:31.610531+01:00 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "SELECT *  [*]INFORMATION_SCHEMA.COLUMNS"; SQL statement:
+SELECT *  INFORMATION_SCHEMA.COLUMNS [42000-232]
+2025-04-25 11:55:37.460365+01:00 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "[*]INFORMATION_SCHEMA.COLUMNS"; expected "INSERT"; SQL statement:
+INFORMATION_SCHEMA.COLUMNS [42001-232]
+2025-04-25 11:55:48.665526+01:00 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Column "INFORMATION_SCHEMA.COLUMNS" not found; SQL statement:
+SELECT  INFORMATION_SCHEMA.COLUMNS [42122-232]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:514)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
+	at org.h2.message.DbException.get(DbException.java:223)
+	at org.h2.message.DbException.get(DbException.java:199)
+	at org.h2.expression.ExpressionColumn.getColumnException(ExpressionColumn.java:244)
+	at org.h2.expression.ExpressionColumn.optimizeOther(ExpressionColumn.java:226)
+	at org.h2.expression.ExpressionColumn.optimize(ExpressionColumn.java:213)
+	at org.h2.command.query.Select.prepareExpressions(Select.java:1228)
+	at org.h2.command.query.Query.prepare(Query.java:232)
+	at org.h2.command.Parser.prepareCommand(Parser.java:489)
+	at org.h2.engine.SessionLocal.prepareLocal(SessionLocal.java:645)
+	at org.h2.engine.SessionLocal.prepareCommand(SessionLocal.java:561)
+	at org.h2.jdbc.JdbcConnection.prepareCommand(JdbcConnection.java:1164)
+	at org.h2.jdbc.JdbcStatement.executeInternal(JdbcStatement.java:245)
+	at org.h2.jdbc.JdbcStatement.execute(JdbcStatement.java:231)
+	at org.h2.server.web.WebApp.getResult(WebApp.java:1344)
+	at org.h2.server.web.WebApp.query(WebApp.java:1142)
+	at org.h2.server.web.WebApp$1.next(WebApp.java:1108)
+	at org.h2.server.web.WebApp$1.next(WebApp.java:1095)
+	at org.h2.server.web.WebThread.process(WebThread.java:190)
+	at org.h2.server.web.WebThread.run(WebThread.java:103)
+	at java.base/java.lang.Thread.run(Thread.java:1575)
+2025-04-25 11:55:52.110644+01:00 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "[*]INFORMATION_SCHEMA.COLUMNS"; expected "INSERT"; SQL statement:
+INFORMATION_SCHEMA.COLUMNS [42001-232]
+2025-04-25 12:05:36.795064+01:00 jdbc[5]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "[*]DATE_CONTACT"; expected "DELETE, DROP"; SQL statement:
+DATE_CONTACT [42001-232]

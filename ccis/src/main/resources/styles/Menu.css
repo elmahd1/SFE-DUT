@@ -1,0 +1,42 @@
+/* Main MenuBar styling */
+.menu-bar {
+    -fx-background-color: #0072BC; /* deep blue background */
+    -fx-border-color: #F7941E;
+    -fx-border-width: 0 0 3px 0;
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-font-size: 14px;
+}
+
+/* Menu text color (normal) */
+.menu-bar .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+/* Hover effect on top-level menus */
+.menu:hover {
+    -fx-background-color: #F7941E; /* orange highlight */
+}
+
+/* When menu is expanded */
+.menu:showing {
+    -fx-background-color: #8DC63F; /* green for opened menu */
+}
+
+/* Menu items style */
+.menu-item {
+    -fx-background-color: #7abafa; /* light blue background */
+    -fx-text-fill: #222;
+    -fx-padding: 8px 15px;
+}
+
+/* Hover on menu item */
+.menu-item:hover {
+    -fx-background-color: #0072BC;
+    -fx-text-fill: white;
+}
+
+/* Optional: separator color between menu items */
+.menu-item:separator {
+    -fx-background-color: #ccc;
+}

@@ -5,6 +5,9 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Id;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+
+import java.sql.Timestamp;
+
 import jakarta.persistence.Column;
 
 @Entity
@@ -15,10 +18,7 @@ public class EspaceEntreprise {
     private int id;
 
     @Column(name = "date_contact")
-    private String dateContact;
-
-    @Column(name = "heure_contact")
-    private String heureContact;
+    private Timestamp dateContact;
 
     @Column(name = "objet_visite")
     private String objetVisite;
@@ -63,10 +63,7 @@ public class EspaceEntreprise {
     private String formeJuridique;
 
     @Column(name = "date_depot")
-    private String dateDepot;
-
-    @Column(name = "heure_depot")
-    private String heureDepot;
+    private Timestamp dateDepot;
 
     @Column(name = "taille_entreprise")
     private String tailleEntreprise;
@@ -74,8 +71,8 @@ public class EspaceEntreprise {
     @Column(name = "secteur_activite")
     private String secteurActivite;
 
-    @Column(name = "avtivite")
-    private String avtivite;
+    @Column(name = "activite")
+    private String activite;
 
     @Column(name = "nom_prenom_c_ccis")
     private String nomPrenomCCIS;
@@ -84,10 +81,8 @@ public class EspaceEntreprise {
     private String qualiteCCIS;
 
     @Column(name = "date_depart")
-    private String dateDepart;
-
-    @Column(name = "heure_depart")
-    private String heureDepart;
+    private Timestamp dateDepart;
+    
     // Getters and Setters
 
     public int getId() {
@@ -98,21 +93,14 @@ public class EspaceEntreprise {
         this.id = id;
     }
 
-    public String getDateContact() {
+    public Timestamp getDateContact() {
         return dateContact;
     }
 
-    public void setDateContact(String dateContact) {
+    public void setDateContact(Timestamp dateContact) {
         this.dateContact = dateContact;
     }
 
-    public String getHeureContact() {
-        return heureContact;
-    }
-
-    public void setHeureContact(String heureContact) {
-        this.heureContact = heureContact;
-    }
 
     public String getObjetVisite() {
         return objetVisite;
@@ -201,17 +189,11 @@ public class EspaceEntreprise {
     public void setFormeJuridique(String formeJuridique) {
         this.formeJuridique = formeJuridique;
     }
-    public String getDateDepot() {
+    public Timestamp getDateDepot() {
         return dateDepot;
     }
-    public void setDateDepot(String dateDepot) {
+    public void setDateDepot(Timestamp dateDepot) {
         this.dateDepot = dateDepot;
-    }
-    public String getHeureDepot() {
-        return heureDepot;
-    }
-    public void setHeureDepot(String heureDepot) {
-        this.heureDepot = heureDepot;
     }
     public String getTailleEntreprise() {
         return tailleEntreprise;
@@ -226,10 +208,10 @@ public class EspaceEntreprise {
         this.secteurActivite = secteurActivite;
     }
     public String getAvtivite() {
-        return avtivite;
+        return activite;
     }
     public void setAvtivite(String avtivite) {
-        this.avtivite = avtivite;
+        this.activite = avtivite;
     }
     public String getNomPrenomCCIS() {
         return nomPrenomCCIS;
@@ -243,17 +225,11 @@ public class EspaceEntreprise {
     public void setQualiteCCIS(String qualiteCCIS) {
         this.qualiteCCIS = qualiteCCIS;
     }
-    public String getDateDepart() {
+    public Timestamp getDateDepart() {
         return dateDepart;
     }
-    public void setDateDepart(String dateDepart) {
+    public void setDateDepart(Timestamp dateDepart) {
         this.dateDepart = dateDepart;
-    }
-    public String getHeureDepart() {
-        return heureDepart;
-    }
-    public void setHeureDepart(String heureDepart) {
-        this.heureDepart = heureDepart;
     }
     
 }

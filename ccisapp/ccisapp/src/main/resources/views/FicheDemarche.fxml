@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Label?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+            stylesheets="@/styles/demarchefiche.css" prefHeight="400.0" prefWidth="600.0">
+   <children>
+      <ScrollPane fx:id="scrollPane" fitToWidth="true" layoutX="0.0" layoutY="0.0" prefHeight="600.0" prefWidth="800.0">
+         <content>
+            <AnchorPane fx:id="scrollContent" prefWidth="780.0" prefHeight="1500.0">
+               <children>
+                  <!-- Row 1: Date Contact -->
+                  <DatePicker fx:id="dateContact" layoutX="20.0" layoutY="20.0" promptText="Date de contact"/>
+                  <Label fx:id="dateContactError" layoutX="20.0" layoutY="50.0" styleClass="error-label" visible="false"/>
+                  
+                  <!-- Row 2: Heure Contact -->
+                  <TextField fx:id="heureContact" layoutX="20.0" layoutY="70.0" promptText="Heure de contact"/>
+                  <Label fx:id="heureContactError" layoutX="20.0" layoutY="100.0" styleClass="error-label" visible="false"/>
+                  
+                  <!-- Row 3: Type Demande -->
+                  <ComboBox fx:id="typeDemande" layoutX="20.0" layoutY="120.0" promptText="Type de demande"/>
+                  <Label fx:id="typeDemandeError" layoutX="20.0" layoutY="150.0" styleClass="error-label" visible="false"/>
+                  
+                  <!-- Row 4: Status -->
+                  <ComboBox fx:id="status" layoutX="20.0" layoutY="170.0" promptText="Statut"/>
+                  <Label fx:id="statusError" layoutX="20.0" layoutY="200.0" styleClass="error-label" visible="false"/>
+                  
+                  <!-- Row 5: Objet Visite -->
+                  <ComboBox fx:id="objetVisite" layoutX="20.0" layoutY="220.0" promptText="Objet de visite"/>
+                  <Label fx:id="objetVisiteError" layoutX="20.0" layoutY="250.0" styleClass="error-label" visible="false"/>
+                  
+                  <!-- Row 6: Montant -->
+                  <TextField fx:id="montant" layoutX="20.0" layoutY="270.0" promptText="Montant"/>
+                  <Label fx:id="montantError" layoutX="20.0" layoutY="300.0" styleClass="error-label" visible="false"/>
+                  
+                  <!-- Row 7: Accepte Envoi CCIS -->
+                  <CheckBox fx:id="accepteEnvoiCCIS" layoutX="20.0" layoutY="320.0" text="J'accepte de recevoir les envois de la CCIS"/>
+                  <!-- No error label needed for checkbox -->
+                  
+                  <!-- Row 8: Nom Prenom -->
+                  <TextField fx:id="nomPrenom" layoutX="20.0" layoutY="350.0" promptText="Nom et Prénom"/>
+                  <Label fx:id="nomPrenomError" layoutX="20.0" layoutY="380.0" styleClass="error-label" visible="false"/>
+                  
+                  <!-- Row 9: Telephone Fix -->
+                  <TextField fx:id="telephoneFix" layoutX="20.0" layoutY="400.0" promptText="Téléphone Fixe"/>
+                  <Label fx:id="telephoneFixError" layoutX="20.0" layoutY="430.0" styleClass="error-label" visible="false"/>
+                  
+                  <!-- Row 10: Telephone GSM -->
+                  <TextField fx:id="telephoneGSM" layoutX="20.0" layoutY="450.0" promptText="Téléphone GSM"/>
+                  <Label fx:id="telephoneGSMError" layoutX="20.0" layoutY="480.0" styleClass="error-label" visible="false"/>
+                  
+                  <!-- Row 11: Email -->
+                  <TextField fx:id="email" layoutX="20.0" layoutY="500.0" promptText="Email"/>
+                  <Label fx:id="emailError" layoutX="20.0" layoutY="530.0" styleClass="error-label" visible="false"/>
+                  
+                  <!-- Row 12: Siteweb -->
+                  <TextField fx:id="siteweb" layoutX="20.0" layoutY="550.0" promptText="Site Web"/>
+                  <Label fx:id="sitewebError" layoutX="20.0" layoutY="580.0" styleClass="error-label" visible="false"/>
+                  
+                  <!-- Row 13: Adresse -->
+                  <TextField fx:id="adresse" layoutX="20.0" layoutY="600.0" promptText="Adresse de contact"/>
+                  <Label fx:id="adresseError" layoutX="20.0" layoutY="630.0" styleClass="error-label" visible="false"/>
+                  
+                  <!-- Row 14: Ville -->
+                  <TextField fx:id="ville" layoutX="20.0" layoutY="650.0" promptText="Ville"/>
+                  <Label fx:id="villeError" layoutX="20.0" layoutY="680.0" styleClass="error-label" visible="false"/>
+                  
+                  <!-- Row 15: Denomination -->
+                  <TextField fx:id="denomination" layoutX="20.0" layoutY="700.0" promptText="Dénomination"/>
+                  <Label fx:id="denominationError" layoutX="20.0" layoutY="730.0" styleClass="error-label" visible="false"/>
+                  
+                  <!-- Row 16: Nom Representant Legal -->
+                  <TextField fx:id="nomRepresentantLegal" layoutX="20.0" layoutY="750.0" promptText="Nom du représentant légal"/>
+                  <Label fx:id="nomRepresentantLegalError" layoutX="20.0" layoutY="780.0" styleClass="error-label" visible="false"/>
+                  
+                  <!-- Row 17: Forme Juridique -->
+                  <ComboBox fx:id="formeJuridique" layoutX="20.0" layoutY="800.0" promptText="Forme juridique"/>
+                  <Label fx:id="formeJuridiqueError" layoutX="20.0" layoutY="830.0" styleClass="error-label" visible="false"/>
+                  
+                  <!-- Row 18: Autre Forme Juridique -->
+                  <TextField fx:id="autreFormeJuridique" layoutX="20.0" layoutY="850.0" promptText="Précisez la forme juridique"/>
+                  <Label fx:id="autreFormeJuridiqueError" layoutX="20.0" layoutY="880.0" styleClass="error-label" visible="false"/>
+                  
+                  <!-- Row 19: Date Depot -->
+                  <DatePicker fx:id="dateDepot" layoutX="20.0" layoutY="900.0" promptText="Date de dépôt"/>
+                  <Label fx:id="dateDepotError" layoutX="20.0" layoutY="930.0" styleClass="error-label" visible="false"/>
+                  
+                  <!-- Row 20: Heure Depot -->
+                  <TextField fx:id="heureDepot" layoutX="20.0" layoutY="950.0" promptText="Heure de dépôt"/>
+                  <Label fx:id="heureDepotError" layoutX="20.0" layoutY="980.0" styleClass="error-label" visible="false"/>
+                  
+                  <!-- Row 21: Secteur Activite -->
+                  <ComboBox fx:id="secteurActivite" layoutX="20.0" layoutY="1000.0" promptText="Secteur d'activité"/>
+                  <Label fx:id="secteurActiviteError" layoutX="20.0" layoutY="1030.0" styleClass="error-label" visible="false"/>
+                  
+                  <!-- Row 22: Activite -->
+                  <TextField fx:id="activite" layoutX="20.0" layoutY="1050.0" promptText="Activité"/>
+                  <Label fx:id="activiteError" layoutX="20.0" layoutY="1080.0" styleClass="error-label" visible="false"/>
+                  
+                  <!-- Row 23: Nom Prenom Conseiller CCIS -->
+                  <TextField fx:id="nomPrenomConseillerCCIS" layoutX="20.0" layoutY="1100.0" promptText="Nom et prénom du conseiller CCIS"/>
+                  <Label fx:id="nomPrenomConseillerCCISError" layoutX="20.0" layoutY="1130.0" styleClass="error-label" visible="false"/>
+                  
+                  <!-- Row 24: Qualite Conseiller CCIS -->
+                  <TextField fx:id="qualiteConseillerCCIS" layoutX="20.0" layoutY="1150.0" promptText="Qualité du conseiller CCIS"/>
+                  <Label fx:id="qualiteConseillerCCISError" layoutX="20.0" layoutY="1180.0" styleClass="error-label" visible="false"/>
+                  
+                  <!-- Row 25: Etat Dossier -->
+                  <ComboBox fx:id="etatDossier" layoutX="20.0" layoutY="1200.0" promptText="État du dossier"/>
+                  <Label fx:id="etatDossierError" layoutX="20.0" layoutY="1230.0" styleClass="error-label" visible="false"/>
+                  
+                  <!-- Row 26: Suite Demande -->
+                  <ComboBox fx:id="suiteDemande" layoutX="20.0" layoutY="1250.0" promptText="Suite de la Demande"/>
+                  <Label fx:id="suiteDemandeError" layoutX="20.0" layoutY="1280.0" styleClass="error-label" visible="false"/>
+                  
+                  <!-- Submit Button -->
+                  <Button text="Soumettre" layoutX="20.0" layoutY="1310.0" onAction="#handleSubmit"/>
+               </children>
+            </AnchorPane>
+         </content>
+      </ScrollPane>
+   </children>
+</AnchorPane>

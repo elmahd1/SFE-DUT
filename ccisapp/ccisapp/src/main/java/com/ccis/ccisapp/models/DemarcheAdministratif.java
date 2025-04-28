@@ -5,29 +5,33 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Id;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import java.sql.Timestamp;
 import jakarta.persistence.Column;
 
 @Entity 
 @Table(name = "demarche_administratif")
 public class DemarcheAdministratif {
+    public DemarcheAdministratif() {
+    }
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(name = "date_contact")
-    private String dateContact;
+    private Timestamp dateContact;
 
-    @Column(name = "heure_contact")
-    private String heureContact;
-
-    @Column(name = "objet_visite")
-    private String objetVisite;
+    @Column(name = "type_demande")
+    private String typeDemande;
 
     @Column(name = "statut")
     private String statut;
 
+    @Column(name = "objet_visite")
+    private String objetVisite;
+
     @Column(name = "montant")
-    private String montant;
+    private float montant;
 
     @Column(name = "nom_prenom")
     private String nomPrenom;
@@ -63,10 +67,7 @@ public class DemarcheAdministratif {
     private String formeJuridique;
 
     @Column(name = "date_depot")
-    private String dateDepot;
-
-    @Column(name = "heure_depot")
-    private String heureDepot;
+    private Timestamp dateDepot;
 
     @Column(name = "secteur_activite")
     private String secteurActivite;
@@ -90,11 +91,7 @@ public class DemarcheAdministratif {
     private String observation;
 
     @Column(name = "date_delivrance")
-    private String dateDelivrance;
-
-    @Column(name = "heure_delivrance")
-    private String heureDelivrance;
-
+    private Timestamp dateDelivrance;
 
     // Getters and Setters
     public int getId() {
@@ -103,17 +100,11 @@ public class DemarcheAdministratif {
     public void setId(int id) {
         this.id = id;
     }
-    public String getDateContact() {
+    public Timestamp getDateContact() {
         return dateContact;
     }
-    public void setDateContact(String dateContact) {
+    public void setDateContact(Timestamp dateContact) {
         this.dateContact = dateContact;
-    }   
-    public String getHeureContact() {
-        return heureContact;
-    }
-    public void setHeureContact(String heureContact) {
-        this.heureContact = heureContact;
     }
     public String getObjetVisite() {
         return objetVisite;
@@ -127,10 +118,10 @@ public class DemarcheAdministratif {
     public void setStatut(String statut) {
         this.statut = statut;
     }
-    public String getMontant() {
+    public float getMontant() {
         return montant;
     }
-    public void setMontant(String montant) {
+    public void setMontant(float montant) {
         this.montant = montant;
     }
     public String getNomPrenom() {
@@ -199,17 +190,11 @@ public class DemarcheAdministratif {
     public void setFormeJuridique(String formeJuridique) {
         this.formeJuridique = formeJuridique;
     }
-    public String getDateDepot() {
+    public Timestamp getDateDepot() {
         return dateDepot;
     }
-    public void setDateDepot(String dateDepot) {
+    public void setDateDepot(Timestamp dateDepot) {
         this.dateDepot = dateDepot;
-    }
-    public String getHeureDepot() {
-        return heureDepot;
-    }
-    public void setHeureDepot(String heureDepot) {
-        this.heureDepot = heureDepot;
     }
     public String getSecteurActivite() {
         return secteurActivite;
@@ -253,17 +238,16 @@ public class DemarcheAdministratif {
     public void setObservation(String observation) {
         this.observation = observation;
     }
-    public String getDateDelivrance() {
+    public Timestamp getDateDelivrance() {
         return dateDelivrance;
     }
-    public void setDateDelivrance(String dateDelivrance) {
+    public void setDateDelivrance(Timestamp dateDelivrance) {
         this.dateDelivrance = dateDelivrance;
     }
-    public String getHeureDelivrance() {
-        return heureDelivrance;
+    public String getTypeDemande() {
+        return typeDemande;
     }
-    public void setHeureDelivrance(String heureDelivrance) {
-        this.heureDelivrance = heureDelivrance;
-    }
+    public void setTypeDemande(String typeDemande) {
+        this.typeDemande = typeDemande; }
 
 }
