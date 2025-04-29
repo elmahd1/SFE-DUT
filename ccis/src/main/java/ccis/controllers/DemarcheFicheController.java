@@ -7,17 +7,20 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
+import javafx.scene.control.Alert;
 import javafx.scene.control.CheckBox;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.application.Platform;
-import java.sql.Timestamp;
 import ccis.models.DemarcheAdministratif;
 
+import java.time.format.DateTimeFormatter;
 
+import ccis.dao.DemarcheAdministratifDao;  // Import the DAO class
 
 public class DemarcheFicheController {
 
@@ -73,12 +76,27 @@ public class DemarcheFicheController {
     @FXML private TextField qualiteConseillerCCIS;
     @FXML private ComboBox<String> etatDossier;
     @FXML private ComboBox<String> suiteDemande;
+    @FXML private TextField interlocuteur; // Add this new field
+    @FXML private Label interlocuteurError; // Add this new field
+    @FXML private TextField observation; // Add this new field
+    @FXML private Label observationError; // Add this new field
+    @FXML private DatePicker dateDelivrance; // Add this new field
+    @FXML private Label dateDelivranceError; // Add this new field
+    @FXML private TextField heureDelivrance; // Add this new field
+    @FXML private Label heureDelivranceError;
     @FXML
     private ScrollPane scrollPane;
     @FXML
-    private AnchorPane scrollContent;
- @FXML
+    private VBox scrollContent;
+ private DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    // Create an instance of DemarcheAdministratifDAO
+    private DemarcheAdministratifDao demarcheDAO = new DemarcheAdministratifDao();
+
+    @FXML
     public void initialize() {
+        
+    nomPrenomConseillerCCIS.setText("Rachid BNINHA");
+    qualiteConseillerCCIS.setText("Chef de département services aux ressortissants");
         // Type Demande ComboBox
         ObservableList<String> typeDemandeOptions = FXCollections.observableArrayList(
             "Demande d’information", 
@@ -101,7 +119,8 @@ public class DemarcheFicheController {
             "Autre"
         );
         formeJuridique.setItems(formeJuridiqueOptions);
-formeJuridique.setEditable(true);
+        formeJuridique.setEditable(true);
+
         // Secteur Activité ComboBox
         ObservableList<String> secteurActiviteOptions = FXCollections.observableArrayList(
             "Industrie", 
@@ -124,167 +143,265 @@ formeJuridique.setEditable(true);
             "Rejetée"
         );
         suiteDemande.setItems(suiteDemandeOptions);
+        
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
-ObservableList<String> objetVisteList = FXCollections.observableArrayList(
-    "Carte professionnelle",
-    "Attestation professionnelle",
-    "Visa des factures",
-    "Visa de certificats sanitaires/phytosanitaires",
-    "Visa des documents commerciaux",
-    "Certificat d’origine",
-    "Recommandation pour Visa Affaires"
+
+        ObservableList<String> objetVisiteList = FXCollections.observableArrayList(
+            "Carte professionnelle",
+            "Attestation professionnelle",
+            "Visa des factures",
+            "Visa de certificats sanitaires/phytosanitaires",
+            "Visa des documents commerciaux",
+            "Certificat d’origine",
+            "Recommandation pour Visa Affaires"
         );
-        objetVisite.setItems(objetVisteList);
-        // Autres initialisations si nécessaire
+        objetVisite.setItems(objetVisiteList);
     }
-
-
 
     @FXML
     public void handleSubmit(ActionEvent event) {
         boolean isValid = true;
-    
-        // Clear previous errors
         clearAllErrors();
         
-        // Date Contact validation
+        // Add validation logic for all required fields here
+        // Example:
         if (dateContact.getValue() == null) {
-            showError(dateContact,dateContactError ,"Veuillez sélectionner une date de contact");
+            showError(dateContact, dateContactError, "La date de contact est requise");
             isValid = false;
         }
         
-        // Heure Contact validation (HH:mm format)
-        if (!heureContact.getText().matches("^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$")) {
-            showError(heureContact,heureContactError, "Format d'heure invalide (HH:mm)");
+        if (heureContact.getText().isEmpty()) {
+            showError(heureContact, heureContactError, "L'heure de contact est requise");
             isValid = false;
         }
-        
-        // Type Demande validation
-        if (typeDemande.getValue() == null || typeDemande.getValue().isEmpty()) {
-            showError(typeDemande,typeDemandeError ,"Veuillez sélectionner un type de demande");
+        if (typeDemande.getValue() == null) {
+            showError(typeDemande, typeDemandeError, "Le type de demande est requis");
             isValid = false;
         }
-        
-        // Status validation
-        if (status.getValue() == null || status.getValue().isEmpty()) {
-            showError(status,statusError ,"Veuillez sélectionner un statut");
+        if (status.getValue() == null) {
+            showError(status, statusError, "Le statut est requis");
             isValid = false;
         }
-        
-        // Email validation
-        if (!email.getText().isEmpty() && !email.getText().matches("^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
-            showError(email,emailError ,"Format d'email invalide");
+        if (objetVisite.getValue() == null) {
+            showError(objetVisite, objetVisiteError, "L'objet de la visite est requis");
             isValid = false;
         }
-        
-        // Telephone validation (at least one phone number required)
-        if ( telephoneGSM.getText().isEmpty()) {
-            showError(telephoneGSM, telephoneGSMError,"Au moins un numéro de téléphone est requis");
+        if (nomPrenom.getText().isEmpty()) {
+            showError(nomPrenom, nomPrenomError, "Le nom et prénom sont requis");
             isValid = false;
         }
-        
-        // Numeric field validation (montant)
-        if (!montant.getText().isEmpty() && !montant.getText().matches("^\\d+([.,]\\d+)?$")) {
-            showError(montant,montantError, "Le montant doit être numérique");
+        if (telephoneGSM.getText().isEmpty()) {
+            showError(telephoneGSM, telephoneGSMError, "Le téléphone GSM est requis");
             isValid = false;
+        }
+        if (email.getText().isEmpty()) {
+            showError(email, emailError, "L'email est requis");
+            isValid = false;
+        }
+        if (adresse.getText().isEmpty()) {
+            showError(adresse, adresseError, "L'adresse est requise");
+            isValid = false;
+        }
+        if (ville.getText().isEmpty()) {
+            showError(ville, villeError, "La ville est requise");
+            isValid = false;
+        }
+        if (denomination.getText().isEmpty()) {
+            showError(denomination, denominationError, "La dénomination est requise");
+            isValid = false;
+        }
+        if (nomRepresentantLegal.getText().isEmpty()) {
+            showError(nomRepresentantLegal, nomRepresentantLegalError, "Le nom du représentant légal est requis");
+            isValid = false;
+        }
+        if (formeJuridique.getValue() == null) {
+            showError(formeJuridique, formeJuridiqueError, "La forme juridique est requise");
+            isValid = false;
+        }
+        if (dateDepot.getValue() == null) {
+            showError(dateDepot, dateDepotError, "La date de dépôt est requise");
+            isValid = false;
+        }
+        if (heureDepot.getText().isEmpty()) {
+            showError(heureDepot, heureDepotError, "L'heure de dépôt est requise");
+            isValid = false;
+        }
+        if (secteurActivite.getValue() == null) {
+            showError(secteurActivite, secteurActiviteError, "Le secteur d'activité est requis");
+            isValid = false;
+        }
+        if (activite.getText().isEmpty()) {
+            showError(activite, activiteError, "L'activité est requise");
+            isValid = false;
+        }
+
+       
+if (isValid) {
+    try {
+        System.out.println("Tentative d'enregistrement...");
+        DemarcheAdministratif demarche = new DemarcheAdministratif();
+        
+        // Required fields validation
+        if (dateContact.getValue() == null) {
+            throw new IllegalArgumentException("La date de contact est obligatoire");
+        }
+        demarche.setDateContact(dateContact.getValue().format(dateFormatter));
+        
+        // Time fields with validation
+        validateTimeFormat(heureContact.getText(), "Heure de contact");
+        demarche.setHeureContact(heureContact.getText());
+        
+        // Other required fields
+        if (typeDemande.getValue() == null) {
+            throw new IllegalArgumentException("Le type de demande est obligatoire");
+        }
+        demarche.setTypeDemande(typeDemande.getValue());
+        
+        // Handle numeric field with proper validation
+        try {
+            demarche.setMontant(montant.getText().isEmpty() ? 0 : 
+                Float.parseFloat(montant.getText()));
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Montant invalide");
         }
         
         // Required text fields
-        if (nomPrenom.getText().trim().isEmpty()) {
-            showError(nomPrenom,nomPrenomError, "Ce champ est obligatoire");
-            isValid = false;
+        if (nomPrenom.getText() == null || nomPrenom.getText().trim().isEmpty()) {
+            throw new IllegalArgumentException("Le nom et prénom sont obligatoires");
         }
+        demarche.setNomPrenom(nomPrenom.getText().trim());
         
-        if (ville.getText().trim().isEmpty()) {
-            showError(ville, villeError,"Ce champ est obligatoire");
-            isValid = false;
+        // Email validation
+        if (!email.getText().isEmpty() && !isValidEmail(email.getText())) {
+            throw new IllegalArgumentException("Format d'email invalide");
         }
-        
-        if (denomination.getText().trim().isEmpty()) {
-            showError(denomination, denominationError,"Ce champ est obligatoire");
-            isValid = false;
-        }
-        
-        // Forme Juridique validation
-        if (formeJuridique.getValue() == null || formeJuridique.getValue().isEmpty()) {
-            showError(formeJuridique, formeJuridiqueError,"Veuillez sélectionner une forme juridique");
-            isValid = false;
-        }
-        
-        // If all validations pass
-        if (isValid) {
-            System.out.println("Formulaire valide - Traitement des données...");
-            // Process the form data here
-        
-    
-        DemarcheAdministratif demarche = new DemarcheAdministratif();
-    
-       // Récupération des champs
-        //demarche.setDateContact(dateContact.getValue() != null ? Timestamp.valueOf(dateContact.getValue().atStartOfDay()) : null);
-        demarche.setTypeDemande(typeDemande.getValue());
-        demarche.setStatut(status.getValue());
-        demarche.setAccepteEnvoi(accepteEnvoiCCIS.isSelected()?"oui":"non" );
-        demarche.setNomPrenom(nomPrenom.getText());
-        demarche.setFixe(telephoneFix.getText());
-        demarche.setGsm(telephoneGSM.getText());
         demarche.setEmail(email.getText());
-        demarche.setSiteWeb(siteweb.getText());
-        demarche.setAdresse(adresse.getText());
-        demarche.setVille(ville.getText());
-        demarche.setDenomination(denomination.getText());
-        demarche.setNomRepLegal(nomRepresentantLegal.getText());
-        demarche.setFormeJuridique(formeJuridique.getValue());
-     //   demarche.setDateDepot(dateDepot.getValue() != null ? Timestamp.valueOf(dateDepot.getValue().atStartOfDay()) : null);
-        demarche.setSecteurActivite(secteurActivite.getValue());
-        demarche.setActivite(activite.getText());
-        demarche.setNomPrenomCCIS(nomPrenomConseillerCCIS.getText());
-        demarche.setQualiteCCIS(qualiteConseillerCCIS.getText());
-        demarche.setEtatDossier(etatDossier.getValue());
-        demarche.setSuiteDemande(suiteDemande.getValue());
-    
-        // Sauvegarde via le repo
         
-   
-    
-        System.out.println("Formulaire soumis avec succès.");
-        } else {
-            System.out.println("Veuillez corriger les erreurs dans le formulaire");
-        }
+        // Set other fields with null checks
+        demarche.setStatut(status.getValue() != null ? status.getValue() : "");
+        demarche.setObjetVisite(objetVisite.getValue() != null ? objetVisite.getValue() : "");
+        demarche.setFixe(telephoneFix.getText() != null ? telephoneFix.getText() : "");
+        demarche.setGsm(telephoneGSM.getText() != null ? telephoneGSM.getText() : "");
+        demarche.setSiteWeb(siteweb.getText() != null ? siteweb.getText() : "");
+        demarche.setAdresse(adresse.getText() != null ? adresse.getText() : "");
+        demarche.setVille(ville.getText() != null ? ville.getText() : "");
+        demarche.setDenomination(denomination.getText() != null ? denomination.getText() : "");
+        demarche.setNomRepLegal(nomRepresentantLegal.getText() != null ? nomRepresentantLegal.getText() : "");
+        demarche.setFormeJuridique(formeJuridique.getValue() != null ? formeJuridique.getValue() : "");
+        
+        // Date fields with null checks
+        demarche.setDateDepot(dateDepot.getValue() != null ? dateDepot.getValue().format(dateFormatter) : null);
+        validateTimeFormat(heureDepot.getText(), "Heure de dépôt");
+        demarche.setHeureDepot(heureDepot.getText());
+        
+        // Other fields
+        demarche.setSecteurActivite(secteurActivite.getValue() != null ? secteurActivite.getValue() : "");
+        demarche.setActivite(activite.getText() != null ? activite.getText() : "");
+        demarche.setNomPrenomCCIS(nomPrenomConseillerCCIS.getText() != null ? nomPrenomConseillerCCIS.getText() : "");
+        demarche.setQualiteCCIS(qualiteConseillerCCIS.getText() != null ? qualiteConseillerCCIS.getText() : "");
+        demarche.setEtatDossier(etatDossier.getValue() != null ? etatDossier.getValue() : "");
+        demarche.setSuiteDemande(suiteDemande.getValue() != null ? suiteDemande.getValue() : "");
+        demarche.setObservation(observation.getText() != null ? observation.getText() : "");
+        demarche.setDateDelivrance(dateDelivrance.getValue() != null ? dateDelivrance.getValue().format(dateFormatter) : null);
+        validateTimeFormat(heureDelivrance.getText(), "Heure de délivrance");
+        demarche.setHeureDelivrance(heureDelivrance.getText());
+        
+        demarche.setAccepteEnvoi(accepteEnvoiCCIS.isSelected() ? "Oui" : "Non");
 
+        System.out.println("Données à enregistrer: " + demarche.toString());
+        demarcheDAO.insertDemarche(demarche);
+        System.out.println("Enregistrement réussi");
+        
+          // Show success message
+          Alert alert = new Alert(Alert.AlertType.INFORMATION);
+          alert.setTitle("Succès");
+          alert.setHeaderText(null);
+          alert.setContentText("La démarche a été enregistrée avec succès!");
+          alert.showAndWait();
+          
+
+          clearForm();
+
+          
+    } catch (IllegalArgumentException e) {
+        showErrorAlert("Erreur de validation", e.getMessage());
+    } catch (Exception e) {
+        showErrorAlert("Erreur", "Une erreur est survenue lors de l'enregistrement: " + e.getMessage());
+        e.printStackTrace();
+    }
+}
+        }
+    
+
+        private void clearForm() {
+            dateContact.setValue(null);
+            heureContact.clear();
+            typeDemande.getSelectionModel().clearSelection();
+            status.getSelectionModel().clearSelection();
+            objetVisite.getSelectionModel().clearSelection();
+            montant.clear(); 
+            accepteEnvoiCCIS.setSelected(false);
+            nomPrenom.clear();
+            telephoneFix.clear();
+            telephoneGSM.clear();
+            email.clear();
+            siteweb.clear();
+            adresse.clear();
+            ville.clear();
+            denomination.clear();
+            nomRepresentantLegal.clear();
+            formeJuridique.getSelectionModel().clearSelection();
+            autreFormeJuridique.clear();
+            dateDepot.setValue(null);
+            heureDepot.clear();
+            secteurActivite.getSelectionModel().clearSelection();
+            activite.clear();
+            observation.clear();
+            dateDelivrance.setValue(null);
+            heureDelivrance.clear();
+        }
+    // Method to show errors for any control
+    private void showError(Control control, Label errorLabel, String message) {
+        control.setStyle("-fx-border-color: red; -fx-border-width: 1px;");
+        errorLabel.setText(message);
+        errorLabel.setVisible(true);
+        control.setTooltip(new Tooltip(message));
     }
 
+    // Method to clear errors
+    private void clearError(Control control, Label errorLabel) {
+        control.setStyle("");
+        errorLabel.setVisible(false);
+        control.setTooltip(null);
+    }
 
+    // Method to clear all errors
+    private void clearAllErrors() {
+        clearError(dateContact, dateContactError);
+        clearError(heureContact, heureContactError);
+        clearError(typeDemande, typeDemandeError);
+        // Clear all other fields similarly...
+    }
 
-
-
-// Method to show errors for any control
-private void showError(Control control, Label errorLabel, String message) {
-    control.setStyle("-fx-border-color: red; -fx-border-width: 1px;");
-    errorLabel.setText(message);
-    errorLabel.setVisible(true);
-    
-    // Set tooltip for immediate feedback
-    control.setTooltip(new Tooltip(message));
-}
-
-// Method to clear errors
-private void clearError(Control control, Label errorLabel) {
-    control.setStyle("");
-    errorLabel.setVisible(false);
-    control.setTooltip(null);
-}
-
-// Method to clear all errors
-private void clearAllErrors() {
-    clearError(dateContact, dateContactError);
-    clearError(heureContact, heureContactError);
-    clearError(typeDemande, typeDemandeError);
-    // Clear all other fields similarly...
-}
-
- 
     public void scrollToBottom() {
-        // Run later to make sure layout is calculated
         Platform.runLater(() -> scrollPane.setVvalue(1.0));
     }
+    // Helper methods
+private void validateTimeFormat(String time, String fieldName) {
+    if (time != null && !time.isEmpty() && !time.matches("^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$")) {
+        throw new IllegalArgumentException(fieldName + " doit être au format HH:MM");
+    }
+}
+
+private boolean isValidEmail(String email) {
+    return email.matches("^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
+}
+
+private void showErrorAlert(String title, String message) {
+    Alert alert = new Alert(Alert.AlertType.ERROR);
+    alert.setTitle(title);
+    alert.setHeaderText(null);
+    alert.setContentText(message);
+    alert.showAndWait();
+}
 }

@@ -21,7 +21,7 @@ public class MenuController {
             e.printStackTrace();
         }
     }
-    @FXML private void goHome() { loadPage("/views/Home.fxml"); }
+    @FXML private void home() { loadPage("/views/Home.fxml"); }
     @FXML private void fa()     { loadPage("/views/FicheDemarche.fxml"); }
     @FXML private void esd()    { loadPage("/views/EtatSuiviDemarche.fxml"); }
     @FXML private void ead()    { loadPage("/views/ExtraitAnnuaireDemarche.fxml"); }

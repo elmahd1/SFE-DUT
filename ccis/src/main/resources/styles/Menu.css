@@ -1,42 +1,227 @@
-/* Main MenuBar styling */
+/* 
+   CCIS Theme CSS for Menu Components
+   Matches the blue and orange color scheme from the logo
+*/
+
+/* Base colors from the logo */
+* {
+    -fx-primary-blue: #0074B2;
+    -fx-primary-orange: #FF8A00;
+    -fx-secondary-blue: #83C4E8;
+    -fx-secondary-orange: #FFBB66;
+    -fx-light-green: #8DBC66;
+    -fx-dark-green: #44883E;
+    -fx-light-gray: #F4F6F9;
+    -fx-medium-gray: #E0E0E0;
+    -fx-medium-dark-gray: #AAAAAA;
+    -fx-dark-gray: #555555;
+    -fx-white: #FFFFFF;
+}
+
+/* Applying font styles */
+.root {
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+    -fx-background-color: -fx-white;
+}
+
+/* Menu Bar styling */
 .menu-bar {
-    -fx-background-color: #0072BC; /* deep blue background */
-    -fx-border-color: #F7941E;
-    -fx-border-width: 0 0 3px 0;
-    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-background-color: linear-gradient(to bottom, -fx-primary-blue, derive(-fx-primary-blue, -10%));
+    -fx-padding: 0 0 0 0;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 2);
+}
+
+.menu-bar > .container > .menu-button {
+    -fx-background-color: transparent;
+    -fx-padding: 6px 12px;
+}
+
+.menu-bar > .container > .menu-button:hover,
+.menu-bar > .container > .menu-button:focused,
+.menu-bar > .container > .menu-button:showing {
+    -fx-background-color: derive(-fx-primary-blue, 20%);
+}
+
+.menu-bar > .container > .menu-button > .label {
+    -fx-text-fill: -fx-white;
+    -fx-font-weight: bold;
     -fx-font-size: 14px;
 }
 
-/* Menu text color (normal) */
-.menu-bar .label {
-    -fx-text-fill: white;
-    -fx-font-weight: bold;
+/* Menu styling */
+.menu:hover > .label,
+.menu:showing > .label {
+    -fx-text-fill: -fx-white;
 }
 
-/* Hover effect on top-level menus */
-.menu:hover {
-    -fx-background-color: #F7941E; /* orange highlight */
-}
-
-/* When menu is expanded */
-.menu:showing {
-    -fx-background-color: #8DC63F; /* green for opened menu */
-}
-
-/* Menu items style */
+/* Menu Item styling */
 .menu-item {
-    -fx-background-color: #7abafa; /* light blue background */
-    -fx-text-fill: #222;
+    -fx-background-color: -fx-white;
     -fx-padding: 8px 15px;
 }
 
-/* Hover on menu item */
-.menu-item:hover {
-    -fx-background-color: #0072BC;
-    -fx-text-fill: white;
+.menu-item > .label {
+    -fx-text-fill: -fx-dark-gray;
+    -fx-font-size: 13px;
 }
 
-/* Optional: separator color between menu items */
-.menu-item:separator {
-    -fx-background-color: #ccc;
+.menu-item:focused, .menu-item:hovered {
+    -fx-background-color: -fx-secondary-blue;
+}
+
+.menu-item:focused > .label, .menu-item:hovered > .label {
+    -fx-text-fill: -fx-white;
+}
+
+/* Context menu styling */
+.context-menu {
+    -fx-background-color: -fx-white;
+    -fx-border-color: -fx-secondary-blue;
+    -fx-border-width: 1px;
+    -fx-background-radius: 4px;
+    -fx-border-radius: 4px;
+    -fx-padding: 5px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 10, 0, 0, 2);
+}
+
+/* Separator styling */
+.separator {
+    -fx-color: -fx-medium-gray;
+}
+
+.menu > .separator {
+    -fx-padding: 3px 0px 3px 0px;
+}
+
+/* Logo styling */
+.logo {
+    -fx-fill: -fx-white;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 3, 0, 0, 0);
+}
+
+/* User profile section in menu */
+.user-profile {
+    -fx-padding: 6px 16px;
+    -fx-spacing: 8px;
+    -fx-background-color: derive(-fx-primary-blue, -10%);
+}
+
+.user-name {
+    -fx-text-fill: -fx-white;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+}
+
+.user-role {
+    -fx-text-fill: -fx-white;
+    -fx-font-size: 11px;
+    -fx-opacity: 0.85;
+}
+
+/* Content area styling */
+.content-area {
+    -fx-background-color: -fx-light-gray;
+    -fx-padding: 20px;
+}
+
+/* Status bar at bottom */
+.status-bar {
+    -fx-background-color: -fx-medium-gray;
+    -fx-padding: 5px 10px;
+    -fx-spacing: 10px;
+}
+
+.status-label {
+    -fx-text-fill: -fx-dark-gray;
+    -fx-font-size: 12px;
+}
+
+/* Sub menu styling */
+.sub-menu {
+    -fx-background-color: derive(-fx-primary-blue, 60%);
+    -fx-padding: 10px;
+}
+
+.sub-menu-button {
+    -fx-background-color: -fx-white;
+    -fx-text-fill: -fx-primary-blue;
+    -fx-font-weight: bold;
+    -fx-padding: 8px 15px;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-cursor: hand;
+}
+
+.sub-menu-button:hover {
+    -fx-background-color: derive(-fx-primary-blue, 90%);
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 3, 0, 0, 1);
+}
+
+/* Breadcrumb styling */
+.breadcrumb-bar {
+    -fx-padding: 10px 20px;
+    -fx-background-color: -fx-white;
+    -fx-border-color: -fx-medium-gray;
+    -fx-border-width: 0 0 1px 0;
+}
+
+.breadcrumb-item {
+    -fx-text-fill: -fx-medium-dark-gray;
+    -fx-font-size: 12px;
+}
+
+.breadcrumb-item-current {
+    -fx-text-fill: -fx-primary-blue;
+    -fx-font-weight: bold;
+}
+
+/* Menu icon buttons */
+.icon-button {
+    -fx-background-color: transparent;
+    -fx-padding: 6px;
+    -fx-cursor: hand;
+}
+
+.icon-button:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.2);
+    -fx-background-radius: 3px;
+}
+
+.icon-button-graphic {
+    -fx-fill: -fx-white;
+}
+
+/* Notification badge */
+.notification-badge {
+    -fx-background-color: -fx-primary-orange;
+    -fx-background-radius: 10px;
+    -fx-text-fill: -fx-white;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-padding: 2px 6px;
+}
+
+/* Active menu indicator */
+.menu-item.active {
+    -fx-background-color: -fx-secondary-blue;
+}
+
+.menu-item.active > .label {
+    -fx-text-fill: -fx-white;
+    -fx-font-weight: bold;
+}
+
+/* Stack pane content styling */
+.stack-pane {
+    -fx-background-color: -fx-light-gray;
+}
+
+/* Animation for menu transitions */
+.keyframes {
+    -fx-animate: fadeIn 0.3s;
+}
+
+@keyframes fadeIn {
+    from { -fx-opacity: 0; }
+    to { -fx-opacity: 1; }
 }

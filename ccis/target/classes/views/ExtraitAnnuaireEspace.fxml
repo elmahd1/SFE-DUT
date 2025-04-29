@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="ccis.controllers.ESEController">
+    <TableView fx:id="tableView" layoutX="10" layoutY="10" prefWidth="1250" prefHeight="600">
+        <columns>
+                <TableColumn fx:id="denomination" text="Dénomination"/>
+                <TableColumn fx:id="typeCol" text="Type"/>
+                <TableColumn fx:id="formeJuridiqueCol" text="Forme Juridique"/>
+                <TableColumn fx:id="secteurActiviteCol" text="Secteur Activitée"/>
+                <TableColumn fx:id="activiteCol" text="Activite"/>
+                <TableColumn fx:id="GSMCol" text="GSM"/>
+                <TableColumn fx:id="FixeCol" text="Fixe"/>
+                <TableColumn fx:id="AdresseCol" text="Adresse"/>
+                <TableColumn fx:id="villeCol" text="Ville"/>
+                <TableColumn fx:id="interlocuteurCol" text="Interlocuteur"/>
+                <TableColumn fx:id="emailCol" text="Email"/>
+                <TableColumn fx:id="siteWebCol" text="Site Web"/>
+        </columns>
+    </TableView>
+</AnchorPane>

@@ -8,27 +8,60 @@
 <AnchorPane xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1"
             style="-fx-background-color: #f4f6f9;"
-            fx:controller="ccis.controllers.HomeController"> <!-- subtle gray background -->
+            fx:controller="ccis.controllers.HomeController"
+            stylesheets="@/styles/home.css">
 
     <VBox spacing="30" AnchorPane.topAnchor="40" AnchorPane.leftAnchor="40" AnchorPane.rightAnchor="40">
-        <Text text="Accueil"
-              style="-fx-font-size: 26px; -fx-fill: #0072BC; -fx-font-weight: bold;" />
-
+        <!-- Header with welcome message and date/time -->
+        <HBox alignment="CENTER_LEFT" spacing="20">
+            <Text text="Accueil" styleClass="home-title" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Label fx:id="dateTimeLabel" styleClass="date-time" />
+        </HBox>
+        
+        <!-- Dashboard Cards -->
         <HBox spacing="40">
-            <VBox style="-fx-background-color: white; -fx-padding: 20; -fx-border-color: #0072BC; -fx-border-width: 2; -fx-background-radius: 8; -fx-pref-width: 300;" spacing="10">
-                <Text text="Démarche Administratif"
-                      style="-fx-font-size: 16px; -fx-fill: #333333;"/>
-                <Label fx:id="demarcheCount"
-                       style="-fx-font-size: 22px; -fx-text-fill: #0072BC; -fx-font-weight: bold;"/>
+            <!-- Démarche Administratif Card -->
+            <VBox styleClass="dashboard-card, blue-card" spacing="10">
+                <VBox spacing="5">
+                    <Text text="Démarche Administratif" styleClass="card-title"/>
+                    <Label fx:id="demarcheCount" styleClass="count-blue"/>
+                    <Text text="Dossiers en cours de traitement" styleClass="card-description"/>
+                </VBox>
+                <Region VBox.vgrow="ALWAYS" />
+                <HBox alignment="CENTER_RIGHT">
+                    <Button text="Détails" styleClass="action-button" onAction="#fa"/>
+                </HBox>
             </VBox>
 
-            <VBox style="-fx-background-color: white; -fx-padding: 20; -fx-border-color: #F7941E; -fx-border-width: 2; -fx-background-radius: 8; -fx-pref-width: 300;" spacing="10">
-                <Text text="Espace Entreprise"
-                      style="-fx-font-size: 16px; -fx-fill: #333333;"/>
-                <Label fx:id="entrepriseCount"
-                       style="-fx-font-size: 22px; -fx-text-fill: #F7941E; -fx-font-weight: bold;"/>
+            <!-- Espace Entreprise Card -->
+            <VBox styleClass="dashboard-card, orange-card" spacing="10">
+                <VBox spacing="5">
+                    <Text text="Espace Entreprise" styleClass="card-title"/>
+                    <Label fx:id="entrepriseCount" styleClass="count-orange"/>
+                    <Text text="Entreprises enregistrées" styleClass="card-description"/>
+                </VBox>
+                <Region VBox.vgrow="ALWAYS" />
+                <HBox alignment="CENTER_RIGHT">
+                    <Button text="Détails" styleClass="action-button-secondary" onAction="#fe"/>
+                </HBox>
             </VBox>
         </HBox>
-
-  </VBox>
+        
+        <!-- Quick Actions Section -->
+        <VBox spacing="15">
+            <Text text="Actions Rapides" styleClass="section-header"/>
+            <HBox spacing="20">
+                <Button text="Nouvelle Démarche" styleClass="action-button" />
+                <Button text="Nouvelle Entreprise" styleClass="action-button-secondary" />
+                <Button text="Rapports" styleClass="action-button" />
+            </HBox>
+        </VBox>
+        
+        <!-- Status Footer (Optional) -->
+        <HBox styleClass="footer" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" 
+              AnchorPane.bottomAnchor="0" alignment="CENTER_RIGHT" >
+            <Label text="CCIS - Système de Gestion © 2025" styleClass="status-label"/>
+        </HBox>
+    </VBox>
 </AnchorPane>

@@ -2,6 +2,8 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml/1"
@@ -9,23 +11,49 @@
             fx:controller="ccis.controllers.MenuController">
 
     <top>
-        <MenuBar>
-            <Menu text="Demarche Administratif">
-                <MenuItem text="Fiche" onAction="#fa"/>
-                <MenuItem text="Etat suivi" onAction="#esd"/>
-                <MenuItem text="Extrait de l'annuaire" onAction="#ead"/>
-                <MenuItem text="Graphes" onAction="#gd"/>
-            </Menu>
-            <Menu text="Espace Entreprise">
-                <MenuItem text="Fiche" onAction="#fe"/>
-                <MenuItem text="Etat suivi" onAction="#ese"/>
-                <MenuItem text="Extrait de l'annuaire" onAction="#eae"/>
-                <MenuItem text="Graphes" onAction="#ge"/>
-            </Menu>
-        </MenuBar>
+        <VBox>
+            <!-- Main Menu Bar -->
+            <MenuBar>
+                <Menu text="Accueil" >
+                    <MenuItem text="Acceuil" onAction="#home"/>
+                </Menu>    
+                <Menu text="Demarche Administratif">
+                    <MenuItem text="Fiche" onAction="#fa"/>
+                    <MenuItem text="Etat suivi" onAction="#esd"/>
+                    <MenuItem text="Extrait de l'annuaire" onAction="#ead"/>
+                    <MenuItem text="Graphes" onAction="#gd"/>
+                </Menu>
+                <Menu text="Espace Entreprise">
+                    <MenuItem text="Fiche" onAction="#fe"/>
+                    <MenuItem text="Etat suivi" onAction="#ese"/>
+                    <MenuItem text="Extrait de l'annuaire" onAction="#eae"/>
+                    <MenuItem text="Graphes" onAction="#ge"/>
+                </Menu>
+                <!-- Right-aligned user section -->
+                <Menu text="Aide">
+                    <MenuItem text="Documentation" />
+                    <MenuItem text="À propos" />
+                </Menu>
+            </MenuBar>
+            
+            <!-- Breadcrumb Navigation Bar (Optional) -->
+            <!-- <HBox styleClass="breadcrumb-bar">
+                <Label fx:id="breadcrumbPath" styleClass="breadcrumb-item-current"/>
+            </HBox> -->
+        </VBox>
     </top>
 
     <center>
-        <StackPane fx:id="contentArea"/>
+        <StackPane fx:id="contentArea" styleClass="stack-pane"/>
     </center>
+    
+    <!-- <bottom>
+       
+        <HBox styleClass="status-bar">
+            <Label fx:id="statusLabel" styleClass="status-label" text="Prêt"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="versionLabel" styleClass="status-label" text="Version 1.0"/>
+        </HBox>
+    </bottom> -->
+
 </BorderPane>

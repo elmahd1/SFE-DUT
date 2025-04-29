@@ -2,31 +2,23 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-<?import javafx.scene.control.cell.PropertyValueFactory?>
-<?import javafx.scene.control.MenuButton?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.CheckMenuItem?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
 
-<AnchorPane fx:id="rootPane" xmlns:fx="http://javafx.com/fxml" >
-
-    <center>
-        <TableView fx:id="demarcheTable">
-            <columns>
-                <TableColumn fx:id="dateContactCol" text="Date Contact"/>
-                <TableColumn fx:id="heureContactCol" text="Heure Contact"/>
-                <TableColumn fx:id="typeDemandeCol" text="Type Demande"/>
-                <TableColumn fx:id="statutCol" text="Statut"/>
-                <TableColumn fx:id="objetVisiteCol" text="Objet Visite"/>
-                <TableColumn fx:id="montantCol" text="Montant"/>
-                <TableColumn fx:id="nomPrenomCol" text="Nom Prénom"/>
-                <TableColumn fx:id="fixeCol" text="Téléphone Fixe"/>
-                <TableColumn fx:id="gsmCol" text="Téléphone GSM"/>
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="ccis.controllers.EADController">
+    <TableView fx:id="tableView" layoutX="10" layoutY="10" prefWidth="1250" prefHeight="600">
+        <columns>
+                <TableColumn fx:id="denominationCol" text="Dénomination"/>
+                <TableColumn fx:id="typeCol" text="Type"/>
+                <TableColumn fx:id="formeJuridiqueCol" text="Forme Juridique"/>
+                <TableColumn fx:id="secteurActiviteCol" text="Secteur Activitée"/>
+                <TableColumn fx:id="activiteCol" text="Activite"/>
+                <TableColumn fx:id="GSMCol" text="GSM"/>
+                <TableColumn fx:id="FixeCol" text="Fixe"/>
+                <TableColumn fx:id="AdresseCol" text="Adresse"/>
+                <TableColumn fx:id="villeCol" text="Ville"/>
+                <TableColumn fx:id="interlocuteurCol" text="Interlocuteur"/>
                 <TableColumn fx:id="emailCol" text="Email"/>
-                <!-- Add more columns as needed -->
-            </columns>
-        </TableView>
-    </center>
+                <TableColumn fx:id="siteWebCol" text="Site Web"/>
+                <TableColumn fx:id="actionCol" text="Actions"/>
+        </columns>
+    </TableView>
 </AnchorPane>

@@ -1,0 +1,215 @@
+/* 
+   CCIS Theme CSS for Home Screen
+   Matches the blue and orange color scheme from the logo
+*/
+
+/* Base colors from the logo */
+* {
+    -fx-primary-blue: #0074B2;
+    -fx-primary-orange: #FF8A00;
+    -fx-secondary-blue: #83C4E8;
+    -fx-secondary-orange: #FFBB66;
+    -fx-light-green: #8DBC66;
+    -fx-dark-green: #44883E;
+    -fx-light-gray: #F4F6F9;
+    -fx-medium-gray: #E0E0E0;
+    -fx-dark-gray: #555555;
+    -fx-white: #FFFFFF;
+}
+
+/* Applying font styles */
+.root {
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+    -fx-background-color: -fx-light-gray;
+}
+
+/* Home title */
+.home-title {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-fill: -fx-primary-blue;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 3, 0, 0, 1);
+}
+
+/* Dashboard cards */
+.dashboard-card {
+    -fx-background-color: -fx-white;
+    -fx-padding: 20px;
+    -fx-background-radius: 10px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 4);
+    -fx-min-width: 300px;
+    -fx-min-height: 120px;
+    -fx-cursor: hand;
+    -fx-transition: -fx-background-color 0.3s;
+}
+
+.dashboard-card:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 15, 0, 0, 6);
+    -fx-translate-y: -2px;
+}
+
+/* Blue-bordered card */
+.blue-card {
+    -fx-border-color: -fx-primary-blue;
+    -fx-border-width: 0 0 0 5px;
+    -fx-border-radius: 10 0 0 10;
+}
+
+.blue-card:hover {
+    -fx-background-color: derive(-fx-primary-blue, 95%);
+}
+
+/* Orange-bordered card */
+.orange-card {
+    -fx-border-color: -fx-primary-orange;
+    -fx-border-width: 0 0 0 5px;
+    -fx-border-radius: 10 0 0 10;
+}
+
+.orange-card:hover {
+    -fx-background-color: derive(-fx-primary-orange, 95%);
+}
+
+/* Card title */
+.card-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-fill: -fx-dark-gray;
+}
+
+/* Card count - Blue */
+.count-blue {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-primary-blue;
+}
+
+/* Card count - Orange */
+.count-orange {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-primary-orange;
+}
+
+/* Card description */
+.card-description {
+    -fx-font-size: 13px;
+    -fx-fill: -fx-dark-gray;
+    -fx-opacity: 0.8;
+}
+
+/* Card icon */
+.card-icon {
+    -fx-fill: -fx-medium-gray;
+    -fx-opacity: 0.5;
+}
+
+/* Recent activity section */
+.section-header {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-fill: -fx-dark-gray;
+    -fx-padding: 0 0 10 0;
+}
+
+/* Activity list */
+.list-view {
+    -fx-background-color: transparent;
+    -fx-border-color: -fx-medium-gray;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+}
+
+.list-cell {
+    -fx-background-color: -fx-white;
+    -fx-padding: 10px;
+    -fx-border-color: -fx-light-gray;
+    -fx-border-width: 0 0 1 0;
+}
+
+.list-cell:hover {
+    -fx-background-color: derive(-fx-light-gray, 50%);
+}
+
+.list-cell:selected {
+    -fx-background-color: derive(-fx-primary-blue, 90%);
+    -fx-text-fill: -fx-dark-gray;
+}
+
+/* Quick actions button */
+.action-button {
+    -fx-background-color: -fx-primary-blue;
+    -fx-text-fill: -fx-white;
+    -fx-font-weight: bold;
+    -fx-padding: 10px 20px;
+    -fx-background-radius: 5px;
+    -fx-cursor: hand;
+}
+
+.action-button:hover {
+    -fx-background-color: derive(-fx-primary-blue, 20%);
+}
+
+.action-button-secondary {
+    -fx-background-color: -fx-primary-orange;
+    -fx-text-fill: -fx-white;
+    -fx-font-weight: bold;
+    -fx-padding: 10px 20px;
+    -fx-background-radius: 5px;
+    -fx-cursor: hand;
+}
+
+.action-button-secondary:hover {
+    -fx-background-color: derive(-fx-primary-orange, 20%);
+}
+
+/* Animation keyframes for cards */
+.keyframes {
+    -fx-animate: cardGrow 0.3s;
+}
+
+@keyframes cardGrow {
+    from { -fx-scale-x: 0.95; -fx-scale-y: 0.95; }
+    to { -fx-scale-x: 1.0; -fx-scale-y: 1.0; }
+}
+
+/* Date & time display */
+.date-time {
+    -fx-font-size: 14px;
+    -fx-text-fill: -fx-dark-gray;
+    -fx-font-style: italic;
+}
+
+/* Welcome message */
+.welcome-message {
+    -fx-font-size: 16px;
+    -fx-text-fill: -fx-dark-gray;
+    -fx-font-weight: bold;
+}
+
+/* Status indicator for dashboard */
+.status-indicator {
+    -fx-background-radius: 10px;
+    -fx-pref-width: 10px;
+    -fx-pref-height: 10px;
+}
+
+.status-active {
+    -fx-background-color: -fx-light-green;
+}
+
+.status-warning {
+    -fx-background-color: -fx-primary-orange;
+}
+
+.status-error {
+    -fx-background-color: #D32F2F;
+}
+
+/* Footer styling */
+.footer {
+    -fx-padding: 10px;
+    -fx-background-color: -fx-primary-blue;
+    -fx-text-fill: -fx-white;
+    -fx-font-size: 12px;
+}

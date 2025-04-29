@@ -1,83 +1,53 @@
 package ccis.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.persistence.Id;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Column;
 
-@Entity
-@Table(name = "espace_entreprise")
 public class EspaceEntreprise {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public EspaceEntreprise() {
+    }
     private int id;
 
-    @Column(name = "date_contact")
     private String dateContact;
 
-    @Column(name = "objet_visite")
     private String objetVisite;
 
-    @Column(name = "nom_prenom")
     private String nomPrenom;
 
-    @Column(name = "statut")
     private String statut;
 
-    @Column(name = "fixe")
     private String fixe;
 
-    @Column(name = "gsm")
     private String gsm;
 
-    @Column(name = "email")
     private String email;
 
-    @Column(name = "accepte_envoi")
     private String accepteEnvoi;
 
-    @Column(name = "adresse")
     private String adresse;
 
-    @Column(name = "ville")
     private String ville;
 
-    @Column(name = "denomination")
     private String denomination;
 
-    @Column(name = "code_ice")
     private String codeIce;
 
-    @Column(name = "nom_rep_legal")
     private String nomRepLegal;
 
-    @Column(name = "site_web")
     private String siteWeb;
 
-    @Column(name = "forme_juridique")
     private String formeJuridique;
 
-    @Column(name = "date_depot")
     private String dateDepot;
 
-    @Column(name = "taille_entreprise")
     private String tailleEntreprise;
 
-    @Column(name = "secteur_activite")
     private String secteurActivite;
 
-    @Column(name = "activite")
     private String activite;
 
-    @Column(name = "nom_prenom_c_ccis")
     private String nomPrenomCCIS;
 
-    @Column(name = "qualite_c_ccis")
     private String qualiteCCIS;
 
-    @Column(name = "date_depart")
     private String dateDepart;
     
     // Getters and Setters

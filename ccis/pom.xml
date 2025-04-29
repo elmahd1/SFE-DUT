@@ -37,11 +37,7 @@
       <version>${javafx.version}</version>
     </dependency>
 
-   <dependency>
-    <groupId>org.hibernate</groupId>
-    <artifactId>hibernate-core</artifactId>
-    <version>6.0.0.Final</version> <!-- Use a compatible version of Hibernate -->
-</dependency>
+  
 
 <dependency>
     <groupId>org.xerial</groupId>
@@ -50,12 +46,6 @@
 </dependency>
 
 
-    <!-- Jakarta Persistence (JPA) -->
-    <dependency>
-      <groupId>jakarta.persistence</groupId>
-      <artifactId>jakarta.persistence-api</artifactId>
-      <version>3.1.0</version>
-    </dependency>
 
     <!-- JUnit for testing -->
     <dependency>
@@ -70,11 +60,12 @@
       <version>5.11.0</version>
       <scope>test</scope>
     </dependency>
+   <!-- Apache POI -->
     <dependency>
-    <groupId>com.github.gwenn</groupId>
-    <artifactId>sqlite-dialect</artifactId>
-    <version>0.1.2</version>
-</dependency>
+        <groupId>org.apache.poi</groupId>
+        <artifactId>poi-ooxml</artifactId>
+        <version>5.2.3</version>
+    </dependency>
 
   </dependencies>
 

@@ -1,96 +1,69 @@
 package ccis.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.persistence.Id;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Column;
 
-@Entity 
-@Table(name = "demarche_administratif")
 public class DemarcheAdministratif {
     public DemarcheAdministratif() {
     }
     
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "date_contact")
     private String dateContact;
 
-    @Column(name = "type_demande")
+    private String heureContact;
+
     private String typeDemande;
 
-    @Column(name = "statut")
     private String statut;
 
-    @Column(name = "objet_visite")
     private String objetVisite;
 
-    @Column(name = "montant")
     private float montant;
 
-    @Column(name = "nom_prenom")
     private String nomPrenom;
 
-    @Column(name = "fixe")
     private String fixe;
 
-    @Column(name = "gsm")
     private String gsm;
 
-    @Column(name = "email")
     private String email;
 
-    @Column(name = "accepte_envoi")
     private String accepteEnvoi;
 
-    @Column(name = "site_web")
     private String siteWeb;
 
-    @Column(name = "adresse")
     private String adresse;
 
-    @Column(name = "ville")
     private String ville;
 
-    @Column(name = "denomination")
     private String denomination;
 
-    @Column(name = "nom_rep_legal")
     private String nomRepLegal;
 
-    @Column(name = "forme_juridique")
     private String formeJuridique;
 
-    @Column(name = "date_depot")
     private String dateDepot;
 
-    @Column(name = "secteur_activite")
+    private String heureDepot;
+
     private String secteurActivite;
 
-    @Column(name = "activite")
     private String activite;
 
-    @Column(name = "nom_prenom_c_ccis")
     private String nomPrenomCCIS;
 
-    @Column(name = "qualite_c_ccis")
     private String qualiteCCIS;
 
-    @Column(name = "etat_dossier")
     private String etatDossier;
 
-    @Column(name = "suite_demande")
     private String suiteDemande;
 
-    @Column(name = "observation")
     private String observation;
 
-    @Column(name = "date_delivrance")
     private String dateDelivrance;
+
+    private String heureDelivrance;
+
+    private String interlocuteur;
 
     // Getters and Setters
     public int getId() {
@@ -102,6 +75,7 @@ public class DemarcheAdministratif {
     public String getDateContact() {
         return dateContact;
     }
+
     public void setDateContact(String dateContact) {
         this.dateContact = dateContact;
     }
@@ -248,5 +222,29 @@ public class DemarcheAdministratif {
     }
     public void setTypeDemande(String typeDemande) {
         this.typeDemande = typeDemande; }
+    public String getHeureContact() {
+        return heureContact;
+    }
+    public void setHeureContact(String heureContact) {
+        this.heureContact = heureContact;
+    }
+    public String getHeureDepot() {
+        return heureDepot;
+    }
+    public void setHeureDepot(String heureDepot) {
+        this.heureDepot = heureDepot;
+    }
+    public String getHeureDelivrance() {
+        return heureDelivrance;
+    }
+    public void setHeureDelivrance(String heureDelivrance) {
+        this.heureDelivrance = heureDelivrance;
+    }
+    public String getInterlocuteur() {
+        return interlocuteur;
+    }
+    public void setInterlocuteur(String interlocuteur) {
+        this.interlocuteur = interlocuteur;
+    }
 
 }
