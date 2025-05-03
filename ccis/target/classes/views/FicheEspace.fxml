@@ -19,7 +19,7 @@
             <children>
                <!-- Form Title -->
                <HBox alignment="CENTER" style="-fx-padding: 0 0 15 0;">
-                  <Label text="FICHE DE DÉMARCHE" styleClass="form-title"/>
+                  <Label text="FICHE ESPACE ENTREPRISE" styleClass="form-title"/>
                </HBox>
                
                <!-- Row 1: Date and Time Contact -->
@@ -42,26 +42,6 @@
                   </children>
                </HBox>
                
-               <!-- Row 2: Type and Status -->
-               <HBox spacing="10" styleClass="form-section">
-                  <children>
-                     <VBox spacing="5">
-                        <children>
-                           <Label text="Type de demande" />
-                           <ComboBox fx:id="typeDemande" prefWidth="250.0" promptText="Sélectionnez le type"/>
-                           <Label fx:id="typeDemandeError" styleClass="error-label" visible="false"/>
-                        </children>
-                     </VBox>
-                     <VBox spacing="5">
-                        <children>
-                           <Label text="Statut" />
-                           <ComboBox fx:id="status" prefWidth="250.0" promptText="Sélectionnez le statut"/>
-                           <Label fx:id="statusError" styleClass="error-label" visible="false"/>
-                        </children>
-                     </VBox>
-                  </children>
-               </HBox>
-               
                <!-- Row 3: Objet Visite -->
                <VBox spacing="5" styleClass="form-section">
                   <children>
@@ -71,18 +51,7 @@
                   </children>
                </VBox>
                
-               <!-- Row 4: Montant -->
-               <HBox spacing="10" styleClass="form-section">
-                  <children>
-                     <VBox spacing="5">
-                        <children>
-                           <Label text="Montant (DH)" />
-                           <TextField fx:id="montant" prefWidth="250.0" promptText="Montant en dirhams"/>
-                           <Label fx:id="montantError" styleClass="error-label" visible="false"/>
-                        </children>
-                     </VBox>
-                  </children>
-               </HBox>
+
                
                <!-- Row 5: Personal Information -->
                <VBox spacing="5" styleClass="form-section">
@@ -93,6 +62,14 @@
                   </children>
                </VBox>
                
+               <VBox spacing="5" styleClass="form-section">
+                  <children>
+                     <Label text="Statut" />
+                     <ComboBox fx:id="status" prefWidth="530.0" promptText="Sélectionnez le statut"/>
+                     <Label fx:id="statusError" styleClass="error-label" visible="false"/>
+                  </children>
+               </VBox>
+
                <!-- Row 6: Phone Numbers -->
                <HBox spacing="10" styleClass="form-section">
                   <children>
@@ -105,7 +82,7 @@
                      </VBox>
                      <VBox spacing="5">
                         <children>
-                           <Label text="Téléphone mobile" />
+                           <Label text="Téléphone GSM" />
                            <TextField fx:id="telephoneGSM" prefWidth="250.0" promptText="Numéro de GSM"/>
                            <Label fx:id="telephoneGSMError" styleClass="error-label" visible="false"/>
                         </children>
@@ -125,14 +102,7 @@
                   </children>
                </VBox>
                
-               <!-- Row 8: Website -->
-               <VBox spacing="5" styleClass="form-section">
-                  <children>
-                     <Label text="Site web" />
-                     <TextField fx:id="siteweb" prefWidth="530.0" promptText="www.exemple.com"/>
-                     <Label fx:id="sitewebError" styleClass="error-label" visible="false"/>
-                  </children>
-               </VBox>
+
                
                <!-- Row 9: Address Information -->
                <VBox spacing="5" styleClass="form-section">
@@ -163,6 +133,14 @@
                   </children>
                </HBox>
                
+               <VBox spacing="5" styleClass="form-section">
+                  <children>
+                     <Label text="Code ICE" />
+                     <TextField fx:id="codeICE" prefWidth="530.0" promptText="Code ICE"/>
+                     <Label fx:id="codeICEError" styleClass="error-label" visible="false"/>
+                  </children>
+               </VBox>
+
                <!-- Row 11: Legal Information -->
                <VBox spacing="5" styleClass="form-section">
                   <children>
@@ -171,7 +149,14 @@
                      <Label fx:id="nomRepresentantLegalError" styleClass="error-label" visible="false"/>
                   </children>
                </VBox>
-               
+                              <!-- Row 8: Website -->
+               <VBox spacing="5" styleClass="form-section">
+                  <children>
+                     <Label text="Site web" />
+                     <TextField fx:id="siteweb" prefWidth="530.0" promptText="www.exemple.com"/>
+                     <Label fx:id="sitewebError" styleClass="error-label" visible="false"/>
+                  </children>
+               </VBox>
                <!-- Row 12: Legal Form -->
                <VBox spacing="5" styleClass="form-section">
                   <children>
@@ -200,6 +185,14 @@
                      </VBox>
                   </children>
                </HBox>
+
+                     <VBox spacing="5" styleClass="forme-section">
+                        <children>
+                           <Label text="Taille de l'entreprise" />
+                           <ComboBox fx:id="tailleEntreprise" prefWidth="250.0" promptText="Sélectionnez la taille de l'entreprise"/>
+                           <Label fx:id="tailleEntrepriseError" styleClass="error-label" visible="false"/>
+                        </children>
+                     </VBox>
                
                <!-- Row 14: Activity Info -->
                <HBox spacing="10" styleClass="form-section">
@@ -241,50 +234,23 @@
                   </children>
                </HBox>
                
-               <!-- Row 16: Dossier Status -->
-               <HBox spacing="10" styleClass="form-section">
-                  <children>
-                     <VBox spacing="5">
-                        <children>
-                           <Label text="État du dossier" />
-                           <ComboBox fx:id="etatDossier" prefWidth="250.0" promptText="Sélectionnez l'état"/>
-                           <Label fx:id="etatDossierError" styleClass="error-label" visible="false"/>
-                        </children>
-                     </VBox>
-                     <VBox spacing="5">
-                        <children>
-                           <Label text="Suite de la demande" />
-                           <ComboBox fx:id="suiteDemande" prefWidth="250.0" promptText="Sélectionnez la suite"/>
-                           <Label fx:id="suiteDemandeError" styleClass="error-label" visible="false"/>
-                        </children>
-                     </VBox>
-                  </children>
-               </HBox>
-               
-               <!-- Row 17: Observation -->
-               <VBox spacing="5" styleClass="form-section">
-                  <children>
-                     <Label text="Observation" />
-                     <TextField fx:id="observation" prefWidth="530.0" promptText="Commentaires ou observations"/>
-                     <Label fx:id="observationError" styleClass="error-label" visible="false"/>
-                  </children>
-               </VBox>
+
                
                <!-- Row 18: Delivery Info -->
                <HBox spacing="10" styleClass="form-section">
                   <children>
                      <VBox spacing="5">
                         <children>
-                           <Label text="Date de délivrance" />
-                           <DatePicker fx:id="dateDelivrance" prefWidth="250.0" promptText="JJ/MM/AAAA"/>
-                           <Label fx:id="dateDelivranceError" styleClass="error-label" visible="false"/>
+                           <Label text="Date de depart" />
+                           <DatePicker fx:id="dateDepart" prefWidth="250.0" promptText="JJ/MM/AAAA"/>
+                           <Label fx:id="dateDepartError" styleClass="error-label" visible="false"/>
                         </children>
                      </VBox>
                      <VBox spacing="5">
                         <children>
-                           <Label text="Heure de délivrance" />
-                           <TextField fx:id="heureDelivrance" prefWidth="250.0" promptText="HH:MM"/>
-                           <Label fx:id="heureDelivranceError" styleClass="error-label" visible="false"/>
+                           <Label text="Heure de depart" />
+                           <TextField fx:id="heureDepart" prefWidth="250.0" promptText="HH:MM"/>
+                           <Label fx:id="heureDepartError" styleClass="error-label" visible="false"/>
                         </children>
                      </VBox>
                   </children>
@@ -294,6 +260,9 @@
                <HBox alignment="CENTER" style="-fx-padding: 10 0 20 0;">
                   <Button text="Enregistrer" prefWidth="300.0" onAction="#handleSubmit" 
                          style="-fx-font-size: 14px; -fx-padding: 12 20 12 20;"/>
+                <Button text="Importer (via Excel)" prefWidth="300.0" onAction="#handleImport" 
+                         style="-fx-font-size: 14px; -fx-padding: 12 20 12 20;"/>
+               
                </HBox>
             </children>
          </VBox>

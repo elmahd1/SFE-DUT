@@ -8,6 +8,8 @@ public class EspaceEntreprise {
 
     private String dateContact;
 
+    private String heureContact;
+
     private String objetVisite;
 
     private String nomPrenom;
@@ -38,6 +40,8 @@ public class EspaceEntreprise {
 
     private String dateDepot;
 
+    private String heureDepot;
+
     private String tailleEntreprise;
 
     private String secteurActivite;
@@ -49,6 +53,8 @@ public class EspaceEntreprise {
     private String qualiteCCIS;
 
     private String dateDepart;
+
+    private String heureDepart;
     
     // Getters and Setters
 
@@ -198,5 +204,23 @@ public class EspaceEntreprise {
     public void setDateDepart(String dateDepart) {
         this.dateDepart = dateDepart;
     }
+    public String getHeureDepart(){
+       return heureDepart; 
+    }
+    public String getHeureDepot(){
+        return heureDepot; 
+     }
+     public String getHeureContact(){
+        return heureContact; 
+     }
+     public void setHeureDepot(String heureDepot){
+        this.heureDepot=heureDepot; 
+     }
+     public void setHeureDepart(String heureDepart){
+         this.heureDepart=heureDepart;
+      }
+      public void setHeureContact(String heureContact){
+         this.heureContact=heureContact ;
+      }
     
 }

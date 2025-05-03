@@ -1,0 +1,312 @@
+/* Style CSS pour interface professionnelle avec thème bleu, orange et vert */
+
+/* Styles généraux et couleurs principales */
+* {
+    -fx-primary-blue: #1a5fb4;
+    -fx-secondary-blue: #3584e4;
+    -fx-light-blue: #dfeaf8;
+    
+    -fx-primary-orange: #e66100;
+    -fx-secondary-orange: #ff7800;
+    -fx-light-orange: #ffead7;
+    
+    -fx-primary-green: #26a269;
+    -fx-secondary-green: #33d17a;
+    -fx-light-green: #e2f5eb;
+    
+    -fx-dark-text: #333333;
+    -fx-light-text: #ffffff;
+    -fx-medium-text: #555555;
+}
+
+.root {
+    -fx-background-color: #f8f9fa;
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+    -fx-font-size: 14px;
+}
+
+.main-container {
+    -fx-background-color: #f8f9fa;
+    -fx-padding: 0;
+}
+
+/* Styles pour l'en-tête */
+.header-container {
+    -fx-background-color: linear-gradient(to bottom, -fx-primary-blue, -fx-secondary-blue);
+    -fx-padding: 15px 20px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 5);
+}
+
+.title-bar {
+    -fx-padding: 0 0 10px 0;
+}
+
+.main-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-light-text;
+}
+
+.search-field {
+    -fx-background-color: white;
+    -fx-background-radius: 20px;
+    -fx-padding: 8px 15px;
+    -fx-prompt-text-fill: #999999;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 1);
+    -fx-min-width: 250px;
+}
+
+/* Styles des boutons */
+.button {
+    -fx-background-radius: 4px;
+    -fx-padding: 8px 12px;
+    -fx-cursor: hand;
+    -fx-font-weight: bold;
+}
+
+.search-button {
+    -fx-background-color: -fx-primary-orange;
+    -fx-text-fill: -fx-light-text;
+}
+
+.search-button:hover {
+    -fx-background-color: -fx-secondary-orange;
+}
+
+.export-button {
+    -fx-background-color: -fx-primary-green;
+    -fx-text-fill: -fx-light-text;
+}
+
+.export-button:hover {
+    -fx-background-color: -fx-secondary-green;
+}
+
+.action-button {
+    -fx-background-color: -fx-secondary-blue;
+    -fx-text-fill: -fx-light-text;
+    -fx-padding: 5px 10px;
+    -fx-margin: 0 5px;
+}
+
+.action-button:hover {
+    -fx-background-color: -fx-primary-blue;
+}
+
+.refresh-button {
+    -fx-background-color: #eeeeee;
+    -fx-text-fill: -fx-dark-text;
+    -fx-padding: 5px 10px;
+}
+
+.refresh-button:hover {
+    -fx-background-color: #dddddd;
+}
+
+/* Styles des onglets */
+.tab-pane {
+    -fx-background-color: transparent;
+}
+
+.tab-pane .tab-header-area .tab-header-background {
+    -fx-background-color: -fx-secondary-blue;
+}
+
+.tab-pane .tab {
+    -fx-background-color: -fx-light-blue;
+    -fx-padding: 6px 15px;
+}
+
+.tab-pane .tab:selected {
+    -fx-background-color: -fx-light-text;
+    -fx-focus-color: transparent;
+}
+
+.tab .tab-label {
+    -fx-text-fill: -fx-dark-text;
+    -fx-font-weight: bold;
+}
+
+/* Styles pour le contenu principal */
+.content-pane {
+    -fx-background-color: transparent;
+    -fx-padding: 20px;
+}
+
+.data-container {
+    -fx-padding: 10px;
+}
+
+/* Styles pour les sections et tableaux */
+.section-pane {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 8, 0, 0, 3);
+}
+
+.section-pane .title {
+    -fx-background-color: -fx-primary-blue;
+    -fx-text-fill: -fx-light-text;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-padding: 10px 15px;
+}
+
+.section-pane .content {
+    -fx-background-color: -fx-light-text;
+    -fx-padding: 15px;
+}
+
+/* Styles des tableaux */
+.data-table {
+    -fx-background-color: -fx-light-text;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 1px;
+}
+
+.data-table .column-header {
+    -fx-background-color: linear-gradient(to bottom, -fx-primary-blue, -fx-secondary-blue);
+    -fx-padding: 10px 5px;
+}
+
+.data-table .column-header .label {
+    -fx-text-fill: -fx-light-text;
+    -fx-font-weight: bold;
+    -fx-alignment: center;
+}
+
+.data-table .table-row-cell {
+    -fx-background-color: -fx-light-text;
+    -fx-border-color: #f0f0f0;
+    -fx-border-width: 0 0 1 0;
+}
+
+.data-table .table-row-cell:odd {
+    -fx-background-color: #f9f9f9;
+}
+
+.data-table .table-row-cell:selected {
+    -fx-background-color: -fx-light-blue;
+    -fx-text-fill: -fx-dark-text;
+}
+
+.data-table .table-row-cell:hover {
+    -fx-background-color: -fx-light-orange;
+}
+
+/* Styles des graphiques */
+.chart {
+    -fx-padding: 10px;
+    -fx-background-color: -fx-light-text;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 1px;
+    -fx-border-radius: 4px;
+}
+
+.chart-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.chart-legend {
+    -fx-background-color: transparent;
+}
+
+/* Style pour graphique en secteurs */
+.chart-pie {
+    -fx-border-color: transparent;
+}
+
+.chart-pie-label {
+    -fx-fill: -fx-dark-text;
+    -fx-font-size: 12px;
+}
+
+.default-color0.chart-pie { -fx-pie-color: -fx-primary-blue; }
+.default-color1.chart-pie { -fx-pie-color: -fx-primary-orange; }
+.default-color2.chart-pie { -fx-pie-color: -fx-primary-green; }
+.default-color3.chart-pie { -fx-pie-color: #9c27b0; }
+.default-color4.chart-pie { -fx-pie-color: #607d8b; }
+.default-color5.chart-pie { -fx-pie-color: #795548; }
+.default-color6.chart-pie { -fx-pie-color: #ff5722; }
+.default-color7.chart-pie { -fx-pie-color: #00bcd4; }
+
+/* Style pour graphique en barres */
+.chart-bar {
+    -fx-background-insets: 0, 1, 2;
+    -fx-background-radius: 5 5 0 0, 4 4 0 0, 3 3 0 0;
+}
+
+.default-color0.chart-bar { -fx-bar-fill: -fx-primary-blue; }
+.default-color1.chart-bar { -fx-bar-fill: -fx-primary-orange; }
+.default-color2.chart-bar { -fx-bar-fill: -fx-primary-green; }
+.default-color3.chart-bar { -fx-bar-fill: #9c27b0; }
+.default-color4.chart-bar { -fx-bar-fill: #607d8b; }
+
+.axis {
+    -fx-tick-label-font-size: 12px;
+    -fx-tick-label-fill: -fx-medium-text;
+}
+
+.axis-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-dark-text;
+}
+
+/* Style pour pied de page */
+.footer {
+    -fx-background-color: linear-gradient(to bottom, -fx-light-blue, #e5eef9);
+    -fx-padding: 10px 20px;
+    -fx-border-width: 1 0 0 0;
+    -fx-border-color: #ccdcf0;
+}
+
+.footer-label {
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-medium-text;
+}
+
+.footer-value {
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-primary-blue;
+}
+
+.footer-date {
+    -fx-text-fill: -fx-medium-text;
+    -fx-font-style: italic;
+}
+
+/* Style pour les titres de section pliés */
+.section-pane:collapsed > .title {
+    -fx-background-color: linear-gradient(to right, -fx-primary-blue, #80b1e8);
+}
+
+/* Curseurs personnalisés pour les graphiques */
+.chart-plot-background {
+    -fx-background-color: #fafafa;
+    -fx-background-radius: 5px;
+    -fx-border-color: #e0e0e0;
+    -fx-border-radius: 5px;
+}
+
+.chart-vertical-grid-lines {
+    -fx-stroke: #e0e0e0;
+    -fx-stroke-dash-array: 2 4;
+}
+
+.chart-horizontal-grid-lines {
+    -fx-stroke: #e0e0e0;
+    -fx-stroke-dash-array: 2 4;
+}
+
+/* Styles spécifiques pour les TitledPane */
+.section-pane:nth-child(1) .title {
+    -fx-background-color: -fx-primary-blue;
+}
+
+.section-pane:nth-child(2) .title {
+    -fx-background-color: -fx-primary-orange;
+}
+
+.section-pane:nth-child(3) .title {
+    -fx-background-color: -fx-primary-green;
+}

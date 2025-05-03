@@ -169,6 +169,7 @@
                      <Label text="Représentant légal" />
                      <TextField fx:id="nomRepresentantLegal" prefWidth="530.0" promptText="Nom du représentant"/>
                      <Label fx:id="nomRepresentantLegalError" styleClass="error-label" visible="false"/>
+
                   </children>
                </VBox>
                
@@ -293,6 +294,12 @@
                <!-- Submit Button -->
                <HBox alignment="CENTER" style="-fx-padding: 10 0 20 0;">
                   <Button text="Enregistrer" prefWidth="300.0" onAction="#handleSubmit" 
+                         style="-fx-font-size: 14px; -fx-padding: 12 20 12 20;"/>
+                <Button text="Importer (via Excel)" prefWidth="300.0" onAction="#handleImport" 
+                         style="-fx-font-size: 14px; -fx-padding: 12 20 12 20;"/>
+                          <Button text="Imprimer" prefWidth="300.0" onAction="#handlePrint" 
+                         style="-fx-font-size: 14px; -fx-padding: 12 20 12 20;"/>
+               <Button text="Annuler" prefWidth="300.0" onAction="#clearForm" 
                          style="-fx-font-size: 14px; -fx-padding: 12 20 12 20;"/>
                </HBox>
             </children>

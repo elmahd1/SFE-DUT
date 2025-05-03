@@ -8,7 +8,15 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
+
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class EADController {
 
@@ -26,7 +34,6 @@ public class EADController {
     @FXML private TableColumn<DemarcheAdministratif, String> interlocuteurCol;
     @FXML private TableColumn<DemarcheAdministratif, String> emailCol;
     @FXML private TableColumn<DemarcheAdministratif, String> siteWebCol;
-    @FXML private TableColumn<DemarcheAdministratif, String> actionCol;
 
     private final DemarcheAdministratifDao dao = new DemarcheAdministratifDao();
     private final ObservableList<DemarcheAdministratif> demarchesList = FXCollections.observableArrayList();
@@ -70,32 +77,62 @@ public class EADController {
         }
     }
 
-    @FXML
-    private void handleSave() {
-        // Suppose que tu as un formulaire pour saisir une démarche
-        DemarcheAdministratif newDemarche = new DemarcheAdministratif();
-        // Remplir newDemarche avec les données du formulaire
-
-        dao.insertDemarche(newDemarche);
-        loadDemarches(); // Rafraîchir la table
-    }
-
-    @FXML
-    private void handleUpdate() {
-        DemarcheAdministratif selectedDemarche = tableView.getSelectionModel().getSelectedItem();
-        if (selectedDemarche != null) {
-            // Modifier selectedDemarche avec les données du formulaire
-            dao.updateDemarche(selectedDemarche);
-            loadDemarches(); // Rafraîchir la table
-        } else {
-            showAlert("Aucune sélection", "Veuillez sélectionner une démarche à modifier.");
-        }
-    }
-
     private void showAlert(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+    @FXML
+    private void exportEA(){
+         Workbook workbook = new XSSFWorkbook();
+    Sheet sheet = workbook.createSheet("Démarche Administratif");
+
+    // Créer la ligne d'en-têtes
+    Row headerRow = sheet.createRow(0);
+    headerRow.createCell(0).setCellValue("Dénomination");
+    headerRow.createCell(1).setCellValue("Type");
+    headerRow.createCell(2).setCellValue("Forme Juridique");
+    headerRow.createCell(3).setCellValue("Secteur Activité");
+    headerRow.createCell(4).setCellValue("Activité");
+    headerRow.createCell(5).setCellValue("GSM");
+    headerRow.createCell(6).setCellValue("Fixe");
+    headerRow.createCell(7).setCellValue("Adresse");
+    headerRow.createCell(8).setCellValue("Ville");
+    headerRow.createCell(9).setCellValue("Interlocuteur");
+    headerRow.createCell(10).setCellValue("Email");
+    headerRow.createCell(11).setCellValue("Site Web");
+    
+    // Ajouter les données
+    List<DemarcheAdministratif> demarches = dao.getAllDemarches();
+    int rowNum = 1;
+    for (DemarcheAdministratif demarche : demarches) {
+        Row row = sheet.createRow(rowNum++);
+        
+        row.createCell(0).setCellValue(demarche.getDenomination());
+        row.createCell(1).setCellValue(demarche.getStatut());
+        row.createCell(2).setCellValue(demarche.getFormeJuridique());
+        row.createCell(3).setCellValue(demarche.getSecteurActivite());
+        row.createCell(4).setCellValue(demarche.getActivite());
+        row.createCell(5).setCellValue(demarche.getGsm());
+        row.createCell(6).setCellValue(demarche.getFixe());
+        row.createCell(7).setCellValue(demarche.getAdresse());
+        row.createCell(8).setCellValue(demarche.getVille());
+        row.createCell(9).setCellValue(demarche.getNomPrenom()); // correspond à interlocuteur ?
+        row.createCell(10).setCellValue(demarche.getEmail());
+        row.createCell(11).setCellValue(demarche.getSiteWeb());
+    }
+    File exportDir=new File("C:\\ccis documents\\demarche administratif\\extrait annuaire");
+    if (!exportDir.exists()) {
+        exportDir.mkdirs();
+    }
+    String filePath = "C:\\ccis documents\\demarche administratif\\extrait annuaire\\Extrait_annuaire_demarches.xlsx";
+    // Sauvegarder le fichier Excel
+    try (FileOutputStream fileOut = new FileOutputStream(filePath)) {
+        workbook.write(fileOut);
+    } catch (IOException e) {
+        e.printStackTrace();
+        showAlert("Erreur d'exportation", "Une erreur s'est produite lors de l'exportation des données.");
+    }
     }
 }

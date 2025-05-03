@@ -1,0 +1,129 @@
+/* Thème CCIS - Style CSS */
+
+.root {
+    -fx-background-color: #f5f5f5;
+    -fx-font-family: "Segoe UI", Arial, sans-serif;
+}
+
+.main-container {
+    -fx-background-color: #f5f5f5;
+    -fx-padding: 10px;
+}
+
+/* Style pour la barre de recherche */
+.search-field {
+    -fx-background-color: white;
+    -fx-background-radius: 5px;
+    -fx-border-color: #cccccc;
+    -fx-border-radius: 5px;
+    -fx-padding: 5px 10px;
+    -fx-font-size: 14px;
+}
+
+.search-field:focused {
+    -fx-border-color: #FF8A00;
+    -fx-effect: dropshadow(three-pass-box, rgba(46, 134, 222, 0.4), 5, 0, 0, 0);
+}
+
+/* Style pour les boutons */
+.button {
+    -fx-background-color: #FF8A00;
+    -fx-text-fill: white;
+    -fx-background-radius: 5px;
+    -fx-padding: 8px 15px;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #f0ae43;
+}
+
+.button:pressed {
+    -fx-background-color: #f68308;
+}
+
+.search-button {
+    -fx-graphic: url("search-icon.png"); /* Ajoutez une icône de recherche si disponible */
+}
+
+.export-button {
+    -fx-background-color: #FF8A00;
+    
+}
+
+.export-button:hover {
+    -fx-background-color: #f0ae43;
+}
+
+/* Style pour le tableau */
+.table-view {
+    -fx-background-color: white;
+    -fx-background-radius: 5px;
+    -fx-border-color: #e0e0e0;
+    -fx-border-radius: 5px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);
+}
+
+.table-view .column-header {
+    -fx-background-color: #3498db;
+    -fx-padding: 10px 5px;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.table-view .table-row-cell {
+    -fx-background-color: white;
+    -fx-border-color: transparent #e0e0e0 #e0e0e0 transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+.table-view .table-row-cell:odd {
+    -fx-background-color: #f9f9f9;
+}
+
+.table-view .table-row-cell:selected {
+    -fx-background-color: #b3d9ff;
+}
+
+/* Style pour les cellules du tableau */
+.table-view .table-cell {
+    -fx-alignment: center-left;
+    -fx-padding: 8px 5px;
+}
+
+/* Styles pour la barre de défilement */
+.scroll-bar:vertical {
+    -fx-background-color: #f0f0f0;
+    -fx-background-radius: 0;
+}
+
+.scroll-bar:vertical .thumb {
+    -fx-background-color: #c0c0c0;
+    -fx-background-radius: 5px;
+}
+
+.scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #a0a0a0;
+}
+
+/* Style pour indiquer que la ligne est survolée */
+.table-row-cell:hover {
+    -fx-background-color: #eaf4ff;
+}
+
+/* Animation lors du chargement du tableau */
+.table-view .placeholder .label {
+    -fx-text-fill: #666;
+    -fx-font-style: italic;
+}
+
+/* Style pour les actions */
+.table-column .action-button {
+    -fx-background-color: transparent;
+    -fx-padding: 3px;
+    -fx-cursor: hand;
+}

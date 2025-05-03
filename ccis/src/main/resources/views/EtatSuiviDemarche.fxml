@@ -1,40 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
-<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="ccis.controllers.ESDController">
-    <TableView fx:id="tableView" layoutX="10" layoutY="10" prefWidth="1250" prefHeight="600">
+<?import javafx.scene.control.cell.*?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<AnchorPane stylesheets="@/styles/ES.css" xmlns:fx="http://javafx.com/fxml"  fx:controller="ccis.controllers.ESDController" styleClass="main-container" >
+    <!-- Barre de recherche et boutons en haut -->
+    <HBox layoutX="10" layoutY="10" spacing="10" alignment="CENTER_LEFT">
+        <TextField fx:id="searchField" promptText="Rechercher..." onKeyReleased="#onSearch" prefWidth="250" styleClass="search-field"/>
+        <Button onAction="#onSearch" mnemonicParsing="false" text="Rechercher" styleClass="search-button"/>
+        <Region HBox.hgrow="ALWAYS" />
+        <Button onAction="#exportD" mnemonicParsing="false" text="Exporter les démarches" styleClass="export-button"/>
+    </HBox>
+    
+    <!-- TableView avec marge en haut pour laisser de la place à la barre de recherche -->
+    <TableView fx:id="tableView" layoutX="10" layoutY="50" prefWidth="1250" prefHeight="560" styleClass="table-view">
         <columns>
-            <TableColumn fx:id="colDateContact" text="Date Contact" />
-            <TableColumn fx:id="colHeureContact" text="Heure Contact" />
-          <TableColumn fx:id="colTypeDemande" text="Type Demande" />
-            <TableColumn fx:id="colType" text="Type" />
-            <TableColumn fx:id="colObjetVisite" text="Objet Visite" />
-            <TableColumn fx:id="colMontant" text="Montant" />
-            <TableColumn fx:id="colNomPrenom" text="Nom et Prénom" />
-            <TableColumn fx:id="colFixe" text="Fixe" />
-            <TableColumn fx:id="colGsm" text="GSM" />
-            <TableColumn fx:id="colEmail" text="Email" />
-            <TableColumn fx:id="colAccepteEnvoiCcis" text="Accepte Envoi CCIS" />
-            <TableColumn fx:id="colSiteWeb" text="Site Web" />
-            <TableColumn fx:id="colSiegeSocialeAdresse" text="Adresse Siege" />
-           <TableColumn fx:id="colVilleCommunite" text="Ville/Commune" />
-             <TableColumn fx:id="colDenomination" text="Dénomination" />
-           <TableColumn fx:id="colNomRepresentantLegal" text="Nom Représentant" />
-             <TableColumn fx:id="colFormeJuridique" text="Forme Juridique" />
-              <TableColumn fx:id="colDatedepot" text="Date Depot" />
-            <TableColumn fx:id="colHeureDepot" text="Heure Depot" />
-            <TableColumn fx:id="colSecteurActivite" text="Secteur Activité" />
-            <TableColumn fx:id="colActivite" text="Activité" />
-           <TableColumn fx:id="colNomPrenomConseillerCcis" text="Nom Conseiller CCIS" />
-           <TableColumn fx:id="colQualiteConseillerCcis" text="Qualité Conseiller CCIS" />
-            <TableColumn fx:id="colEtatDossierFournit" text="Etat Dossier" />
-            <TableColumn fx:id="colSuiteAccordeeCommande" text="Suite Commande" />
-            <TableColumn fx:id="colObservation" text="Observation" />
-            <TableColumn fx:id="colDateDelivrance" text="Date Délivrance" />  
-             <TableColumn fx:id="colHeureDelivrance" text="Heure Délivrance" />
-            <TableColumn fx:id="actions" text="Actions"/>
+            <TableColumn fx:id="colDateContact" text="Date Contact" styleClass="table-column"/>
+            <TableColumn fx:id="colHeureContact" text="Heure Contact" styleClass="table-column"/>
+            <TableColumn fx:id="colTypeDemande" text="Type Demande" styleClass="table-column"/>
+            <TableColumn fx:id="colType" text="Type" styleClass="table-column"/>
+            <TableColumn fx:id="colObjetVisite" text="Objet Visite" styleClass="table-column"/>
+            <TableColumn fx:id="colMontant" text="Montant" styleClass="table-column"/>
+            <TableColumn fx:id="colNomPrenom" text="Nom et Prénom" styleClass="table-column"/>
+            <TableColumn fx:id="colFixe" text="Fixe" styleClass="table-column"/>
+            <TableColumn fx:id="colGsm" text="GSM" styleClass="table-column"/>
+            <TableColumn fx:id="colEmail" text="Email" styleClass="table-column"/>
+            <TableColumn fx:id="colAccepteEnvoiCcis" text="Accepte Envoi CCIS" styleClass="table-column"/>
+            <TableColumn fx:id="colSiteWeb" text="Site Web" styleClass="table-column"/>
+            <TableColumn fx:id="colSiegeSocialeAdresse" text="Adresse Siege" styleClass="table-column"/>
+            <TableColumn fx:id="colVilleCommunite" text="Ville/Commune" styleClass="table-column"/>
+            <TableColumn fx:id="colDenomination" text="Dénomination" styleClass="table-column"/>
+            <TableColumn fx:id="colNomRepresentantLegal" text="Nom Représentant" styleClass="table-column"/>
+            <TableColumn fx:id="colFormeJuridique" text="Forme Juridique" styleClass="table-column"/>
+            <TableColumn fx:id="colDateDepot" text="Date Depot" styleClass="table-column"/>
+            <TableColumn fx:id="colHeureDepot" text="Heure Depot" styleClass="table-column"/>
+            <TableColumn fx:id="colSecteurActivite" text="Secteur Activité" styleClass="table-column"/>
+            <TableColumn fx:id="colActivite" text="Activité" styleClass="table-column"/>
+            <TableColumn fx:id="colNomPrenomConseillerCcis" text="Nom Conseiller CCIS" styleClass="table-column"/>
+            <TableColumn fx:id="colQualiteConseillerCcis" text="Qualité Conseiller CCIS" styleClass="table-column"/>
+            <TableColumn fx:id="colEtatDossierFournit" text="Etat Dossier" styleClass="table-column"/>
+            <TableColumn fx:id="colSuiteAccordeeCommande" text="Suite Commande" styleClass="table-column"/>
+            <TableColumn fx:id="colObservation" text="Observation" styleClass="table-column"/>
+            <TableColumn fx:id="colDateDelivrance" text="Date Délivrance" styleClass="table-column"/>
+            <TableColumn fx:id="colHeureDelivrance" text="Heure Délivrance" styleClass="table-column"/>
+            <TableColumn fx:id="colActions" text="Actions" styleClass="table-column"/>
         </columns>
     </TableView>
 </AnchorPane>

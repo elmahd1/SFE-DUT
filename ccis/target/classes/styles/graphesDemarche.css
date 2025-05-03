@@ -1,0 +1,183 @@
+/* Style du conteneur principal */
+.main-container {
+    -fx-background-color: #f5f9ff;
+    -fx-font-family: "Segoe UI", Arial, sans-serif;
+}
+
+/* Style pour le ScrollPane */
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+/* Style pour les VBox et HBox */
+.vbox, .hbox {
+    -fx-background-color: white;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-padding: 15px;
+}
+
+/* Style pour les boutons */
+.button {
+    -fx-background-color: #2c5f9b;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 8px 16px;
+    -fx-background-radius: 4px;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #4a89dc;
+}
+
+/* Style pour les boutons de téléchargement et de copie */
+#downloadChart1, #downloadChart2, #downloadChart3, #downloadTable1, #downloadTable2, #downloadTable3 {
+    -fx-background-color: #4caf50;
+}
+
+#downloadChart1:hover, #downloadChart2:hover, #downloadChart3:hover, 
+#downloadTable1:hover, #downloadTable2:hover, #downloadTable3:hover {
+    -fx-background-color: #81c784;
+}
+
+#copyChart1, #copyChart2, #copyChart3 {
+    -fx-background-color: #ff8c00;
+}
+
+#copyChart1:hover, #copyChart2:hover, #copyChart3:hover {
+    -fx-background-color: #ffa54f;
+}
+
+/* Style pour les graphiques */
+.chart {
+    -fx-padding: 10px;
+    -fx-background-color: white;
+    -fx-background-radius: 5px;
+    -fx-border-radius: 5px;
+    -fx-border-color: #e0e0e0;
+}
+
+/* Style pour les PieChart */
+.chart-pie {
+    -fx-border-color: derive(-fx-pie-color, -10%);
+    -fx-border-width: 1px;
+}
+
+.chart-pie-label {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+/* Couleurs personnalisées pour les secteurs des PieCharts */
+.default-color0.chart-pie { -fx-pie-color: #2c5f9b; }
+.default-color1.chart-pie { -fx-pie-color: #ff8c00; }
+.default-color2.chart-pie { -fx-pie-color: #4caf50; }
+.default-color3.chart-pie { -fx-pie-color: #8e44ad; }
+.default-color4.chart-pie { -fx-pie-color: #e74c3c; }
+.default-color5.chart-pie { -fx-pie-color: #f39c12; }
+.default-color6.chart-pie { -fx-pie-color: #3498db; }
+.default-color7.chart-pie { -fx-pie-color: #1abc9c; }
+
+/* Style pour le BarChart */
+.chart-bar {
+    -fx-bar-fill: #4a89dc;
+    -fx-background-radius: 3px;
+}
+
+.chart-bar:hover {
+    -fx-bar-fill: #ff8c00;
+}
+
+.chart-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+.axis {
+    -fx-tick-label-fill: #333333;
+    -fx-font-size: 12px;
+}
+
+.axis-label {
+    -fx-text-fill: #333333;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+/* Style pour les TableView */
+.table-view {
+    -fx-background-color: white;
+    -fx-table-cell-border-color: #e0e0e0;
+    -fx-border-color: #e0e0e0;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #2c5f9b;
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+    -fx-padding: 8px;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: white;
+    -fx-alignment: center;
+    -fx-font-weight: bold;
+}
+
+.table-view .table-cell {
+    -fx-alignment: center;
+    -fx-padding: 6px;
+}
+
+.table-row-cell {
+    -fx-background-color: white;
+    -fx-border-color: #f0f0f0;
+    -fx-table-cell-border-color: #f0f0f0;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: #f8f8f8;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #d0e3ff;
+}
+
+/* Style pour la barre de défilement */
+.scroll-bar:vertical {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:horizontal {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar > .thumb {
+    -fx-background-color: #4a89dc;
+    -fx-background-radius: 5em;
+}
+
+.scroll-bar > .thumb:hover {
+    -fx-background-color: #2c5f9b;
+}
+
+/* Style pour les légendes des graphiques */
+.chart-legend {
+    -fx-background-color: transparent;
+    -fx-padding: 5px;
+}
+
+.chart-legend-item {
+    -fx-font-size: 12px;
+}

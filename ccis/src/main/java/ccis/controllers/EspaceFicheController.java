@@ -15,26 +15,34 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.application.Platform;
-import ccis.models.DemarcheAdministratif;
+import ccis.models.EspaceEntreprise;
 
+import org.apache.poi.ss.usermodel.Sheet;
+import java.io.File;
+import java.io.FileInputStream;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.BiConsumer;
 
-import ccis.dao.DemarcheAdministratifDao;  // Import the DAO class
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DateUtil;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-public class EspaceFicheController {
+import ccis.dao.EspaceEntrepriseDAO;  // Import the DAO class
+
+ public class EspaceFicheController {
 
     @FXML private DatePicker dateContact;
     @FXML private Label dateContactError;
     @FXML private TextField heureContact;
     @FXML private Label heureContactError;
-    @FXML private ComboBox<String> typeDemande;
-    @FXML private Label typeDemandeError;
-    @FXML private ComboBox<String> status;
-    @FXML private Label statusError;
     @FXML private ComboBox<String> objetVisite;
     @FXML private Label objetVisiteError;
-    @FXML private Label montantError;
     @FXML private Label nomPrenomError;
     @FXML private Label telephoneFixError;
     @FXML private Label telephoneGSMError;
@@ -45,17 +53,13 @@ public class EspaceFicheController {
     @FXML private Label denominationError;
     @FXML private Label nomRepresentantLegalError;
     @FXML private Label formeJuridiqueError;
-    @FXML private Label autreFormeJuridiqueError;
     @FXML private Label dateDepotError;
     @FXML private Label heureDepotError;
     @FXML private Label secteurActiviteError;
     @FXML private Label activiteError;
     @FXML private Label nomPrenomConseillerCCISError;
     @FXML private Label qualiteConseillerCCISError;
-    @FXML private Label etatDossierError;
-    @FXML private Label suiteDemandeError;
     @FXML private Label erreurLabel;
-    @FXML private TextField montant;
     @FXML private CheckBox accepteEnvoiCCIS;
     @FXML private TextField nomPrenom;
     @FXML private TextField telephoneFix;
@@ -67,49 +71,30 @@ public class EspaceFicheController {
     @FXML private TextField denomination;
     @FXML private TextField nomRepresentantLegal;
     @FXML private ComboBox<String> formeJuridique;
-    @FXML private TextField autreFormeJuridique;
     @FXML private DatePicker dateDepot;
     @FXML private TextField heureDepot;
     @FXML private ComboBox<String> secteurActivite;
     @FXML private TextField activite;
     @FXML private TextField nomPrenomConseillerCCIS;
     @FXML private TextField qualiteConseillerCCIS;
-    @FXML private ComboBox<String> etatDossier;
-    @FXML private ComboBox<String> suiteDemande;
-    @FXML private TextField interlocuteur; // Add this new field
-    @FXML private Label interlocuteurError; // Add this new field
-    @FXML private TextField observation; // Add this new field
-    @FXML private Label observationError; // Add this new field
-    @FXML private DatePicker dateDelivrance; // Add this new field
-    @FXML private Label dateDelivranceError; // Add this new field
-    @FXML private TextField heureDelivrance; // Add this new field
-    @FXML private Label heureDelivranceError;
+    @FXML private DatePicker dateDepart; // Add this new field
+    @FXML private Label dateDepartError; // Update this line
+    @FXML private TextField heureDepart; // Add this new field
+    @FXML private Label heureDepartError;
     @FXML
     private ScrollPane scrollPane;
     @FXML
     private VBox scrollContent;
  private DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    // Create an instance of DemarcheAdministratifDAO
-    private DemarcheAdministratifDao demarcheDAO = new DemarcheAdministratifDao();
+    // Create an instance of dao
+   EspaceEntrepriseDAO dao = new EspaceEntrepriseDAO();
 
     @FXML
     public void initialize() {
         
     nomPrenomConseillerCCIS.setText("Rachid BNINHA");
     qualiteConseillerCCIS.setText("Chef de département services aux ressortissants");
-        // Type Demande ComboBox
-        ObservableList<String> typeDemandeOptions = FXCollections.observableArrayList(
-            "Demande d’information", 
-            "Demande de document"
-        );
-        typeDemande.setItems(typeDemandeOptions);
 
-        // Status ComboBox
-        ObservableList<String> statusOptions = FXCollections.observableArrayList(
-            "Personne Physique", 
-            "Personne Morale"
-        );
-        status.setItems(statusOptions);
 
         // Forme Juridique ComboBox
         ObservableList<String> formeJuridiqueOptions = FXCollections.observableArrayList(
@@ -129,20 +114,8 @@ public class EspaceFicheController {
         );
         secteurActivite.setItems(secteurActiviteOptions);
 
-        // Etat Dossier ComboBox
-        ObservableList<String> etatDossierOptions = FXCollections.observableArrayList(
-            "Complet et conforme", 
-            "Incomplet", 
-            "Non conforme"
-        );
-        etatDossier.setItems(etatDossierOptions);
+ 
 
-        // Suite Demande ComboBox
-        ObservableList<String> suiteDemandeOptions = FXCollections.observableArrayList(
-            "Acceptée", 
-            "Rejetée"
-        );
-        suiteDemande.setItems(suiteDemandeOptions);
         
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
 
@@ -172,14 +145,6 @@ public class EspaceFicheController {
         
         if (heureContact.getText().isEmpty()) {
             showError(heureContact, heureContactError, "L'heure de contact est requise");
-            isValid = false;
-        }
-        if (typeDemande.getValue() == null) {
-            showError(typeDemande, typeDemandeError, "Le type de demande est requis");
-            isValid = false;
-        }
-        if (status.getValue() == null) {
-            showError(status, statusError, "Le statut est requis");
             isValid = false;
         }
         if (objetVisite.getValue() == null) {
@@ -239,77 +204,59 @@ public class EspaceFicheController {
 if (isValid) {
     try {
         System.out.println("Tentative d'enregistrement...");
-        DemarcheAdministratif demarche = new DemarcheAdministratif();
+        EspaceEntreprise espace = new EspaceEntreprise();
         
         // Required fields validation
         if (dateContact.getValue() == null) {
             throw new IllegalArgumentException("La date de contact est obligatoire");
         }
-        demarche.setDateContact(dateContact.getValue().format(dateFormatter));
+        espace.setDateContact(dateContact.getValue().format(dateFormatter));
         
         // Time fields with validation
         validateTimeFormat(heureContact.getText(), "Heure de contact");
-        demarche.setHeureContact(heureContact.getText());
-        
-        // Other required fields
-        if (typeDemande.getValue() == null) {
-            throw new IllegalArgumentException("Le type de demande est obligatoire");
-        }
-        demarche.setTypeDemande(typeDemande.getValue());
-        
-        // Handle numeric field with proper validation
-        try {
-            demarche.setMontant(montant.getText().isEmpty() ? 0 : 
-                Float.parseFloat(montant.getText()));
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Montant invalide");
-        }
+        espace.setHeureContact(heureContact.getText());
         
         // Required text fields
         if (nomPrenom.getText() == null || nomPrenom.getText().trim().isEmpty()) {
             throw new IllegalArgumentException("Le nom et prénom sont obligatoires");
         }
-        demarche.setNomPrenom(nomPrenom.getText().trim());
+        espace.setNomPrenom(nomPrenom.getText().trim());
         
         // Email validation
         if (!email.getText().isEmpty() && !isValidEmail(email.getText())) {
             throw new IllegalArgumentException("Format d'email invalide");
         }
-        demarche.setEmail(email.getText());
+        espace.setEmail(email.getText());
         
         // Set other fields with null checks
-        demarche.setStatut(status.getValue() != null ? status.getValue() : "");
-        demarche.setObjetVisite(objetVisite.getValue() != null ? objetVisite.getValue() : "");
-        demarche.setFixe(telephoneFix.getText() != null ? telephoneFix.getText() : "");
-        demarche.setGsm(telephoneGSM.getText() != null ? telephoneGSM.getText() : "");
-        demarche.setSiteWeb(siteweb.getText() != null ? siteweb.getText() : "");
-        demarche.setAdresse(adresse.getText() != null ? adresse.getText() : "");
-        demarche.setVille(ville.getText() != null ? ville.getText() : "");
-        demarche.setDenomination(denomination.getText() != null ? denomination.getText() : "");
-        demarche.setNomRepLegal(nomRepresentantLegal.getText() != null ? nomRepresentantLegal.getText() : "");
-        demarche.setFormeJuridique(formeJuridique.getValue() != null ? formeJuridique.getValue() : "");
+        espace.setObjetVisite(objetVisite.getValue() != null ? objetVisite.getValue() : "");
+        espace.setFixe(telephoneFix.getText() != null ? telephoneFix.getText() : "");
+        espace.setGsm(telephoneGSM.getText() != null ? telephoneGSM.getText() : "");
+        espace.setSiteWeb(siteweb.getText() != null ? siteweb.getText() : "");
+        espace.setAdresse(adresse.getText() != null ? adresse.getText() : "");
+        espace.setVille(ville.getText() != null ? ville.getText() : "");
+        espace.setDenomination(denomination.getText() != null ? denomination.getText() : "");
+        espace.setNomRepLegal(nomRepresentantLegal.getText() != null ? nomRepresentantLegal.getText() : "");
+        espace.setFormeJuridique(formeJuridique.getValue() != null ? formeJuridique.getValue() : "");
         
         // Date fields with null checks
-        demarche.setDateDepot(dateDepot.getValue() != null ? dateDepot.getValue().format(dateFormatter) : null);
+        espace.setDateDepot(dateDepot.getValue() != null ? dateDepot.getValue().format(dateFormatter) : null);
         validateTimeFormat(heureDepot.getText(), "Heure de dépôt");
-        demarche.setHeureDepot(heureDepot.getText());
+        espace.setHeureDepot(heureDepot.getText());
         
         // Other fields
-        demarche.setSecteurActivite(secteurActivite.getValue() != null ? secteurActivite.getValue() : "");
-        demarche.setActivite(activite.getText() != null ? activite.getText() : "");
-        demarche.setNomPrenomCCIS(nomPrenomConseillerCCIS.getText() != null ? nomPrenomConseillerCCIS.getText() : "");
-        demarche.setQualiteCCIS(qualiteConseillerCCIS.getText() != null ? qualiteConseillerCCIS.getText() : "");
-        demarche.setEtatDossier(etatDossier.getValue() != null ? etatDossier.getValue() : "");
-        demarche.setSuiteDemande(suiteDemande.getValue() != null ? suiteDemande.getValue() : "");
-        demarche.setObservation(observation.getText() != null ? observation.getText() : "");
-        demarche.setDateDelivrance(dateDelivrance.getValue() != null ? dateDelivrance.getValue().format(dateFormatter) : null);
-        validateTimeFormat(heureDelivrance.getText(), "Heure de délivrance");
-        demarche.setHeureDelivrance(heureDelivrance.getText());
+        espace.setSecteurActivite(secteurActivite.getValue() != null ? secteurActivite.getValue() : "");
+        espace.setAvtivite(activite.getText() != null ? activite.getText() : "");
+        espace.setNomPrenomCCIS(nomPrenomConseillerCCIS.getText() != null ? nomPrenomConseillerCCIS.getText() : "");
+        espace.setQualiteCCIS(qualiteConseillerCCIS.getText() != null ? qualiteConseillerCCIS.getText() : "");
+        espace.setDateDepart(dateDepart.getValue() != null ? dateDepart.getValue().format(dateFormatter) : null);
+        validateTimeFormat(heureDepart.getText(), "Heure de départ");
+        espace.setHeureDepart(heureDepart.getText());
         
-        demarche.setAccepteEnvoi(accepteEnvoiCCIS.isSelected() ? "Oui" : "Non");
+        espace.setAccepteEnvoi(accepteEnvoiCCIS.isSelected() ? "Oui" : "Non");
 
-        System.out.println("Données à enregistrer: " + demarche.toString());
-        demarcheDAO.insertDemarche(demarche);
+        System.out.println("Données à enregistrer: " + espace.toString());
+       dao.create(espace);
         System.out.println("Enregistrement réussi");
         
           // Show success message
@@ -336,10 +283,7 @@ if (isValid) {
         private void clearForm() {
             dateContact.setValue(null);
             heureContact.clear();
-            typeDemande.getSelectionModel().clearSelection();
-            status.getSelectionModel().clearSelection();
             objetVisite.getSelectionModel().clearSelection();
-            montant.clear(); 
             accepteEnvoiCCIS.setSelected(false);
             nomPrenom.clear();
             telephoneFix.clear();
@@ -351,14 +295,13 @@ if (isValid) {
             denomination.clear();
             nomRepresentantLegal.clear();
             formeJuridique.getSelectionModel().clearSelection();
-            autreFormeJuridique.clear();
             dateDepot.setValue(null);
             heureDepot.clear();
             secteurActivite.getSelectionModel().clearSelection();
             activite.clear();
-            observation.clear();
-            dateDelivrance.setValue(null);
-            heureDelivrance.clear();
+            dateDepart.setValue(null);
+            heureDepart.clear();
+
         }
     // Method to show errors for any control
     private void showError(Control control, Label errorLabel, String message) {
@@ -379,8 +322,18 @@ if (isValid) {
     private void clearAllErrors() {
         clearError(dateContact, dateContactError);
         clearError(heureContact, heureContactError);
-        clearError(typeDemande, typeDemandeError);
-        // Clear all other fields similarly...
+        clearError(nomPrenom, nomPrenomError);
+        clearError(telephoneGSM, telephoneGSMError);
+        clearError(email, emailError);
+        clearError(adresse, adresseError);
+        clearError(ville, villeError);
+        clearError(denomination, denominationError);
+        clearError(nomRepresentantLegal, nomRepresentantLegalError);
+        clearError(formeJuridique, formeJuridiqueError);
+        clearError(dateDepot, dateDepotError);
+        clearError(heureDepot, heureDepotError);
+        clearError(secteurActivite, secteurActiviteError);
+        clearError(activite, activiteError);
     }
 
     public void scrollToBottom() {
@@ -404,4 +357,114 @@ private void showErrorAlert(String title, String message) {
     alert.setContentText(message);
     alert.showAndWait();
 }
+@FXML
+private void handleImport(ActionEvent event) {
+    FileChooser fileChooser = new FileChooser();
+    fileChooser.setTitle("Sélectionner un fichier Excel");
+    fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel Files", "*.xlsx"));
+    File file = fileChooser.showOpenDialog(null); // tu peux passer ici le Stage si tu l’as
+
+    if (file != null) {
+        importFromExcel(file);
+    }
+}
+private void importFromExcel(File file) {
+    try (FileInputStream fis = new FileInputStream(file);
+         Workbook workbook = new XSSFWorkbook(fis)) {
+
+        Sheet sheet = workbook.getSheetAt(0);
+        Row headerRow = sheet.getRow(0);
+
+        if (headerRow == null) {
+            System.out.println("Fichier Excel vide ou sans en-tête.");
+            return;
+        }
+
+        // Map header titles to their column indexes
+        Map<String, Integer> columnIndexes = new HashMap<>();
+        for (Cell cell : headerRow) {
+            columnIndexes.put(cell.getStringCellValue().trim(), cell.getColumnIndex());
+        }
+
+        // Define mapping from Excel column name to Java object setter
+        Map<String, BiConsumer<EspaceEntreprise, String>> fieldMapping = new HashMap<>();
+        fieldMapping.put("Dénomination", (d, v) -> d.setDenomination(v));
+        fieldMapping.put("Forme juridique", (d, v) -> d.setFormeJuridique(v));
+        fieldMapping.put("Secteur Activité", (d, v) -> d.setSecteurActivite(v));
+        fieldMapping.put("Activité", (d, v) -> d.setAvtivite(v));
+        fieldMapping.put("FIXE", (d, v) -> d.setFixe(v));
+        fieldMapping.put("GSM 1", (d, v) -> d.setGsm(v));
+        fieldMapping.put("Siège Sociale / Adresses", (d, v) -> d.setAdresse(v));
+        fieldMapping.put("Ville / Communité", (d, v) -> d.setVille(v));
+        fieldMapping.put("Email 1", (d, v) -> d.setEmail(v));
+        fieldMapping.put("Date de contact", (d, v) -> d.setDateContact(v));
+        fieldMapping.put("Heure de contact", (d, v) -> d.setHeureContact(v));
+        fieldMapping.put("Objet de la visite", (d, v) -> d.setObjetVisite(v));
+        fieldMapping.put("Nom et Prénom", (d, v) -> d.setNomPrenom(v));
+        fieldMapping.put("Accepte Envoi CCIS", (d, v) -> d.setAccepteEnvoi(v));
+        fieldMapping.put("Site Web", (d, v) -> d.setSiteWeb(v));
+        fieldMapping.put("Nom du représentant légal", (d, v) -> d.setNomRepLegal(v));
+        fieldMapping.put("Date de dépôt", (d, v) -> d.setDateDepot(v));
+        fieldMapping.put("Heure de dépôt", (d, v) -> d.setHeureDepot(v));
+        fieldMapping.put("Nom et Prénom du conseiller CCIS", (d, v) -> d.setNomPrenomCCIS(v));
+        fieldMapping.put("Qualité du conseiller CCIS", (d, v) -> d.setQualiteCCIS(v));
+        fieldMapping.put("Date de départ", (d, v) -> d.setDateDepart(v));
+        fieldMapping.put("Heure de départ", (d, v) -> d.setHeureDepart(v));
+
+        for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+            Row row = sheet.getRow(i);
+            if (row == null) continue;
+
+            EspaceEntreprise d = new EspaceEntreprise();
+
+            for (String header : fieldMapping.keySet()) {
+                Integer colIndex = columnIndexes.get(header);
+                if (colIndex == null) continue;
+
+                Cell cell = row.getCell(colIndex);
+                String value = getCellAsString(cell);
+
+                try {
+                    fieldMapping.get(header).accept(d, value);
+                } catch (Exception e) {
+                    System.out.println("Erreur lors du traitement de la colonne '" + header + "' à la ligne " + (i + 1) + ": " + e.getMessage());
+                }
+            }
+
+            new EspaceEntrepriseDAO().create(d);
+        }
+
+        System.out.println("Importation terminée avec succès.");
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Succès");
+        alert.setHeaderText(null);
+        alert.setContentText("L'importation a été effectuée avec succès!");
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+
+private String getCellAsString(Cell cell) {
+    if (cell == null) return "";
+    switch (cell.getCellType()) {
+        case STRING: return cell.getStringCellValue();
+        case NUMERIC:
+            if (DateUtil.isCellDateFormatted(cell)) {
+                return cell.getDateCellValue().toString();
+            } else {
+                return String.valueOf(cell.getNumericCellValue());
+            }
+        case BOOLEAN: return String.valueOf(cell.getBooleanCellValue());
+        case FORMULA:
+            try {
+                return cell.getStringCellValue(); // or cell.getNumericCellValue() depending
+            } catch (IllegalStateException e) {
+                return String.valueOf(cell.getNumericCellValue());
+            }
+        default: return "";
+    }
+}
+
+
 }
