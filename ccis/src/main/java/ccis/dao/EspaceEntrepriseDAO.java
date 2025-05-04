@@ -11,34 +11,37 @@ public class EspaceEntrepriseDAO {
 
     // Create operation
     public void create(EspaceEntreprise espaceEntreprise) {
-        String sql = "INSERT INTO espace_entreprise (date_contact, objet_visite, nom_prenom, statut, fixe, gsm, email, accepte_envoi, adresse, ville, denomination, code_ice, nom_rep_legal, site_web, forme_juridique, date_depot, taille_entreprise, secteur_activite, activite, nom_prenom_ccis, qualite_ccis, date_depart) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO espace_entreprise (date_contact, heure_contact, objet_visite, nom_prenom, statut, telephone_fixe, telephone_gsm, email, accepte_envoi_ccis, adresse, ville, denomination, code_ice, nom_representant_legal, site_web, forme_juridique, taille_entreprise, secteur_activite, activite, nom_prenom_conseiller_ccis, qualite_conseiller_ccis, date_depart, heure_depart, date_depot, heure_depot) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection connection = JDBCConnection.getConnection(); 
              PreparedStatement stmt = connection.prepareStatement(sql)) {
             
-            stmt.setString(1, espaceEntreprise.getDateContact());
-            stmt.setString(2, espaceEntreprise.getObjetVisite());
-            stmt.setString(3, espaceEntreprise.getNomPrenom());
-            stmt.setString(4, espaceEntreprise.getStatut());
-            stmt.setString(5, espaceEntreprise.getFixe());
-            stmt.setString(6, espaceEntreprise.getGsm());
-            stmt.setString(7, espaceEntreprise.getEmail());
-            stmt.setString(8, espaceEntreprise.getAccepteEnvoi());
-            stmt.setString(9, espaceEntreprise.getAdresse());
-            stmt.setString(10, espaceEntreprise.getVille());
-            stmt.setString(11, espaceEntreprise.getDenomination());
-            stmt.setString(12, espaceEntreprise.getCodeIce());
-            stmt.setString(13, espaceEntreprise.getNomRepLegal());
-            stmt.setString(14, espaceEntreprise.getSiteWeb());
-            stmt.setString(15, espaceEntreprise.getFormeJuridique());
-            stmt.setString(16, espaceEntreprise.getDateDepot());
-            stmt.setString(17, espaceEntreprise.getTailleEntreprise());
-            stmt.setString(18, espaceEntreprise.getSecteurActivite());
-            stmt.setString(19, espaceEntreprise.getAvtivite());
-            stmt.setString(20, espaceEntreprise.getNomPrenomCCIS());
-            stmt.setString(21, espaceEntreprise.getQualiteCCIS());
-            stmt.setString(22, espaceEntreprise.getDateDepart());
-
+                stmt.setString(1, espaceEntreprise.getDateContact());
+                stmt.setString(2, espaceEntreprise.getHeureContact());
+                stmt.setString(3, espaceEntreprise.getObjetVisite());
+                stmt.setString(4, espaceEntreprise.getNomPrenom());
+                stmt.setString(5, espaceEntreprise.getStatut());
+                stmt.setString(6, espaceEntreprise.getFixe());
+                stmt.setString(7, espaceEntreprise.getGsm());
+                stmt.setString(8, espaceEntreprise.getEmail());
+                stmt.setBoolean(9, Boolean.parseBoolean(espaceEntreprise.getAccepteEnvoi())); // convert String to boolean
+                stmt.setString(10, espaceEntreprise.getAdresse());
+                stmt.setString(11, espaceEntreprise.getVille());
+                stmt.setString(12, espaceEntreprise.getDenomination());
+                stmt.setString(13, espaceEntreprise.getCodeICE());
+                stmt.setString(14, espaceEntreprise.getNomRepLegal());
+                stmt.setString(15, espaceEntreprise.getSiteWeb());
+                stmt.setString(16, espaceEntreprise.getFormeJuridique());
+                stmt.setString(17, espaceEntreprise.getTailleEntreprise());
+                stmt.setString(18, espaceEntreprise.getSecteurActivite());
+                stmt.setString(19, espaceEntreprise.getActivite());
+                stmt.setString(20, espaceEntreprise.getNomPrenomCCIS());
+                stmt.setString(21, espaceEntreprise.getQualiteCCIS());
+                stmt.setString(22, espaceEntreprise.getDateDepart());
+                stmt.setString(23, espaceEntreprise.getHeureDepart());
+                stmt.setString(24, espaceEntreprise.getDateDepot());
+                stmt.setString(25, espaceEntreprise.getHeureDepot());
+                
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -61,24 +64,27 @@ public class EspaceEntrepriseDAO {
                 espaceEntreprise.setObjetVisite(rs.getString("objet_visite"));
                 espaceEntreprise.setNomPrenom(rs.getString("nom_prenom"));
                 espaceEntreprise.setStatut(rs.getString("statut"));
-                espaceEntreprise.setFixe(rs.getString("fixe"));
-                espaceEntreprise.setGsm(rs.getString("gsm"));
+                espaceEntreprise.setFixe(rs.getString("telephone_fixe"));
+                espaceEntreprise.setGsm(rs.getString("telephone_gsm"));
                 espaceEntreprise.setEmail(rs.getString("email"));
-                espaceEntreprise.setAccepteEnvoi(rs.getString("accepte_envoi"));
+                espaceEntreprise.setAccepteEnvoi(rs.getString("accepte_envoi_ccis"));
                 espaceEntreprise.setAdresse(rs.getString("adresse"));
                 espaceEntreprise.setVille(rs.getString("ville"));
                 espaceEntreprise.setDenomination(rs.getString("denomination"));
-                espaceEntreprise.setCodeIce(rs.getString("code_ice"));
-                espaceEntreprise.setNomRepLegal(rs.getString("nom_rep_legal"));
+                espaceEntreprise.setCodeICE(rs.getString("code_ice"));
+                espaceEntreprise.setNomRepLegal(rs.getString("nom_representant_legal"));
                 espaceEntreprise.setSiteWeb(rs.getString("site_web"));
                 espaceEntreprise.setFormeJuridique(rs.getString("forme_juridique"));
                 espaceEntreprise.setDateDepot(rs.getString("date_depot"));
                 espaceEntreprise.setTailleEntreprise(rs.getString("taille_entreprise"));
                 espaceEntreprise.setSecteurActivite(rs.getString("secteur_activite"));
-                espaceEntreprise.setAvtivite(rs.getString("activite"));
-                espaceEntreprise.setNomPrenomCCIS(rs.getString("nom_prenom_ccis"));
-                espaceEntreprise.setQualiteCCIS(rs.getString("qualite_ccis"));
+                espaceEntreprise.setActivite(rs.getString("activite"));
+                espaceEntreprise.setNomPrenomCCIS(rs.getString("nom_prenom_conseiller_ccis"));
+                espaceEntreprise.setQualiteCCIS(rs.getString("qualite_conseiller_ccis"));
                 espaceEntreprise.setDateDepart(rs.getString("date_depart"));
+                espaceEntreprise.setHeureContact(rs.getString("heure_contact"));
+espaceEntreprise.setHeureDepot(rs.getString("heure_depot"));
+                espaceEntreprise.setHeureDepart(rs.getString("heure_depart"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -89,35 +95,38 @@ public class EspaceEntrepriseDAO {
 
     // Update operation
     public void update(EspaceEntreprise espaceEntreprise) {
-        String sql = "UPDATE espace_entreprise SET date_contact = ?, objet_visite = ?, nom_prenom = ?, statut = ?, fixe = ?, gsm = ?, email = ?, accepte_envoi = ?, adresse = ?, ville = ?, denomination = ?, code_ice = ?, nom_rep_legal = ?, site_web = ?, forme_juridique = ?, date_depot = ?, taille_entreprise = ?, secteur_activite = ?, activite = ?, nom_prenom_ccis = ?, qualite_ccis = ?, date_depart = ? WHERE id = ?";
+        String sql = "UPDATE espace_entreprise SET date_contact = ?, heure_contact = ?, objet_visite = ?, nom_prenom = ?, statut = ?, telephone_fixe = ?, telephone_gsm = ?, email = ?, accepte_envoi_ccis = ?, adresse = ?, ville = ?, denomination = ?, code_ice = ?, nom_representant_legal = ?, site_web = ?, forme_juridique = ?, taille_entreprise = ?, secteur_activite = ?, activite = ?, nom_prenom_conseiller_ccis = ?, qualite_conseiller_ccis = ?, date_depart = ?, heure_depart = ?, date_depot = ?, heure_depot = ? WHERE id = ?";
 
         try (Connection connection = JDBCConnection.getConnection(); 
              PreparedStatement stmt = connection.prepareStatement(sql)) {
             
-            stmt.setString(1, espaceEntreprise.getDateContact());
-            stmt.setString(2, espaceEntreprise.getObjetVisite());
-            stmt.setString(3, espaceEntreprise.getNomPrenom());
-            stmt.setString(4, espaceEntreprise.getStatut());
-            stmt.setString(5, espaceEntreprise.getFixe());
-            stmt.setString(6, espaceEntreprise.getGsm());
-            stmt.setString(7, espaceEntreprise.getEmail());
-            stmt.setString(8, espaceEntreprise.getAccepteEnvoi());
-            stmt.setString(9, espaceEntreprise.getAdresse());
-            stmt.setString(10, espaceEntreprise.getVille());
-            stmt.setString(11, espaceEntreprise.getDenomination());
-            stmt.setString(12, espaceEntreprise.getCodeIce());
-            stmt.setString(13, espaceEntreprise.getNomRepLegal());
-            stmt.setString(14, espaceEntreprise.getSiteWeb());
-            stmt.setString(15, espaceEntreprise.getFormeJuridique());
-            stmt.setString(16, espaceEntreprise.getDateDepot());
-            stmt.setString(17, espaceEntreprise.getTailleEntreprise());
-            stmt.setString(18, espaceEntreprise.getSecteurActivite());
-            stmt.setString(19, espaceEntreprise.getAvtivite());
-            stmt.setString(20, espaceEntreprise.getNomPrenomCCIS());
-            stmt.setString(21, espaceEntreprise.getQualiteCCIS());
-            stmt.setString(22, espaceEntreprise.getDateDepart());
-            stmt.setInt(23, espaceEntreprise.getId());
-
+                stmt.setString(1, espaceEntreprise.getDateContact());
+                stmt.setString(2, espaceEntreprise.getHeureContact());
+                stmt.setString(3, espaceEntreprise.getObjetVisite());
+                stmt.setString(4, espaceEntreprise.getNomPrenom());
+                stmt.setString(5, espaceEntreprise.getStatut());
+                stmt.setString(6, espaceEntreprise.getFixe());
+                stmt.setString(7, espaceEntreprise.getGsm());
+                stmt.setString(8, espaceEntreprise.getEmail());
+                stmt.setBoolean(9, Boolean.parseBoolean(espaceEntreprise.getAccepteEnvoi()));
+                stmt.setString(10, espaceEntreprise.getAdresse());
+                stmt.setString(11, espaceEntreprise.getVille());
+                stmt.setString(12, espaceEntreprise.getDenomination());
+                stmt.setString(13, espaceEntreprise.getCodeICE());
+                stmt.setString(14, espaceEntreprise.getNomRepLegal());
+                stmt.setString(15, espaceEntreprise.getSiteWeb());
+                stmt.setString(16, espaceEntreprise.getFormeJuridique());
+                stmt.setString(17, espaceEntreprise.getTailleEntreprise());
+                stmt.setString(18, espaceEntreprise.getSecteurActivite());
+                stmt.setString(19, espaceEntreprise.getActivite());
+                stmt.setString(20, espaceEntreprise.getNomPrenomCCIS());
+                stmt.setString(21, espaceEntreprise.getQualiteCCIS());
+                stmt.setString(22, espaceEntreprise.getDateDepart());
+                stmt.setString(23, espaceEntreprise.getHeureDepart());
+                stmt.setString(24, espaceEntreprise.getDateDepot());
+                stmt.setString(25, espaceEntreprise.getHeureDepot());
+                stmt.setInt(26, espaceEntreprise.getId());
+                
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -152,24 +161,27 @@ public class EspaceEntrepriseDAO {
                 espaceEntreprise.setObjetVisite(rs.getString("objet_visite"));
                 espaceEntreprise.setNomPrenom(rs.getString("nom_prenom"));
                 espaceEntreprise.setStatut(rs.getString("statut"));
-                espaceEntreprise.setFixe(rs.getString("fixe"));
-                espaceEntreprise.setGsm(rs.getString("gsm"));
+                espaceEntreprise.setFixe(rs.getString("telephone_fixe"));
+                espaceEntreprise.setGsm(rs.getString("telephone_gsm"));
                 espaceEntreprise.setEmail(rs.getString("email"));
-                espaceEntreprise.setAccepteEnvoi(rs.getString("accepte_envoi"));
+                espaceEntreprise.setAccepteEnvoi(rs.getString("accepte_envoi_ccis"));
                 espaceEntreprise.setAdresse(rs.getString("adresse"));
                 espaceEntreprise.setVille(rs.getString("ville"));
                 espaceEntreprise.setDenomination(rs.getString("denomination"));
-                espaceEntreprise.setCodeIce(rs.getString("code_ice"));
-                espaceEntreprise.setNomRepLegal(rs.getString("nom_rep_legal"));
+                espaceEntreprise.setCodeICE(rs.getString("code_ice"));
+                espaceEntreprise.setNomRepLegal(rs.getString("nom_representant_legal"));
                 espaceEntreprise.setSiteWeb(rs.getString("site_web"));
                 espaceEntreprise.setFormeJuridique(rs.getString("forme_juridique"));
                 espaceEntreprise.setDateDepot(rs.getString("date_depot"));
                 espaceEntreprise.setTailleEntreprise(rs.getString("taille_entreprise"));
                 espaceEntreprise.setSecteurActivite(rs.getString("secteur_activite"));
-                espaceEntreprise.setAvtivite(rs.getString("activite"));
-                espaceEntreprise.setNomPrenomCCIS(rs.getString("nom_prenom_ccis"));
-                espaceEntreprise.setQualiteCCIS(rs.getString("qualite_ccis"));
+                espaceEntreprise.setActivite(rs.getString("activite"));
+                espaceEntreprise.setNomPrenomCCIS(rs.getString("nom_prenom_conseiller_ccis"));
+                espaceEntreprise.setQualiteCCIS(rs.getString("qualite_conseiller_ccis"));
                 espaceEntreprise.setDateDepart(rs.getString("date_depart"));
+                espaceEntreprise.setHeureContact(rs.getString("heure_contact"));
+espaceEntreprise.setHeureDepot(rs.getString("heure_depot"));
+                espaceEntreprise.setHeureDepart(rs.getString("heure_depart"));
                 espaceEntreprises.add(espaceEntreprise);
             }
         } catch (SQLException e) {

@@ -5,6 +5,7 @@ ccis\dao\DemarcheAdministratifDao.class
 ccis\controllers\EADController.class
 ccis\config\JDBCConnection.class
 ccis\controllers\DemarcheFicheController.class
+ccis\controllers\ESEController$1.class
 ccis\controllers\GrapheEspaceController.class
 ccis\models\DemarcheAdministratif.class
 ccis\controllers\ESDController$1.class
@@ -13,4 +14,5 @@ ccis\App.class
 ccis\controllers\MenuController.class
 ccis\controllers\MainController.class
 ccis\models\EspaceEntreprise.class
+ccis\controllers\EspaceFicheController$1.class
 ccis\dao\EspaceEntrepriseDAO.class

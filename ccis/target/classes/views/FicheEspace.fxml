@@ -65,8 +65,8 @@
                <VBox spacing="5" styleClass="form-section">
                   <children>
                      <Label text="Statut" />
-                     <ComboBox fx:id="status" prefWidth="530.0" promptText="Sélectionnez le statut"/>
-                     <Label fx:id="statusError" styleClass="error-label" visible="false"/>
+                     <ComboBox fx:id="statut" prefWidth="530.0" promptText="Sélectionnez le statut"/>
+                     <Label fx:id="statutError" styleClass="error-label" visible="false"/>
                   </children>
                </VBox>
 
@@ -189,7 +189,7 @@
                      <VBox spacing="5" styleClass="forme-section">
                         <children>
                            <Label text="Taille de l'entreprise" />
-                           <ComboBox fx:id="tailleEntreprise" prefWidth="250.0" promptText="Sélectionnez la taille de l'entreprise"/>
+                           <TextField fx:id="tailleEntreprise" prefWidth="250.0" promptText="Taille de l'entreprise"/>
                            <Label fx:id="tailleEntrepriseError" styleClass="error-label" visible="false"/>
                         </children>
                      </VBox>
@@ -261,6 +261,8 @@
                   <Button text="Enregistrer" prefWidth="300.0" onAction="#handleSubmit" 
                          style="-fx-font-size: 14px; -fx-padding: 12 20 12 20;"/>
                 <Button text="Importer (via Excel)" prefWidth="300.0" onAction="#handleImport" 
+                         style="-fx-font-size: 14px; -fx-padding: 12 20 12 20;"/>
+                          <Button text="Annuler" prefWidth="300.0" onAction="#clearForm" 
                          style="-fx-font-size: 14px; -fx-padding: 12 20 12 20;"/>
                
                </HBox>

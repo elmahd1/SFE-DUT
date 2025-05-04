@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane stylesheets="@/styles/ES.css" xmlns:fx="http://javafx.com/fxml" fx:controller="ccis.controllers.EAEController" styleClass="main-container">
+    <!-- Barre de recherche et boutons en haut -->
+    <HBox layoutX="10" layoutY="10" spacing="10" alignment="CENTER_LEFT">
+      <Region HBox.hgrow="ALWAYS" />
+        <Button onAction="#exportEA" mnemonicParsing="false" text="Exporter l'extrait annuaire de l'espace entreprise" styleClass="export-button"/>
+    </HBox>
+    
+    <!-- TableView avec marge en haut pour laisser de la place à la barre de recherche -->
+    <TableView fx:id="tableView" layoutX="10" layoutY="50" prefWidth="1250" prefHeight="560" styleClass="table-view">
+        <columns>
+            <TableColumn fx:id="denominationCol" text="Dénomination" styleClass="table-column"/>
+            <TableColumn fx:id="codeICECol" text="Code ICE" styleClass="table-column"/>
+            <TableColumn fx:id="typeCol" text="Type" styleClass="table-column"/>
+            <TableColumn fx:id="formeJuridiqueCol" text="Forme Juridique" styleClass="table-column"/>
+            <TableColumn fx:id="tailleCol" text="Taille Entreprise" styleClass="table-column"/>
+            <TableColumn fx:id="secteurActiviteCol" text="Secteur Activité" styleClass="table-column"/>
+            <TableColumn fx:id="activiteCol" text="Activité" styleClass="table-column"/>
+            <TableColumn fx:id="GSMCol" text="GSM" styleClass="table-column"/>
+            <TableColumn fx:id="FixeCol" text="Fixe" styleClass="table-column"/>
+            <TableColumn fx:id="AdresseCol" text="Adresse" styleClass="table-column"/>
+            <TableColumn fx:id="villeCol" text="Ville" styleClass="table-column"/>
+            <TableColumn fx:id="interlocuteurCol" text="Interlocuteur" styleClass="table-column"/>
+            <TableColumn fx:id="emailCol" text="Email" styleClass="table-column"/>
+            <TableColumn fx:id="siteWebCol" text="Site Web" styleClass="table-column"/>
+        </columns>
+    </TableView>
+</AnchorPane>

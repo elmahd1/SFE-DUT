@@ -30,7 +30,7 @@ public class EspaceEntreprise {
 
     private String denomination;
 
-    private String codeIce;
+    private String codeICE;
 
     private String nomRepLegal;
 
@@ -46,7 +46,7 @@ public class EspaceEntreprise {
 
     private String secteurActivite;
 
-    private String activite;
+    private String Activite;
 
     private String nomPrenomCCIS;
 
@@ -138,11 +138,11 @@ public class EspaceEntreprise {
     public void setDenomination(String denomination) {
         this.denomination = denomination;
     }
-    public String getCodeIce() {
-        return codeIce;
+    public String getCodeICE() {
+        return codeICE;
     }
-    public void setCodeIce(String codeIce) {
-        this.codeIce = codeIce;
+    public void setCodeICE(String codeICE) {
+        this.codeICE = codeICE;
     }
     public String getNomRepLegal() {
         return nomRepLegal;
@@ -180,11 +180,11 @@ public class EspaceEntreprise {
     public void setSecteurActivite(String secteurActivite) {
         this.secteurActivite = secteurActivite;
     }
-    public String getAvtivite() {
-        return activite;
+    public String getActivite() {
+        return Activite;
     }
-    public void setAvtivite(String avtivite) {
-        this.activite = avtivite;
+    public void setActivite(String Activite) {
+        this.Activite = Activite;
     }
     public String getNomPrenomCCIS() {
         return nomPrenomCCIS;

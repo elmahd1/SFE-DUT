@@ -47,7 +47,6 @@ import ccis.dao.EspaceEntrepriseDAO;  // Import the DAO class
     @FXML private Label telephoneFixError;
     @FXML private Label telephoneGSMError;
     @FXML private Label emailError;
-    @FXML private Label sitewebError;
     @FXML private Label adresseError;
     @FXML private Label villeError;
     @FXML private Label denominationError;
@@ -57,8 +56,6 @@ import ccis.dao.EspaceEntrepriseDAO;  // Import the DAO class
     @FXML private Label heureDepotError;
     @FXML private Label secteurActiviteError;
     @FXML private Label activiteError;
-    @FXML private Label nomPrenomConseillerCCISError;
-    @FXML private Label qualiteConseillerCCISError;
     @FXML private Label erreurLabel;
     @FXML private CheckBox accepteEnvoiCCIS;
     @FXML private TextField nomPrenom;
@@ -77,10 +74,18 @@ import ccis.dao.EspaceEntrepriseDAO;  // Import the DAO class
     @FXML private TextField activite;
     @FXML private TextField nomPrenomConseillerCCIS;
     @FXML private TextField qualiteConseillerCCIS;
-    @FXML private DatePicker dateDepart; // Add this new field
-    @FXML private Label dateDepartError; // Update this line
-    @FXML private TextField heureDepart; // Add this new field
+    @FXML private DatePicker dateDepart;
+    @FXML private Label dateDepartError;
+    @FXML private TextField heureDepart;
     @FXML private Label heureDepartError;
+    @FXML private ComboBox<String> statut;
+    @FXML private Label statutError;
+    @FXML private TextField codeICE;
+    @FXML private Label codeICEError;
+    @FXML private TextField tailleEntreprise;
+    @FXML private Label tailleEntrepriseError;
+
+
     @FXML
     private ScrollPane scrollPane;
     @FXML
@@ -106,6 +111,15 @@ import ccis.dao.EspaceEntrepriseDAO;  // Import the DAO class
         formeJuridique.setItems(formeJuridiqueOptions);
         formeJuridique.setEditable(true);
 
+                // Statut ComboBox
+                ObservableList<String> statutOptions = FXCollections.observableArrayList(
+                    "Entrepreneur", 
+                    "Porteur de projet",
+                    "Autre"
+                );
+                statut.setItems(statutOptions);
+                statut.setEditable(true);
+
         // Secteur Activité ComboBox
         ObservableList<String> secteurActiviteOptions = FXCollections.observableArrayList(
             "Industrie", 
@@ -120,13 +134,10 @@ import ccis.dao.EspaceEntrepriseDAO;  // Import the DAO class
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
 
         ObservableList<String> objetVisiteList = FXCollections.observableArrayList(
-            "Carte professionnelle",
-            "Attestation professionnelle",
-            "Visa des factures",
-            "Visa de certificats sanitaires/phytosanitaires",
-            "Visa des documents commerciaux",
-            "Certificat d’origine",
-            "Recommandation pour Visa Affaires"
+            "Programmes d'appui / aide aux entreprises",
+            "Demarches administratives",
+            "Annuaire des entreprises",
+            "Repertoire de contact des administrations"
         );
         objetVisite.setItems(objetVisiteList);
     }
@@ -199,6 +210,26 @@ import ccis.dao.EspaceEntrepriseDAO;  // Import the DAO class
             showError(activite, activiteError, "L'activité est requise");
             isValid = false;
         }
+        if(statut.getValue() == null) {
+            showError(statut, statutError, "Le statut est requis");
+            isValid = false;
+        }
+        if (codeICE.getText().isEmpty()) {
+            showError(codeICE, codeICEError, "Le code ICE est requis");
+            isValid = false;
+        }
+        if (tailleEntreprise.getText().isEmpty()) {
+            showError(tailleEntreprise, tailleEntrepriseError, "La taille de l'entreprise est requise");
+            isValid = false;
+        }
+        if (dateDepart.getValue() == null) {
+            showError(dateDepart, dateDepartError, "La date de départ est requise");
+            isValid = false;
+        }
+        if (heureDepart.getText().isEmpty()) {
+            showError(heureDepart, heureDepartError, "L'heure de départ est requise");
+            isValid = false;
+        }
 
        
 if (isValid) {
@@ -246,7 +277,7 @@ if (isValid) {
         
         // Other fields
         espace.setSecteurActivite(secteurActivite.getValue() != null ? secteurActivite.getValue() : "");
-        espace.setAvtivite(activite.getText() != null ? activite.getText() : "");
+        espace.setActivite(activite.getText() != null ? activite.getText() : "");
         espace.setNomPrenomCCIS(nomPrenomConseillerCCIS.getText() != null ? nomPrenomConseillerCCIS.getText() : "");
         espace.setQualiteCCIS(qualiteConseillerCCIS.getText() != null ? qualiteConseillerCCIS.getText() : "");
         espace.setDateDepart(dateDepart.getValue() != null ? dateDepart.getValue().format(dateFormatter) : null);
@@ -254,6 +285,10 @@ if (isValid) {
         espace.setHeureDepart(heureDepart.getText());
         
         espace.setAccepteEnvoi(accepteEnvoiCCIS.isSelected() ? "Oui" : "Non");
+        espace.setStatut(null != statut.getValue() ? statut.getValue() : "");
+        espace.setCodeICE(null != codeICE.getText() ? codeICE.getText() : "");
+        espace.setTailleEntreprise(null != tailleEntreprise.getText() ? tailleEntreprise.getText() : "");
+
 
         System.out.println("Données à enregistrer: " + espace.toString());
        dao.create(espace);
@@ -267,7 +302,7 @@ if (isValid) {
           alert.showAndWait();
           
 
-          clearForm();
+          
 
           
     } catch (IllegalArgumentException e) {
@@ -279,7 +314,7 @@ if (isValid) {
 }
         }
     
-
+@FXML
         private void clearForm() {
             dateContact.setValue(null);
             heureContact.clear();
@@ -301,6 +336,7 @@ if (isValid) {
             activite.clear();
             dateDepart.setValue(null);
             heureDepart.clear();
+            statut.getSelectionModel().clearSelection();
 
         }
     // Method to show errors for any control
@@ -334,6 +370,7 @@ if (isValid) {
         clearError(heureDepot, heureDepotError);
         clearError(secteurActivite, secteurActiviteError);
         clearError(activite, activiteError);
+        clearError(statut, statutError);
     }
 
     public void scrollToBottom() {
@@ -389,27 +426,30 @@ private void importFromExcel(File file) {
         // Define mapping from Excel column name to Java object setter
         Map<String, BiConsumer<EspaceEntreprise, String>> fieldMapping = new HashMap<>();
         fieldMapping.put("Dénomination", (d, v) -> d.setDenomination(v));
-        fieldMapping.put("Forme juridique", (d, v) -> d.setFormeJuridique(v));
+        fieldMapping.put("Forme Juridique", (d, v) -> d.setFormeJuridique(v));
         fieldMapping.put("Secteur Activité", (d, v) -> d.setSecteurActivite(v));
-        fieldMapping.put("Activité", (d, v) -> d.setAvtivite(v));
-        fieldMapping.put("FIXE", (d, v) -> d.setFixe(v));
-        fieldMapping.put("GSM 1", (d, v) -> d.setGsm(v));
-        fieldMapping.put("Siège Sociale / Adresses", (d, v) -> d.setAdresse(v));
-        fieldMapping.put("Ville / Communité", (d, v) -> d.setVille(v));
-        fieldMapping.put("Email 1", (d, v) -> d.setEmail(v));
+        fieldMapping.put("Activité", (d, v) -> d.setActivite(v));
+        fieldMapping.put("Téléphone Fixe", (d, v) -> d.setFixe(v));
+        fieldMapping.put("Téléphone GSM", (d, v) -> d.setGsm(v));
+        fieldMapping.put("Adresse", (d, v) -> d.setAdresse(v));
+        fieldMapping.put("Ville", (d, v) -> d.setVille(v));
+        fieldMapping.put("Email", (d, v) -> d.setEmail(v));
         fieldMapping.put("Date de contact", (d, v) -> d.setDateContact(v));
         fieldMapping.put("Heure de contact", (d, v) -> d.setHeureContact(v));
         fieldMapping.put("Objet de la visite", (d, v) -> d.setObjetVisite(v));
         fieldMapping.put("Nom et Prénom", (d, v) -> d.setNomPrenom(v));
         fieldMapping.put("Accepte Envoi CCIS", (d, v) -> d.setAccepteEnvoi(v));
         fieldMapping.put("Site Web", (d, v) -> d.setSiteWeb(v));
-        fieldMapping.put("Nom du représentant légal", (d, v) -> d.setNomRepLegal(v));
-        fieldMapping.put("Date de dépôt", (d, v) -> d.setDateDepot(v));
-        fieldMapping.put("Heure de dépôt", (d, v) -> d.setHeureDepot(v));
-        fieldMapping.put("Nom et Prénom du conseiller CCIS", (d, v) -> d.setNomPrenomCCIS(v));
-        fieldMapping.put("Qualité du conseiller CCIS", (d, v) -> d.setQualiteCCIS(v));
-        fieldMapping.put("Date de départ", (d, v) -> d.setDateDepart(v));
-        fieldMapping.put("Heure de départ", (d, v) -> d.setHeureDepart(v));
+        fieldMapping.put("Nom du Représentant Légal", (d, v) -> d.setNomRepLegal(v));
+        fieldMapping.put("Date de Dépôt", (d, v) -> d.setDateDepot(v));
+        fieldMapping.put("Heure de Dépôt", (d, v) -> d.setHeureDepot(v));
+        fieldMapping.put("Nom et Prénom Conseiller CCIS", (d, v) -> d.setNomPrenomCCIS(v));
+        fieldMapping.put("Qualité Conseiller CCIS", (d, v) -> d.setQualiteCCIS(v));
+        fieldMapping.put("Date de Départ", (d, v) -> d.setDateDepart(v));
+        fieldMapping.put("Heure de Départ", (d, v) -> d.setHeureDepart(v));
+        fieldMapping.put("Code ICE", (d, v) -> d.setCodeICE(v));
+        fieldMapping.put("Taille Entreprise", (d, v) -> d.setTailleEntreprise(v));
+        fieldMapping.put("Statut", (d, v) -> d.setStatut(v));
 
         for (int i = 1; i <= sheet.getLastRowNum(); i++) {
             Row row = sheet.getRow(i);
