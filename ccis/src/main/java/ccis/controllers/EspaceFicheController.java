@@ -13,27 +13,44 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.application.Platform;
 import ccis.models.EspaceEntreprise;
-
 import org.apache.poi.ss.usermodel.Sheet;
+
+import java.awt.Desktop;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import org.apache.poi.xwpf.usermodel.XWPFRun;
+import org.apache.poi.xwpf.usermodel.XWPFTable;
+import org.apache.poi.xwpf.usermodel.XWPFTableCell;
+import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 
-import ccis.dao.EspaceEntrepriseDAO;  // Import the DAO class
+import ccis.dao.EspaceEntrepriseDAO;
 
  public class EspaceFicheController {
 
@@ -68,8 +85,6 @@ import ccis.dao.EspaceEntrepriseDAO;  // Import the DAO class
     @FXML private TextField denomination;
     @FXML private TextField nomRepresentantLegal;
     @FXML private ComboBox<String> formeJuridique;
-    @FXML private DatePicker dateDepot;
-    @FXML private TextField heureDepot;
     @FXML private ComboBox<String> secteurActivite;
     @FXML private TextField activite;
     @FXML private TextField nomPrenomConseillerCCIS;
@@ -96,7 +111,12 @@ import ccis.dao.EspaceEntrepriseDAO;  // Import the DAO class
 
     @FXML
     public void initialize() {
-        
+    setupTimeValidation(heureContact);
+    setupTimeValidation(heureDepart);
+    nomPrenom.textProperty().addListener((observable, oldValue, newValue) -> {
+        denomination.setText(newValue); // Update denomination
+        nomRepresentantLegal.setText(newValue); // Update nomRepresentantLegal
+    });   
     nomPrenomConseillerCCIS.setText("Rachid BNINHA");
     qualiteConseillerCCIS.setText("Chef de département services aux ressortissants");
 
@@ -140,6 +160,13 @@ import ccis.dao.EspaceEntrepriseDAO;  // Import the DAO class
             "Repertoire de contact des administrations"
         );
         objetVisite.setItems(objetVisiteList);
+        accepteEnvoiCCIS.setSelected(true);
+        dateContact.setValue(java.time.LocalDate.now());
+        dateDepart.setValue(java.time.LocalDate.now());
+
+        dateContact.valueProperty().addListener((observable, oldValue, newValue) -> {
+            dateDepart.setValue(newValue); 
+        }); 
     }
 
     @FXML
@@ -194,14 +221,6 @@ import ccis.dao.EspaceEntrepriseDAO;  // Import the DAO class
             showError(formeJuridique, formeJuridiqueError, "La forme juridique est requise");
             isValid = false;
         }
-        if (dateDepot.getValue() == null) {
-            showError(dateDepot, dateDepotError, "La date de dépôt est requise");
-            isValid = false;
-        }
-        if (heureDepot.getText().isEmpty()) {
-            showError(heureDepot, heureDepotError, "L'heure de dépôt est requise");
-            isValid = false;
-        }
         if (secteurActivite.getValue() == null) {
             showError(secteurActivite, secteurActiviteError, "Le secteur d'activité est requis");
             isValid = false;
@@ -214,10 +233,6 @@ import ccis.dao.EspaceEntrepriseDAO;  // Import the DAO class
             showError(statut, statutError, "Le statut est requis");
             isValid = false;
         }
-        if (codeICE.getText().isEmpty()) {
-            showError(codeICE, codeICEError, "Le code ICE est requis");
-            isValid = false;
-        }
         if (tailleEntreprise.getText().isEmpty()) {
             showError(tailleEntreprise, tailleEntrepriseError, "La taille de l'entreprise est requise");
             isValid = false;
@@ -226,15 +241,11 @@ import ccis.dao.EspaceEntrepriseDAO;  // Import the DAO class
             showError(dateDepart, dateDepartError, "La date de départ est requise");
             isValid = false;
         }
-        if (heureDepart.getText().isEmpty()) {
-            showError(heureDepart, heureDepartError, "L'heure de départ est requise");
-            isValid = false;
-        }
 
        
 if (isValid) {
     try {
-        System.out.println("Tentative d'enregistrement...");
+
         EspaceEntreprise espace = new EspaceEntreprise();
         
         // Required fields validation
@@ -270,11 +281,6 @@ if (isValid) {
         espace.setNomRepLegal(nomRepresentantLegal.getText() != null ? nomRepresentantLegal.getText() : "");
         espace.setFormeJuridique(formeJuridique.getValue() != null ? formeJuridique.getValue() : "");
         
-        // Date fields with null checks
-        espace.setDateDepot(dateDepot.getValue() != null ? dateDepot.getValue().format(dateFormatter) : null);
-        validateTimeFormat(heureDepot.getText(), "Heure de dépôt");
-        espace.setHeureDepot(heureDepot.getText());
-        
         // Other fields
         espace.setSecteurActivite(secteurActivite.getValue() != null ? secteurActivite.getValue() : "");
         espace.setActivite(activite.getText() != null ? activite.getText() : "");
@@ -289,28 +295,29 @@ if (isValid) {
         espace.setCodeICE(null != codeICE.getText() ? codeICE.getText() : "");
         espace.setTailleEntreprise(null != tailleEntreprise.getText() ? tailleEntreprise.getText() : "");
 
-
-        System.out.println("Données à enregistrer: " + espace.toString());
        dao.create(espace);
-        System.out.println("Enregistrement réussi");
-        
+       
           // Show success message
           Alert alert = new Alert(Alert.AlertType.INFORMATION);
           alert.setTitle("Succès");
           alert.setHeaderText(null);
-          alert.setContentText("La démarche a été enregistrée avec succès!");
+          alert.setContentText("Les données ont été enregistrées avec succès!");
           alert.showAndWait();
-          
 
-          
-
-          
     } catch (IllegalArgumentException e) {
         showErrorAlert("Erreur de validation", e.getMessage());
     } catch (Exception e) {
         showErrorAlert("Erreur", "Une erreur est survenue lors de l'enregistrement: " + e.getMessage());
         e.printStackTrace();
     }
+}
+else {
+    // Show error message
+    Alert alert = new Alert(Alert.AlertType.ERROR);
+    alert.setTitle("Erreur de validation");
+    alert.setHeaderText(null);
+    alert.setContentText("Veuillez remplir tous les champs obligatoires.");
+    alert.showAndWait();
 }
         }
     
@@ -330,8 +337,6 @@ if (isValid) {
             denomination.clear();
             nomRepresentantLegal.clear();
             formeJuridique.getSelectionModel().clearSelection();
-            dateDepot.setValue(null);
-            heureDepot.clear();
             secteurActivite.getSelectionModel().clearSelection();
             activite.clear();
             dateDepart.setValue(null);
@@ -366,8 +371,6 @@ if (isValid) {
         clearError(denomination, denominationError);
         clearError(nomRepresentantLegal, nomRepresentantLegalError);
         clearError(formeJuridique, formeJuridiqueError);
-        clearError(dateDepot, dateDepotError);
-        clearError(heureDepot, heureDepotError);
         clearError(secteurActivite, secteurActiviteError);
         clearError(activite, activiteError);
         clearError(statut, statutError);
@@ -405,6 +408,11 @@ private void handleImport(ActionEvent event) {
         importFromExcel(file);
     }
 }
+
+        // Fonction d'aide pour les cases à cocher
+        String caseACocher(boolean value) {
+            return value ? "✓" : "☐";
+        }
 private void importFromExcel(File file) {
     try (FileInputStream fis = new FileInputStream(file);
          Workbook workbook = new XSSFWorkbook(fis)) {
@@ -441,9 +449,7 @@ private void importFromExcel(File file) {
         fieldMapping.put("Accepte Envoi CCIS", (d, v) -> d.setAccepteEnvoi(v));
         fieldMapping.put("Site Web", (d, v) -> d.setSiteWeb(v));
         fieldMapping.put("Nom du Représentant Légal", (d, v) -> d.setNomRepLegal(v));
-        fieldMapping.put("Date de Dépôt", (d, v) -> d.setDateDepot(v));
-        fieldMapping.put("Heure de Dépôt", (d, v) -> d.setHeureDepot(v));
-        fieldMapping.put("Nom et Prénom Conseiller CCIS", (d, v) -> d.setNomPrenomCCIS(v));
+       fieldMapping.put("Nom et Prénom Conseiller CCIS", (d, v) -> d.setNomPrenomCCIS(v));
         fieldMapping.put("Qualité Conseiller CCIS", (d, v) -> d.setQualiteCCIS(v));
         fieldMapping.put("Date de Départ", (d, v) -> d.setDateDepart(v));
         fieldMapping.put("Heure de Départ", (d, v) -> d.setHeureDepart(v));
@@ -505,6 +511,303 @@ private String getCellAsString(Cell cell) {
         default: return "";
     }
 }
+@FXML
+public void handlePrint() {
+   try {
+        // Create a temporary file for the processed Word document
+        File outputDocx = new File("generated_document_espace.docx");
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Enregistrer le PDF généré");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
+        fileChooser.setInitialFileName("Fiche Espace Entreprise.pdf");
+        File outputPdf = fileChooser.showSaveDialog(null);
+        if (outputPdf == null) {
+            // User cancelled the save dialog
+            return;
+        }
 
+        // Load the template Word document
+        String templatePath = "/templates/template_word_espace_entreprise.docx";
+        InputStream templateStream = getClass().getResourceAsStream(templatePath);
+        
+        if (templateStream == null) {
+            showErrorAlert("Erreur", "Le fichier modèle Word est introuvable : " + templatePath);
+            return;
+        }
+        
+        // Create a new Word document from the template
+        XWPFDocument doc = new XWPFDocument(templateStream);
 
+        // Replace all placeholders in the document
+        Map<String, String> replacements = createReplacementMap();
+        replaceText(doc, replacements);
+        
+        // Save the modified document
+        try (FileOutputStream out = new FileOutputStream(outputDocx)) {
+            doc.write(out);
+        }
+       outputDocx.deleteOnExit(); // Delete the file on exit
+        
+        // Convert the Word document to PDF using a better library
+        convertDocxToPdf(outputDocx, outputPdf);
+        outputDocx.delete(); // Delete the Word document after conversion
+       
+        
+        // Open the generated PDF file
+         if (Desktop.isDesktopSupported()) {
+             Desktop.getDesktop().open(outputPdf);
+         }
+         else {
+             // Show success message
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Succès");
+        alert.setHeaderText(null);
+        alert.setContentText("Le document PDF a été généré avec succès : " + outputPdf.getAbsolutePath());
+        alert.showAndWait();
+         }
+    } catch (Exception e) {
+        e.printStackTrace();
+        showErrorAlert("Erreur", "Une erreur est survenue lors de la génération du document : " + e.getMessage());
+    }
+}
+private void convertDocxToPdf(File wordFile, File pdfFile) {
+    try {
+          // Check if Python is installed
+    ProcessBuilder checkPython = new ProcessBuilder("python", "--version");
+    Process checkProcess = checkPython.start();
+    int checkExit = checkProcess.waitFor();
+    if (checkExit != 0) {
+        showErrorAlert("Erreur", "Python n'est pas installé sur cet ordinateur. Veuillez installer Python pour activer la génération de PDF.");
+        return;
+    }
+        // Get the path to the Python script
+        InputStream scriptStream = getClass().getResourceAsStream("/scripts/convert.py");
+        if (scriptStream == null) {
+            throw new IOException("Cannot find Python script in resources");
+        }
+
+        // Create a temporary file for the Python script
+        File tempScript = File.createTempFile("convert", ".py");
+        tempScript.deleteOnExit();
+
+        // Copy the script content to the temporary file
+        try (FileOutputStream fos = new FileOutputStream(tempScript)) {
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = scriptStream.read(buffer)) != -1) {
+                fos.write(buffer, 0, bytesRead);
+            }
+        }
+        
+        // Build the command
+        ProcessBuilder pb = new ProcessBuilder(
+            "python",
+            tempScript.getAbsolutePath(),
+            wordFile.getAbsolutePath(),
+            pdfFile.getAbsolutePath()
+        );
+        
+        // Redirect error stream to output stream
+        pb.redirectErrorStream(true);
+        
+        // Start the process
+        Process process = pb.start();
+        
+        // Read the output
+        try (BufferedReader reader = new BufferedReader(
+                new InputStreamReader(process.getInputStream()))) {
+            String line;
+            StringBuilder output = new StringBuilder();
+            while ((line = reader.readLine()) != null) {
+                output.append(line).append("\n");
+            }
+            
+            // Wait for the process to complete
+            int exitCode = process.waitFor();
+            
+            if (exitCode != 0 || !pdfFile.exists()) {
+                throw new IOException("PDF conversion failed: " + output.toString());
+            }
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+        showErrorAlert("Erreur", "La conversion en PDF a échoué : " + e.getMessage());
+    }
+}
+
+private Map<String, String> createReplacementMap() {
+    Map<String, String> replacements = new HashMap<>();
+    
+    // Date and time fields
+     // Fill the Word template with data
+        replacements.put("{heure_contact}", heureContact.getText() != null ? heureContact.getText() : "");
+        replacements.put("{date_contact}", dateContact.getValue() != null ? dateContact.getValue().toString() : "");
+        replacements.put("{objet1}", caseACocher("Programmes d'appui / aide aux entreprises".equals(objetVisite.getValue())));
+        replacements.put("{objet2}", caseACocher("Demarches administratives".equals(objetVisite.getValue())));
+        replacements.put("{objet3}", caseACocher("Annuaire des entreprises".equals(objetVisite.getValue())));
+        replacements.put("{objet4}", caseACocher("Repertoire de contact des administrations".equals(objetVisite.getValue())));
+        replacements.put("{nom_prenom}", nomPrenom.getText() != null ? nomPrenom.getText() : "");
+        replacements.put("{status1}", caseACocher("Entrepreneur".equals(statut.getValue())));
+        replacements.put("{status2}", caseACocher("Porteur de projet".equals(statut.getValue())));
+        replacements.put("{autre_status}", statut.getValue() != null && statut.getValue().equals("Autre") ? "Autre" : "");
+        replacements.put("{tel_fixe}", telephoneFix.getText() != null ? telephoneFix.getText() : "");
+        replacements.put("{tel_gsm}", telephoneGSM.getText() != null ? telephoneGSM.getText() : "");
+        replacements.put("{email}", email.getText() != null ? email.getText() : "");
+        replacements.put("{accepte_envois}", caseACocher(accepteEnvoiCCIS.isSelected()));
+        replacements.put("{adresse}", adresse.getText() != null ? adresse.getText() : "");
+        replacements.put("{ville}", ville.getText() != null ? ville.getText() : "");
+        replacements.put("{denomination}", denomination.getText() != null ? denomination.getText() : "");
+        replacements.put("{ice}", codeICE.getText() != null ? codeICE.getText() : "");
+        replacements.put("{nom_representant_legal}", nomRepresentantLegal.getText() != null ? nomRepresentantLegal.getText() : "");
+        replacements.put("{site_web}", siteweb.getText() != null ? siteweb.getText() : "");
+        replacements.put("{forme1}", caseACocher("PP(Personne physique)".equals(formeJuridique.getValue())));
+        replacements.put("{forme2}", caseACocher("Auto-entrepreneur".equals(formeJuridique.getValue())));
+        replacements.put("{forme3}", caseACocher("SARL".equals(formeJuridique.getValue())));
+        replacements.put("{forme4}", caseACocher("SA".equals(formeJuridique.getValue())));
+        replacements.put("{autre_forme_juridique}", "Autre".equals(formeJuridique.getValue()) ? formeJuridique.getEditor().getText() : "");
+        replacements.put("{taille1}", caseACocher("Petite".equals(tailleEntreprise.getText()) || "Micro".equals(tailleEntreprise.getText())));
+        replacements.put("{taille2}", caseACocher("Moyenne".equals(tailleEntreprise.getText())));
+        replacements.put("{taille3}", caseACocher("Grande".equals(tailleEntreprise.getText())));
+        replacements.put("{secteur1}", caseACocher("Industrie".equals(secteurActivite.getValue())));
+        replacements.put("{secteur2}", caseACocher("Commerce".equals(secteurActivite.getValue())));
+        replacements.put("{secteur3}", caseACocher("Services".equals(secteurActivite.getValue())));
+        replacements.put("{activite}", activite.getText() != null ? activite.getText() : "");
+        replacements.put("{conseilleur_ccis}", nomPrenomConseillerCCIS.getText() != null ? nomPrenomConseillerCCIS.getText() : "");
+        replacements.put("{qualite}", qualiteConseillerCCIS.getText() != null ? qualiteConseillerCCIS.getText() : "");
+        replacements.put("{heure_depart}", heureDepart.getText() != null ? heureDepart.getText() : "");
+
+    return replacements;
+}
+
+private void replaceText(XWPFDocument doc, Map<String, String> replacements) {
+    // Replace text in paragraphs
+    for (XWPFParagraph paragraph : doc.getParagraphs()) {
+        List<XWPFRun> runs = paragraph.getRuns();
+        if (runs != null) {
+            // Combine all runs text
+            StringBuilder builder = new StringBuilder();
+            for (XWPFRun run : runs) {
+                String text = run.getText(0);
+                if (text != null) {
+                    builder.append(text);
+                }
+            }
+            
+            // Get the full text
+            String text = builder.toString();
+            
+            // Apply all replacements
+            for (Map.Entry<String, String> entry : replacements.entrySet()) {
+                text = text.replace(entry.getKey(), entry.getValue());
+            }
+            
+            // Remove all runs except first
+            for (int i = runs.size() - 1; i > 0; i--) {
+                paragraph.removeRun(i);
+            }
+            
+            // Set the new text in the first run
+            if (runs.size() > 0) {
+                XWPFRun run = runs.get(0);
+                run.setText(text, 0);
+            }
+        }
+    }
+    
+    // Replace text in tables
+    for (XWPFTable table : doc.getTables()) {
+        for (XWPFTableRow row : table.getRows()) {
+            for (XWPFTableCell cell : row.getTableCells()) {
+                for (XWPFParagraph paragraph : cell.getParagraphs()) {
+                    List<XWPFRun> runs = paragraph.getRuns();
+                    if (runs != null) {
+                        // Combine all runs text
+                        StringBuilder builder = new StringBuilder();
+                        for (XWPFRun run : runs) {
+                            String text = run.getText(0);
+                            if (text != null) {
+                                builder.append(text);
+                            }
+                        }
+                        
+                        // Get the full text
+                        String text = builder.toString();
+                        
+                        // Apply all replacements
+                        for (Map.Entry<String, String> entry : replacements.entrySet()) {
+                            text = text.replace(entry.getKey(), entry.getValue());
+                        }
+                        
+                        // Remove all runs except first
+                        for (int i = runs.size() - 1; i > 0; i--) {
+                            paragraph.removeRun(i);
+                        }
+                        
+                        // Set the new text in the first run
+                        if (runs.size() > 0) {
+                            XWPFRun run = runs.get(0);
+                            run.setText(text, 0);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+private void setupTimeValidation(TextField timeField) {
+    // Add listener for text changes
+    timeField.textProperty().addListener((observable, oldValue, newValue) -> {
+        if (newValue == null || newValue.isEmpty()) {
+            return;
+        }
+
+        // Remove any non-digit characters except ':'
+        String cleaned = newValue.replaceAll("[^\\d:]", "");
+        
+        if (cleaned.length() > 5) {
+            timeField.setText(oldValue);
+            return;
+        }
+
+        // Format as HH:mm
+        if (cleaned.matches("\\d{1,2}:\\d{0,2}")) {
+            // Valid format, check ranges
+            String[] parts = cleaned.split(":");
+            try {
+                int hours = Integer.parseInt(parts[0]);
+                int minutes = parts.length > 1 ? Integer.parseInt(parts[1]) : 0;
+
+                if (hours > 23) {
+                    timeField.setText(oldValue);
+                    return;
+                }
+                if (minutes > 59) {
+                    timeField.setText(oldValue);
+                    return;
+                }
+            } catch (NumberFormatException e) {
+                timeField.setText(oldValue);
+                return;
+            }
+        } else if (cleaned.matches("\\d{1,4}")) {
+            // Convert to HH:mm format
+            if (cleaned.length() >= 3) {
+                String hours = cleaned.substring(0, 2);
+                String minutes = cleaned.substring(2);
+                if (Integer.parseInt(hours) <= 23 && 
+                    (minutes.isEmpty() || Integer.parseInt(minutes) <= 59)) {
+                    cleaned = hours + ":" + minutes;
+                } else {
+                    timeField.setText(oldValue);
+                    return;
+                }
+            }
+        } else if (!cleaned.isEmpty()) {
+            timeField.setText(oldValue);
+            return;
+        }
+
+        timeField.setText(cleaned);
+    });
+}
 }

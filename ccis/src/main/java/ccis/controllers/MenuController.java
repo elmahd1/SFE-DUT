@@ -2,7 +2,6 @@ package ccis.controllers;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import java.io.IOException;
@@ -31,4 +30,7 @@ public class MenuController {
     @FXML private void ese()    { loadPage("/views/EtatSuiviEspace.fxml"); }
     @FXML private void eae()    { loadPage("/views/ExtraitAnnuaireEspace.fxml"); }
     @FXML private void ge()     { loadPage("/views/GrapheEspace.fxml"); }
+
+    @FXML private void fp()     { loadPage("/views/FicheProspection.fxml"); }
+    @FXML private void ra()     { loadPage("/views/Recapitulatif.fxml"); }
 }

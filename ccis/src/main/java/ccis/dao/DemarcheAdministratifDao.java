@@ -5,7 +5,7 @@ import ccis.config.JDBCConnection;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Locale;
 public class DemarcheAdministratifDao {
 
     // Create (Insert)
@@ -45,8 +45,14 @@ public class DemarcheAdministratifDao {
             preparedStatement.setString(20, demarche.getGsm());
             preparedStatement.setString(21, demarche.getAdresse());
             preparedStatement.setString(22, demarche.getVille());
+            preparedStatement.setString(23, demarche.getInterlocuteur());
             preparedStatement.setString(24, demarche.getEmail());
-            preparedStatement.setFloat(25, demarche.getMontant());
+// Replace the existing montant code with:
+Double montant = demarche.getMontant();
+double formattedMontant = montant != null ? 
+    Double.parseDouble(String.format(Locale.US, "%.2f", montant)) : 0.00;
+preparedStatement.setDouble(25, formattedMontant);
+
             preparedStatement.setString(26, demarche.getNomPrenom());
             preparedStatement.setString(27, demarche.getAccepteEnvoi());
             preparedStatement.setString(28, demarche.getSiteWeb());
@@ -95,7 +101,7 @@ public class DemarcheAdministratifDao {
                 demarche.setAdresse(resultSet.getString("siege_sociale_adresse"));
                 demarche.setVille(resultSet.getString("ville_communite"));
                 demarche.setEmail(resultSet.getString("email"));
-                demarche.setMontant(resultSet.getFloat("montant"));
+                demarche.setMontant(resultSet.getDouble("montant"));
                 demarche.setNomPrenom(resultSet.getString("nom_prenom"));
                 demarche.setAccepteEnvoi(resultSet.getString("accepte_envoi_ccis"));
                 demarche.setSiteWeb(String.valueOf(resultSet.getDouble("site_web")));
@@ -145,7 +151,7 @@ public class DemarcheAdministratifDao {
             preparedStatement.setString(21, demarche.getAdresse());
             preparedStatement.setString(22, demarche.getVille());
             preparedStatement.setString(24, demarche.getEmail());
-            preparedStatement.setFloat(25, demarche.getMontant());
+            preparedStatement.setDouble(25, demarche.getMontant());
             preparedStatement.setString(26, demarche.getNomPrenom());
             preparedStatement.setString(27, demarche.getAccepteEnvoi());
             preparedStatement.setDouble(28, Double.parseDouble(demarche.getSiteWeb()));
@@ -207,7 +213,7 @@ public class DemarcheAdministratifDao {
                 demarche.setAdresse(resultSet.getString("siege_sociale_adresse"));
                 demarche.setVille(resultSet.getString("ville_communite"));
                 demarche.setEmail(resultSet.getString("email"));
-                demarche.setMontant(resultSet.getFloat("montant"));
+                demarche.setMontant(resultSet.getDouble("montant"));
                 demarche.setNomPrenom(resultSet.getString("nom_prenom"));
                 demarche.setAccepteEnvoi(resultSet.getString("accepte_envoi_ccis"));
                 demarche.setSiteWeb(resultSet.getString("site_web"));

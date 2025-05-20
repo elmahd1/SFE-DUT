@@ -47,7 +47,7 @@
 
 
 
-    <!-- JUnit for testing -->
+    
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
@@ -60,69 +60,45 @@
       <version>5.11.0</version>
       <scope>test</scope>
     </dependency>
-   <!-- Apache POI -->
     <dependency>
         <groupId>org.apache.poi</groupId>
         <artifactId>poi-ooxml</artifactId>
         <version>5.2.3</version>
     </dependency>
-   <!-- Log4j2 API -->
     <dependency>
         <groupId>org.apache.logging.log4j</groupId>
         <artifactId>log4j-api</artifactId>
-        <version>2.20.0</version> <!-- Use the latest version available -->
+        <version>2.20.0</version>
     </dependency>
     <dependency>
     <groupId>org.openjfx</groupId>
     <artifactId>javafx-swing</artifactId>
-    <version>17.0.2</version> <!-- ou ta version JavaFX -->
+    <version>17.0.2</version>
 </dependency>
-   <!-- Apache POI for Word document manipulation -->
     <dependency>
         <groupId>org.apache.poi</groupId>
         <artifactId>poi</artifactId>
         <version>5.2.3</version>
     </dependency>
     <dependency>
-        <groupId>org.apache.poi</groupId>
-        <artifactId>poi-ooxml</artifactId>
-        <version>5.2.3</version>
-    </dependency>
-    
-    <!-- Apache PDFBox for PDF capabilities -->
-    <dependency>
-        <groupId>org.apache.pdfbox</groupId>
-        <artifactId>pdfbox</artifactId>
-        <version>2.0.27</version>
-    </dependency>
-    
-    <!-- POI to PDF Converter -->
-    <dependency>
         <groupId>fr.opensagres.xdocreport</groupId>
         <artifactId>org.apache.poi.xwpf.converter.pdf</artifactId>
         <version>1.0.6</version>
     </dependency>
-    <dependency>
-    <groupId>org.apache.logging.log4j</groupId>
-    <artifactId>log4j-core</artifactId>
-    <version>2.17.1</version>
-</dependency>
 <dependency>
-    <groupId>org.apache.logging.log4j</groupId>
-    <artifactId>log4j-api</artifactId>
-    <version>2.17.1</version>
+    <groupId>org.apache.pdfbox</groupId>
+    <artifactId>pdfbox</artifactId>
+    <version>2.0.29</version>
 </dependency>
-  </dependencies>
+</dependencies>
 
   <build>
     <pluginManagement>
       <plugins>
-        <!-- clean lifecycle -->
         <plugin>
           <artifactId>maven-clean-plugin</artifactId>
           <version>3.4.0</version>
         </plugin>
-        <!-- default lifecycle, jar packaging -->
         <plugin>
           <artifactId>maven-resources-plugin</artifactId>
           <version>3.3.1</version>
@@ -177,6 +153,28 @@
                 <mainClass>ccis.App</mainClass>
             </configuration>
         </plugin>
+    <plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-shade-plugin</artifactId>
+    <version>3.5.1</version>
+    <executions>
+        <execution>
+            <phase>package</phase>
+            <goals>
+                <goal>shade</goal>
+            </goals>
+            <configuration>
+                <transformers>
+                    <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                        <mainClass>ccis.App</mainClass> <!-- Replace with your actual main class -->
+                    </transformer>
+                </transformers>
+                <shadedArtifactAttached>true</shadedArtifactAttached>
+                <shadedClassifierName>fat</shadedClassifierName>
+            </configuration>
+        </execution>
+    </executions>
+</plugin>
     </plugins>
   </build>
   

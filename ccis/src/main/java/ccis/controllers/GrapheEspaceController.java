@@ -6,6 +6,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
@@ -17,10 +18,12 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
+import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.embed.swing.SwingFXUtils;
 import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
+
+import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -28,7 +31,6 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,11 +65,7 @@ public class GrapheEspaceController {
     @FXML
     private TableColumn<ObjetVisiteDetailData, String> objetVisiteColumn;
     @FXML
-    private TableColumn<ObjetVisiteDetailData, Double> montantColumn;
-    @FXML
     private TableColumn<ObjetVisiteDetailData, Double> delaiMoyenColumn;
-    @FXML
-    private TableColumn<ObjetVisiteDetailData, Double> pourcentageMontantColumn;
     @FXML
     private TableColumn<ObjetVisiteDetailData, Double> pourcentageDelaiColumn;
 
@@ -158,7 +156,7 @@ public class GrapheEspaceController {
         
         // Load data
         loadData();
-        File exportDir=new File("C:\\ccis documents\\espace entreprise");
+        File exportDir=new File("C:\\ccis documents application\\espace entreprise");
         if (!exportDir.exists()) {
             exportDir.mkdirs();
         }
@@ -186,18 +184,7 @@ public class GrapheEspaceController {
         delaiMoyenColumn.setCellValueFactory(new PropertyValueFactory<>("delaiMoyen"));
         pourcentageDelaiColumn.setCellValueFactory(new PropertyValueFactory<>("pourcentageDelai"));
         
-        // Format percentage columns in Table 2
-        pourcentageMontantColumn.setCellFactory(column -> new TableCell<ObjetVisiteDetailData, Double>() {
-            @Override
-            protected void updateItem(Double item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setText(null);
-                } else {
-                    setText(String.format("%.1f%%", item));
-                }
-            }
-        });
+
         
         pourcentageDelaiColumn.setCellFactory(column -> new TableCell<ObjetVisiteDetailData, Double>() {
             @Override
@@ -236,10 +223,8 @@ private void loadData() {
         Map<String, Integer> formeCounts = new HashMap<>();
         Map<String, Long> objetDelaiTotal = new HashMap<>();
         Map<String, Integer> objetDelaiCount = new HashMap<>();
-        Map<String, Double> objetMontants = new HashMap<>();
 
         long totalMinutes = 0;
-        double totalMontant = 0.0;
 
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm");
@@ -262,13 +247,12 @@ String forme ="";
 
             // Calculate delay and montant
             try {
-                String d1 = item.getDateDepot();
-                String t1 = item.getHeureDepot();
-                String d2 = item.getDateDepart();
+               
+                String t1 = item.getHeureContact();
                 String t2 = item.getHeureDepart();
                 
-                if (d1 == null || t1 == null || d2 == null || t2 == null ||
-                    d1.isEmpty() || t1.isEmpty() || d2.isEmpty() || t2.isEmpty()) {
+                if ( t1 == null ||  t2 == null ||
+                   t1.isEmpty() ||  t2.isEmpty()) {
                     long defaultMinutes = 120;
                     totalMinutes += defaultMinutes;
                     objetDelaiTotal.put(objet, objetDelaiTotal.getOrDefault(objet, 0L) + defaultMinutes);
@@ -276,12 +260,11 @@ String forme ="";
                     continue;
                 }
 
-                LocalDate date1 = LocalDate.parse(d1, dateFormat);
+
                 LocalTime time1 = LocalTime.parse(t1, timeFormat);
-                LocalDate date2 = LocalDate.parse(d2, dateFormat);
                 LocalTime time2 = LocalTime.parse(t2, timeFormat);
 
-                Duration duration = Duration.between(date1.atTime(time1), date2.atTime(time2));
+                Duration duration = Duration.between(time1, time2);
                 long minutes = Math.max(duration.toMinutes(), 0);
                 totalMinutes += minutes;
                 objetDelaiTotal.put(objet, objetDelaiTotal.getOrDefault(objet, 0L) + minutes);
@@ -303,7 +286,7 @@ String forme ="";
         
         for (Map.Entry<String, Integer> entry : objetCounts.entrySet()) {
             double percent = (entry.getValue() * 100.0) / total;
-            chart1.getData().add(new PieChart.Data(entry.getKey() + " (" + String.format("%.1f", percent) + "%)", entry.getValue()));
+            chart1.getData().add(new PieChart.Data(entry.getKey() + " (" + String.format("%.1f", percent) + "%):"+entry.getValue(), entry.getValue()));
             
             // Add to table1
             table1Data.add(new ObjetVisiteData(entry.getKey(), entry.getValue(), percent));
@@ -321,7 +304,7 @@ String forme ="";
         
         for (Map.Entry<String, Integer> entry : formeCounts.entrySet()) {
             double percent = (entry.getValue() * 100.0) / total;
-            chart3.getData().add(new PieChart.Data(entry.getKey() + " (" + String.format("%.1f", percent) + "%)", entry.getValue()));
+            chart3.getData().add(new PieChart.Data(entry.getKey() + " (" + String.format("%.1f", percent) + "%):"+entry.getValue(), entry.getValue()));
             
             // Add to table3
             table3Data.add(new FormeJuridiqueData(entry.getKey(), entry.getValue(), percent));
@@ -357,6 +340,19 @@ String forme ="";
         
         chart2.getData().addAll(delaiSeries);
         
+for (XYChart.Series<String, Number> series : chart2.getData()) {
+    for (XYChart.Data<String, Number> data5 : series.getData()) {
+        Label label = new Label(data5.getYValue().toString());
+        StackPane node = (StackPane) data5.getNode();
+
+        node.getChildren().add(label);
+
+        // Style optionnel pour le label
+        label.setStyle("-fx-font-size: 20px; -fx-text-fill: white;");
+        StackPane.setAlignment(label, Pos.TOP_CENTER);
+    }
+}
+
         // Set Table 2 data
         table2.setItems(table2Data);
         
@@ -368,9 +364,28 @@ String forme ="";
     public void savePieChartAsPng(PieChart chart, String filename) {
     WritableImage image = chart.snapshot(new SnapshotParameters(), null);
     File file = new File(filename);
+    FileChooser fileChooser = new FileChooser();
+    fileChooser.setTitle("Save Chart as PNG");
+    fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PNG files (*.png)", "*.png"));
+    fileChooser.setInitialFileName(filename);
+    file = fileChooser.showSaveDialog(null);
+    if (file != null) {
+        filename = file.getAbsolutePath();
+    } else {
+        System.out.println("Save operation was cancelled.");
+        return;
+    }
     try {
         ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
-        System.out.println("Chart saved to: " + file.getAbsolutePath());
+        if(Desktop.isDesktopSupported()){
+            Desktop.getDesktop().open(file);
+        }else {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information");
+            alert.setHeaderText(null);
+            alert.setContentText("Chart saved to: " + file.getAbsolutePath());
+            alert.showAndWait();
+        }
     } catch (IOException e) {
         e.printStackTrace();
     }
@@ -379,9 +394,29 @@ String forme ="";
 public void savebarChartAsPng(BarChart<String, Number> chart, String filename) {
             WritableImage image = chart.snapshot(new SnapshotParameters(), null);
             File file = new File(filename);
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Save Chart as PNG");
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PNG files (*.png)", "*.png"));
+            fileChooser.setInitialFileName(filename);
+
+            file = fileChooser.showSaveDialog(null);
+            if (file != null) {
+                filename = file.getAbsolutePath();
+            } else {
+                System.out.println("Save operation was cancelled.");
+                return;
+            }
             try {
                 ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
-                System.out.println("Chart saved to: " + file.getAbsolutePath());
+                if(Desktop.isDesktopSupported()){
+                    Desktop.getDesktop().open(file);}
+                    else{
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Information");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Chart saved to: " + file.getAbsolutePath());
+                    alert.showAndWait();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -413,34 +448,45 @@ private void copyChart1(ActionEvent event) {
             clipboard.setContent(content);
         }
 
- String path = "C:/ccis documents/demarche administratif/";
+
        
 @FXML
 private void downloadChart1(ActionEvent event) {
-    savePieChartAsPng(chart1, path+"graphe objet de visite.png");
+    savePieChartAsPng(chart1, "graphe objet de visite.png");
 }
 @FXML
 private void downloadChart2(ActionEvent event) {
-    savebarChartAsPng(chart2, path+"graphe delai et montant moyen par objet de visite.png");
+    savebarChartAsPng(chart2, "graphe delai et montant moyen par objet de visite.png");
 }
 @FXML
 private void downloadChart3(ActionEvent event) {
-    savePieChartAsPng(chart3, path+"graphe forme juridique.png");
+    savePieChartAsPng(chart3,       "graphe forme juridique.png");
 }
 @FXML
 private void downloadTable1(ActionEvent event) {
-    exportTableToCSV(table1, path+"table objet de visite.csv");
+    exportTableToCSV(table1, "table objet de visite.csv");
 }
 @FXML
 private void downloadTable2(ActionEvent event) {
-    exportTableToCSV(table2, path+"table delai et montant moyens par objet de visite.csv");
+    exportTableToCSV(table2, "table delai et montant moyens par objet de visite.csv");
 }
 @FXML
 private void downloadTable3(ActionEvent event) {
-    exportTableToCSV(table3, path+"table forme juridique.csv");
+    exportTableToCSV(table3, "table forme juridique.csv");
 }
 public <T> void exportTableToCSV(TableView<T> table, String filename) {
     File file = new File(filename);
+    FileChooser fileChooser = new FileChooser();
+    fileChooser.setTitle("Save Table as CSV");
+    fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV files (*.csv)", "*.csv"));
+    fileChooser.setInitialFileName(filename);
+    file = fileChooser.showSaveDialog(null);
+    if (file != null) {
+        filename = file.getAbsolutePath();
+    } else {
+        System.out.println("Save operation was cancelled.");
+        return;
+    }
     try (PrintWriter writer = new PrintWriter(file)) {
         // En-têtes de colonnes
         for (TableColumn<T, ?> column : table.getColumns()) {
@@ -457,7 +503,15 @@ public <T> void exportTableToCSV(TableView<T> table, String filename) {
             writer.println();
         }
 
-        System.out.println("Table exported to: " + file.getAbsolutePath());
+        if(Desktop.isDesktopSupported()){
+            Desktop.getDesktop().open(file);}
+            else{
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information");
+            alert.setHeaderText(null);
+            alert.setContentText("Table saved to: " + file.getAbsolutePath());
+            alert.showAndWait();
+        }
     } catch (IOException e) {
         e.printStackTrace();
     }

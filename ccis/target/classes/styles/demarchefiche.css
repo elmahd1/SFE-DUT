@@ -1,82 +1,179 @@
 /* 
-   CCIS Theme CSS based on the logo with blue and orange colors
-   The logo features gear elements and flowing lines in blue and orange
+   CCIS Theme CSS based on the logo with blue, orange and green colors
+   Modern, responsive design with fixed header and better accessibility
 */
 
 /* Base colors from the logo */
 * {
+    /* Main colors */
     -fx-primary-blue: #0074B2;
     -fx-primary-orange: #FF8A00;
     -fx-secondary-blue: #83C4E8;
     -fx-secondary-orange: #FFBB66;
+    
+    /* Added green accents */
+    -fx-primary-green: #44883E;
     -fx-light-green: #8DBC66;
-    -fx-dark-green: #44883E;
+    
+    /* Basic shades */
+    -fx-white: #FFFFFF;
     -fx-light-gray: #F4F4F4;
     -fx-medium-gray: #E0E0E0;
     -fx-dark-gray: #555555;
-    -fx-white: #FFFFFF;
+    
+    /* Card design */
+    -fx-card-bg: #FFFFFF;
+    -fx-card-radius: 6px;
+    -fx-card-padding: 12px;
+    -fx-card-spacing: 16px;
 }
 
-/* Applying font styles */
+/* Global font styles */
 .root {
     -fx-font-family: "Segoe UI", "Arial", sans-serif;
+    -fx-background-color: #F9F9F9;
+    -fx-font-size: 13px;
+}
+
+/* Header styling */
+.header-container {
     -fx-background-color: -fx-white;
+    -fx-padding: 0 0 6px 0;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 2, 0, 0, 2);
 }
 
-/* ScrollPane styling */
-.scroll-pane {
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
-}
-
-.scroll-pane > .viewport {
-    -fx-background-color: transparent;
-}
-
-/* ScrollBar customization */
-.scroll-bar:vertical {
-    -fx-background-color: -fx-light-gray;
-    -fx-pref-width: 12;
-}
-
-.scroll-bar:vertical .thumb {
+.form-title-container {
     -fx-background-color: -fx-primary-blue;
+    -fx-padding: 12px;
+}
+.form-section {
+    -fx-spacing: 6px;
+    -fx-padding: 4 0 4 0;
+}
+
+.form-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-white;
+}
+
+/* Quick action bar styling */
+.quick-action-bar {
+    -fx-padding: 12px 24px;
+    -fx-alignment: center;
+    -fx-spacing: 12px;
+}
+
+/* Scrollbar styling */
+.custom-scroll .scroll-bar:vertical {
+    -fx-background-color: -fx-light-gray;
+    -fx-pref-width: 12px;
+}
+
+.custom-scroll .scroll-bar:vertical .thumb {
+    -fx-background-color: -fx-primary-green;
     -fx-background-radius: 6px;
 }
 
-/* Form Labels */
-.label {
-    -fx-font-size: 12px;
-    -fx-text-fill: -fx-dark-gray;
-    -fx-font-weight: bold;
+/* Main content grid */
+.scroll-content {
+    -fx-padding: 24px;
 }
 
-/* Error labels */
+/* Form card sections */
+.form-card {
+    -fx-background-color: -fx-card-bg;
+    -fx-background-radius: 8px;
+    -fx-effect: dropshadoque(three-pass-box, rgba(0,0,0,0.1), 2, 0, 0, 1);
+    -fx-padding: 16px;
+    -fx-spacing: 10px;
+    -fx-margin: 0 0 16px 0;
+}
+
+.accent-card {
+    -fx-background-color: derive(-fx-secondary-blue, 80%);
+}
+
+.accent-card-alt {
+    -fx-background-color: derive(-fx-light-green, 85%);
+}
+
+.section-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-primary-blue;
+    -fx-padding: 0 0 10px 0;
+    
+}
+
+/* Form field styling */
+.label {
+    -fx-font-size: 13px;
+    -fx-font-weight: normal;
+    -fx-text-fill: -fx-dark-gray;
+}
+
 .error-label {
     -fx-text-fill: #D32F2F;
-    -fx-font-size: 11px;
+    -fx-font-size: 10px;
+    -fx-padding: 0 0 2 0;
+}
+/* Compact label and input fields */
+.label, .text-field, .combo-box, .date-picker {
+    -fx-font-size: 12px;
+    -fx-padding: 6px;
 }
 
-/* Text Fields */
+/* Text fields */
 .text-field {
     -fx-background-color: -fx-white;
     -fx-border-color: -fx-medium-gray;
-    -fx-border-radius: 3px;
+    -fx-border-radius: 4px;
     -fx-padding: 8px;
-    -fx-font-size: 13px;
+    -fx-font-size: 12px;
 }
 
 .text-field:focused {
     -fx-border-color: -fx-primary-blue;
     -fx-border-width: 2px;
 }
+.form-title-container {
+    -fx-background-color: linear-gradient(to right, -fx-primary-blue 50%, -fx-primary-orange 50%);
+    -fx-padding: 8px 0 8px 0;
+}
+
+/* Add a thin green line below the title bar for accent */
+.form-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-black;
+    -fx-padding: 0 0 2 0;
+    -fx-border-width: 0 0 3 0;
+    -fx-border-color: transparent transparent -fx-primary-green transparent;
+}
+/* Text area */
+.text-area {
+    -fx-background-color: -fx-white;
+    -fx-border-color: -fx-medium-gray;
+    -fx-border-radius: 4px;
+    -fx-font-size: 13px;
+}
+
+.text-area:focused {
+    -fx-border-color: -fx-primary-blue;
+    -fx-border-width: 2px;
+}
+
+.text-area .content {
+    -fx-background-color: -fx-white;
+    -fx-background-radius: 0;
+}
 
 /* ComboBox styling */
 .combo-box {
     -fx-background-color: -fx-white;
     -fx-border-color: -fx-medium-gray;
-    -fx-border-radius: 3px;
-    -fx-padding: 0;
+    -fx-border-radius: 4px;
     -fx-font-size: 13px;
 }
 
@@ -99,7 +196,7 @@
 }
 
 .combo-box-popup .list-cell {
-    -fx-padding: 6px;
+    -fx-padding: 8px;
     -fx-background-color: -fx-white;
     -fx-text-fill: -fx-dark-gray;
 }
@@ -112,8 +209,9 @@
 /* Date Picker styling */
 .date-picker {
     -fx-background-color: -fx-white;
+    -fx-border-color: -fx;
     -fx-border-color: -fx-medium-gray;
-    -fx-border-radius: 3px;
+    -fx-border-radius: 4px;
     -fx-font-size: 13px;
 }
 
@@ -124,7 +222,6 @@
 
 .date-picker .arrow-button {
     -fx-background-color: -fx-primary-blue;
-    -fx-background-radius: 0;
 }
 
 .date-picker .arrow-button .arrow {
@@ -148,14 +245,14 @@
     -fx-background-color: -fx-white;
 }
 
-/* Button styling */
+/* Buttons styling */
 .button {
     -fx-background-color: -fx-primary-blue;
     -fx-text-fill: -fx-white;
     -fx-font-weight: bold;
-    -fx-background-radius: 3px;
+    -fx-background-radius: 4px;
     -fx-cursor: hand;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 3, 0, 0, 1);
+    -fx-effect: dropshadow(three-paste-box, rgba(0,0,0,0.2), 3, 0, 0, 1);
     -fx-padding: 10px 20px;
 }
 
@@ -165,12 +262,60 @@
 
 .button:pressed {
     -fx-background-color: derive(-fx-primary-blue, -10%);
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 1, 0, 0, 0);
+    -fx-effect: dropshadow(three-paste-box, rgba(0,0,0,0.3), 1, 0, 0, 0);
+}
+
+.primary-button {
+    -fx-background-color: -fx-primary-blue;
+    -fx-background-radius: 4px;
+    -fx-text-fill: -fx-white;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-padding: 10px 20px;
+}
+
+.secondary-button {
+    -fx-background-color: -fx-primary-green;
+    -fx-background-radius: 4px;
+    -fx-text-fill: -fx-white;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-padding: 10px 20px;
+}
+
+.cancel-button {
+    -fx-background-color: -fx-primary-orange;
+    -fx-background-radius: 4px;
+    -fx-text-fill: -fx-white;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-padding: 10px 20px;
+}
+
+/* Floating action button */
+.floating-action-bar {
+    -fx-background-color: rgba(255,255,255,0.95);
+    -fx-padding: 10px;
+    -fx-effect: dropshadow(three-paste-box, rgba(0,0,0,0.2), 4, 0, 0, 2);
+}
+
+.floating-action-button {
+    -fx-background-color: -fx-primary-blue;
+    -fx-background-radius: 30px;
+    -fx-text-fill: -fx-white;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-padding: 12px 24px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 5, 0, 0, 2);
+}
+
+.floating-action-button:hover {
+    -fx-background-color: derive(-fx-primary-blue, 10%);
 }
 
 /* CheckBox styling */
 .check-box {
-    -fx-font-size: 13px;
+    -fx-font-size: 12px;
     -fx-text-fill: -fx-dark-gray;
 }
 
@@ -189,22 +334,7 @@
     -fx-border-color: -fx-primary-orange;
 }
 
-/* Container spacing and styling */
-.vbox, .hbox {
-    -fx-spacing: 10px;
-}
-
-/* Form section styling */
-.form-section {
-    -fx-border-color: -fx-medium-gray;
-    -fx-border-width: 0 0 1px 0;
-    -fx-padding: 0 0 10px 0;
-    -fx-margin: 0 0 10px 0;
-}
-
-/* Alternating section coloring for better visual separation */
-.form-section:nth-child(odd) {
-    -fx-background-color: -fx-light-gray;
-    -fx-background-radius: 5px;
-    -fx-padding: 10px;
+/* Bottom spacing for scrolling content */
+.footer-spacing {
+    -fx-min-height: 60px;
 }

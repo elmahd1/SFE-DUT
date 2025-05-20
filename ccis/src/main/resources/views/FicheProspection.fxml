@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="ccis.controllers.FicheProspectionController"
+            prefHeight="600.0" prefWidth="1250.0"
+            stylesheets="@/styles/demarchefiche.css">
+
+    <ScrollPane fx:id="scrollPane" fitToWidth="true" prefWidth="700.0" prefHeight="600.0"
+                hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
+                AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"
+                AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+        <content>
+            <VBox prefWidth="700" fx:id="scrollContent" spacing="10" style="-fx-padding: 16;">
+                <children>
+                    <HBox style="-fx-background-color: linear-gradient(to right, #0074B2 50%, #FF8A00 50%); -fx-min-height: 8px;"/>
+                    <HBox style="-fx-background-color: #44883E; -fx-min-height: 3px;"/>
+                    <HBox alignment="CENTER" style="-fx-padding: 0 0 10 0;">
+                        <Label text="Fiche Prospection: Fiche de prospection M6A7" styleClass="form-title"/>
+                    </HBox>
+
+      <GridPane hgap="12" vgap="8">
+    <columnConstraints>
+        <ColumnConstraints minWidth="150"/>
+        <ColumnConstraints minWidth="300"/>
+        <ColumnConstraints minWidth="150"/>
+        <ColumnConstraints minWidth="300"/>
+    </columnConstraints>
+
+    <!-- Section: Informations de l’entreprise / معلومات عن المؤسسة -->
+    <Label text="Informations de l’entreprise" styleClass="section-title" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+    <Label text="معلومات عن الشركة" styleClass="section-title" GridPane.rowIndex="0" GridPane.columnIndex="3"/>
+
+    <!-- Nom ETP -->
+    <Label text="Nom ETP:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+    <TextField fx:id="nomETPField" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+    <Label text=":اسم الشركة" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
+    <TextField fx:id="nomETPArabicField" GridPane.rowIndex="1" GridPane.columnIndex="3"/>
+    <Label fx:id="nomETPError" styleClass="error-label" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+    <Label fx:id="nomETPArabicError" styleClass="error-label" GridPane.rowIndex="2" GridPane.columnIndex="3"/>
+
+    <!-- Adresse -->
+    <Label text="Adresse:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+    <TextField fx:id="adresseField" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+    <Label text=":العنوان" GridPane.rowIndex="3" GridPane.columnIndex="2"/>
+    <TextField fx:id="adresseArabicField" GridPane.rowIndex="3" GridPane.columnIndex="3"/>
+    <Label fx:id="adresseError" styleClass="error-label" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+    <Label fx:id="adresseArabicError" styleClass="error-label" GridPane.rowIndex="4" GridPane.columnIndex="3"/>
+
+    <!-- Telephone ETP -->
+    <Label text="Téléphone ETP:" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+    <TextField fx:id="telephoneETPField" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+    <Label fx:id="telephoneETPError" styleClass="error-label" GridPane.rowIndex="6" GridPane.columnIndex="1"/>
+
+    <!-- Email ETP -->
+    <Label text="Email ETP:" GridPane.rowIndex="7" GridPane.columnIndex="0"/>
+    <TextField fx:id="emailETPField" GridPane.rowIndex="7" GridPane.columnIndex="1"/>
+    <Label fx:id="emailETPError" styleClass="error-label" GridPane.rowIndex="8" GridPane.columnIndex="1"/>
+
+    <!-- Section: Personne à contacter / الشخص الذي يجب الاتصال به -->
+    <Label text="Personne à contacter" styleClass="section-title" GridPane.rowIndex="9" GridPane.columnIndex="0"/>
+    <Label text="الشخص المسؤول عن الاتصال" styleClass="section-title" GridPane.rowIndex="9" GridPane.columnIndex="2"/>
+
+    <!-- Nom & Prénom -->
+    <Label text="Nom et Prénom:" GridPane.rowIndex="10" GridPane.columnIndex="0"/>
+    <TextField fx:id="nomPrenomField" GridPane.rowIndex="10" GridPane.columnIndex="1"/>
+    <Label text=":الإسم الكامل" GridPane.rowIndex="10" GridPane.columnIndex="2"/>
+    <TextField fx:id="nomPrenomArabicField" GridPane.rowIndex="10" GridPane.columnIndex="3"/>
+    <Label fx:id="nomPrenomError" styleClass="error-label" GridPane.rowIndex="11" GridPane.columnIndex="1"/>
+    <Label fx:id="nomPrenomArabicError" styleClass="error-label" GridPane.rowIndex="11" GridPane.columnIndex="3"/>
+
+    <!-- Fonction -->
+    <Label text="Fonction:" GridPane.rowIndex="12" GridPane.columnIndex="0"/>
+    <TextField fx:id="fonctionField" GridPane.rowIndex="12" GridPane.columnIndex="1"/>
+    <Label text=":الوظيفة" GridPane.rowIndex="12" GridPane.columnIndex="2"/>
+    <TextField fx:id="fonctionArabicField" GridPane.rowIndex="12" GridPane.columnIndex="3"/>
+    <Label fx:id="fonctionError" styleClass="error-label" GridPane.rowIndex="13" GridPane.columnIndex="1"/>
+    <Label fx:id="fonctionArabicError" styleClass="error-label" GridPane.rowIndex="13" GridPane.columnIndex="3"/>
+
+    <!-- Telephone -->
+    <Label text="Téléphone:" GridPane.rowIndex="14" GridPane.columnIndex="0"/>
+    <TextField fx:id="telephoneField" GridPane.rowIndex="14" GridPane.columnIndex="1"/>
+    <Label fx:id="telephoneError" styleClass="error-label" GridPane.rowIndex="15" GridPane.columnIndex="1"/>
+
+    <!-- Email -->
+    <Label text="Email:" GridPane.rowIndex="16" GridPane.columnIndex="0"/>
+    <TextField fx:id="emailField" GridPane.rowIndex="16" GridPane.columnIndex="1"/>
+    <Label fx:id="emailError" styleClass="error-label" GridPane.rowIndex="17" GridPane.columnIndex="1"/>
+
+    <!-- Section: Détails de la prospection -->
+    <Label text="Détails de la prospection" styleClass="section-title" GridPane.rowIndex="18" GridPane.columnIndex="0"/>
+
+    <!-- Type Prospection -->
+    <Label text="Type Prospection:" GridPane.rowIndex="19" GridPane.columnIndex="0"/>
+    <ComboBox fx:id="typeProspectionField" GridPane.rowIndex="19" GridPane.columnIndex="1"/>
+    <Label fx:id="typeProspectionError" styleClass="error-label" GridPane.rowIndex="20" GridPane.columnIndex="1"/>
+
+    <!-- Secteur Activité -->
+    <Label text="Secteur Activité:" GridPane.rowIndex="21" GridPane.columnIndex="0"/>
+    <TextField fx:id="secteurActiviteField" GridPane.rowIndex="21" GridPane.columnIndex="1"/>
+    <Label fx:id="secteurActiviteError" styleClass="error-label" GridPane.rowIndex="22" GridPane.columnIndex="1"/>
+
+    <!-- PSA Prospecter -->
+    <Label text="PSA Prospecter:" GridPane.rowIndex="23" GridPane.columnIndex="0"/>
+    <TextField fx:id="psaProspecterField" GridPane.rowIndex="23" GridPane.columnIndex="1"/>
+    <Label fx:id="psaProspecterError" styleClass="error-label" GridPane.rowIndex="24" GridPane.columnIndex="1"/>
+
+    <!-- Marché Cible -->
+    <Label text="Marché Cible:" GridPane.rowIndex="25" GridPane.columnIndex="0"/>
+    <TextField fx:id="marcheCibleField" GridPane.rowIndex="25" GridPane.columnIndex="1"/>
+    <Label fx:id="marcheCibleError" styleClass="error-label" GridPane.rowIndex="26" GridPane.columnIndex="1"/>
+
+    <!-- Période Prospection -->
+    <Label text="Période Prospection:" GridPane.rowIndex="27" GridPane.columnIndex="0"/>
+    <TextField fx:id="periodeProspectionField" GridPane.rowIndex="27" GridPane.columnIndex="1"/>
+    <Label fx:id="periodeProspectionError" styleClass="error-label" GridPane.rowIndex="28" GridPane.columnIndex="1"/>
+
+    <!-- Particularité -->
+    <Label text="Particularité:" GridPane.rowIndex="29" GridPane.columnIndex="0"/>
+    <TextField fx:id="particulariteField" GridPane.rowIndex="29" GridPane.columnIndex="1"/>
+    <Label fx:id="particulariteError" styleClass="error-label" GridPane.rowIndex="30" GridPane.columnIndex="1"/>
+
+    <!-- Date -->
+    <Label text="Date:" GridPane.rowIndex="31" GridPane.columnIndex="0"/>
+    <DatePicker fx:id="dateField" GridPane.rowIndex="31" GridPane.columnIndex="1"/>
+    <Label fx:id="dateError" styleClass="error-label" GridPane.rowIndex="32" GridPane.columnIndex="1"/>
+</GridPane>
+                    <HBox alignment="CENTER" spacing="12" style="-fx-padding: 12 0 0 0;">
+                        <Button text="Enregistrer" onAction="#handleSave"/>
+                        <Button text="Imprimer" onAction="#handlePrint"/>
+                        <Button text="Annuler" onAction="#handleCancel"/>
+                        <Button text="Exporter récapitulatif" onAction="#handleExportRecap"/>
+                    </HBox>
+                </children>
+            </VBox>
+        </content>
+    </ScrollPane>
+</AnchorPane>

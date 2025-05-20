@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane stylesheets="@/styles/ES.css" xmlns:fx="http://javafx.com/fxml" fx:controller="ccis.controllers.RecapitulatifController" styleClass="main-container">
+    <!-- Barre de recherche et boutons en haut -->
+    <HBox layoutX="10" layoutY="10" spacing="10" alignment="CENTER_LEFT">
+      <Region HBox.hgrow="ALWAYS" />
+        <Button onAction="#exportRA" mnemonicParsing="false" text="Exporter le recapitulatif d'activite" styleClass="export-button"/>
+    <Button onAction="#printRA" mnemonicParsing="false" text="Imprimer le recapitulatif d'activite" styleClass="export-button"/>
+    </HBox>
+    
+    <!-- TableView avec marge en haut pour laisser de la place à la barre de recherche -->
+    <TableView fx:id="tableView" layoutX="10" layoutY="50" prefWidth="1250" prefHeight="560" styleClass="table-view" editable="true">
+        <columns>
+            <TableColumn fx:id="nomSocieteCol" text="Nom / société" styleClass="table-column"/>
+            <TableColumn fx:id="telephoneCol" text="Téléphone" styleClass="table-column"/>
+            <TableColumn fx:id="contactCol" text="Contact" styleClass="table-column"/>
+            <TableColumn fx:id="objectifCol" text="Objectif" styleClass="table-column"/>
+            <TableColumn fx:id="resultatCol" text="Résultat" styleClass="table-column"/>
+            <TableColumn fx:id="commentaireCol" text="Commentaire" styleClass="table-column"/>
+            <TableColumn fx:id="suiteADonnerCol" text="Suite a donner" styleClass="table-column"/>
+            <TableColumn fx:id="actionsCol" text="Actions" styleClass="table-column"/>
+
+        </columns>
+    </TableView>
+</AnchorPane>

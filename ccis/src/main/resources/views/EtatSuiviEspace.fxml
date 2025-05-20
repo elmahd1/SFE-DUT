@@ -31,8 +31,6 @@
             <TableColumn fx:id="colCodeICE" text="Code ICE" styleClass="table-column"/>
             <TableColumn fx:id="colNomRepresentantLegal" text="Nom Représentant" styleClass="table-column"/>
             <TableColumn fx:id="colFormeJuridique" text="Forme Juridique" styleClass="table-column"/>
-            <TableColumn fx:id="colDateDepot" text="Date Depot" styleClass="table-column"/>
-            <TableColumn fx:id="colHeureDepot" text="Heure Depot" styleClass="table-column"/>
             <TableColumn fx:id="colSecteurActivite" text="Secteur Activité" styleClass="table-column"/>
             <TableColumn fx:id="colActivite" text="Activité" styleClass="table-column"/>
             <TableColumn fx:id="colNomPrenomConseillerCcis" text="Nom Conseiller CCIS" styleClass="table-column"/>

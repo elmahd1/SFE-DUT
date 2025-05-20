@@ -9,7 +9,7 @@
             xmlns:fx="http://javafx.com/fxml/1"
             style="-fx-background-color: #f4f6f9;"
             fx:controller="ccis.controllers.HomeController"
-            stylesheets="@/styles/home.css">
+            stylesheets="@/styles/home.css" prefWidth="1400" prefHeight="600">
 
     <VBox spacing="30" AnchorPane.topAnchor="40" AnchorPane.leftAnchor="40" AnchorPane.rightAnchor="40">
         <!-- Header with welcome message and date/time -->

@@ -7,11 +7,15 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.FileChooser;
 
+import java.awt.Desktop;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -50,7 +54,7 @@ public class EAEController {
  private void configureColumns() {
         // Configure each column to display the appropriate property
         denominationCol.setCellValueFactory(new PropertyValueFactory<>("denomination"));
-        typeCol.setCellValueFactory(new PropertyValueFactory<>("typeDemande"));
+        typeCol.setCellValueFactory(new PropertyValueFactory<>("statut"));
         formeJuridiqueCol.setCellValueFactory(new PropertyValueFactory<>("formeJuridique"));
         secteurActiviteCol.setCellValueFactory(new PropertyValueFactory<>("secteurActivite"));
         activiteCol.setCellValueFactory(new PropertyValueFactory<>("activite"));
@@ -64,11 +68,17 @@ public class EAEController {
         codeICECol.setCellValueFactory(new PropertyValueFactory<>("codeICE"));
         tailleCol.setCellValueFactory(new PropertyValueFactory<>("tailleEntreprise")); 
 }
-    private void loadDemarches() {
-        List<EspaceEntreprise> demarches = dao.getAll();
-        demarchesList.setAll(demarches);
-        tableView.setItems(demarchesList);
-    }
+private void loadDemarches() {
+    List<EspaceEntreprise> demarches = dao.getAll();
+
+    // Utiliser un Set pour éliminer les doublons
+    Set<EspaceEntreprise> uniqueDemarches = new HashSet<>(demarches);
+
+    // Ajouter les données uniques à la liste observable
+    demarchesList.setAll(uniqueDemarches);
+    tableView.setItems(demarchesList);
+    FXCollections.reverse(demarchesList);
+}
 
     @FXML
     private void handleDelete() {
@@ -88,57 +98,70 @@ public class EAEController {
         alert.showAndWait();
     }
     @FXML
-    private void exportEA(){
-         Workbook workbook = new XSSFWorkbook();
-    Sheet sheet = workbook.createSheet("Espace Entreprise");
-
-    // Créer la ligne d'en-têtes
-    Row headerRow = sheet.createRow(0);
-    headerRow.createCell(0).setCellValue("Dénomination");
-    headerRow.createCell(1).setCellValue("Code ICE");
-    headerRow.createCell(2).setCellValue("Type");
-    headerRow.createCell(3).setCellValue("Forme Juridique");
-    headerRow.createCell(4).setCellValue("Secteur Activité");
-    headerRow.createCell(5).setCellValue("Activité");
-    headerRow.createCell(6).setCellValue("GSM");
-    headerRow.createCell(7).setCellValue("Fixe");
-    headerRow.createCell(8).setCellValue("Adresse");
-    headerRow.createCell(9).setCellValue("Ville");
-    headerRow.createCell(10).setCellValue("Interlocuteur");
-    headerRow.createCell(11).setCellValue("Email");
-    headerRow.createCell(11).setCellValue("Site Web");
+    private void exportEA() {
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("Espace Entreprise");
     
-    // Ajouter les données
-    List<EspaceEntreprise> demarches = dao.getAll();
-    int rowNum = 1;
-    for (EspaceEntreprise demarche : demarches) {
-        Row row = sheet.createRow(rowNum++);
-        
-        row.createCell(0).setCellValue(demarche.getDenomination());
-        row.createCell(1).setCellValue(demarche.getStatut());
-        row.createCell(2).setCellValue(demarche.getFormeJuridique());
-        row.createCell(3).setCellValue(demarche.getTailleEntreprise());
-        row.createCell(4).setCellValue(demarche.getSecteurActivite());
-        row.createCell(5).setCellValue(demarche.getActivite());
-        row.createCell(6).setCellValue(demarche.getGsm());
-        row.createCell(7).setCellValue(demarche.getFixe());
-        row.createCell(8).setCellValue(demarche.getAdresse());
-        row.createCell(9).setCellValue(demarche.getVille());
-        row.createCell(10).setCellValue(demarche.getNomPrenom()); // correspond à interlocuteur ?
-        row.createCell(11).setCellValue(demarche.getEmail());
-        row.createCell(12).setCellValue(demarche.getSiteWeb());
-    }
-    File exportDir=new File("C:\\ccis documents\\espace entreprise\\extrait annuaire");
-    if (!exportDir.exists()) {
-        exportDir.mkdirs();
-    }
-    String filePath = "C:\\ccis documents\\espace entreprise\\extrait annuaire\\Extrait_annuaire_espace.xlsx";
-    // Sauvegarder le fichier Excel
-    try (FileOutputStream fileOut = new FileOutputStream(filePath)) {
-        workbook.write(fileOut);
-    } catch (IOException e) {
-        e.printStackTrace();
-        showAlert("Erreur d'exportation", "Une erreur s'est produite lors de l'exportation des données.");
-    }
+        // Créer la ligne d'en-têtes
+        Row headerRow = sheet.createRow(0);
+        headerRow.createCell(0).setCellValue("Dénomination");
+        headerRow.createCell(1).setCellValue("Code ICE");
+        headerRow.createCell(2).setCellValue("Type");
+        headerRow.createCell(3).setCellValue("Forme Juridique");
+        headerRow.createCell(4).setCellValue("Secteur Activité");
+        headerRow.createCell(5).setCellValue("Activité");
+        headerRow.createCell(6).setCellValue("GSM");
+        headerRow.createCell(7).setCellValue("Fixe");
+        headerRow.createCell(8).setCellValue("Adresse");
+        headerRow.createCell(9).setCellValue("Ville");
+        headerRow.createCell(10).setCellValue("Interlocuteur");
+        headerRow.createCell(11).setCellValue("Email");
+        headerRow.createCell(12).setCellValue("Site Web");
+    
+        // Récupérer les données et éliminer les doublons
+        List<EspaceEntreprise> demarches = dao.getAll();
+        Set<EspaceEntreprise> uniqueDemarches = new HashSet<>(demarches);
+    
+        // Ajouter les données uniques
+        int rowNum = 1;
+        for (EspaceEntreprise demarche : uniqueDemarches) {
+            Row row = sheet.createRow(rowNum++);
+    
+            row.createCell(0).setCellValue(demarche.getDenomination());
+            row.createCell(1).setCellValue(demarche.getCodeICE());
+            row.createCell(2).setCellValue(demarche.getStatut());
+            row.createCell(3).setCellValue(demarche.getFormeJuridique());
+            row.createCell(4).setCellValue(demarche.getSecteurActivite());
+            row.createCell(5).setCellValue(demarche.getActivite());
+            row.createCell(6).setCellValue(demarche.getGsm());
+            row.createCell(7).setCellValue(demarche.getFixe());
+            row.createCell(8).setCellValue(demarche.getAdresse());
+            row.createCell(9).setCellValue(demarche.getVille());
+            row.createCell(10).setCellValue(demarche.getNomPrenom());
+            row.createCell(11).setCellValue(demarche.getEmail());
+            row.createCell(12).setCellValue(demarche.getSiteWeb());
+        }
+    
+               FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Enregistrer le fichier généré");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel Files", "*.xlsx"));
+        fileChooser.setInitialFileName("Extrait annuaire Espace Entreprise.xlsx");
+        File output = fileChooser.showSaveDialog(null);
+        if (output == null) {
+            // User cancelled the save dialog
+            return;
+        }
+        try (FileOutputStream fileOut = new FileOutputStream(output)) {
+            workbook.write(fileOut);
+            
+        if (Desktop.isDesktopSupported()) {
+            Desktop.getDesktop().open(output);
+        }else{
+            showAlert("Exportation réussie", "Les données ont été exportées avec succès : " + output.getAbsolutePath());
+        }
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("Erreur d'exportation", "Une erreur s'est produite lors de l'exportation des données.");
+        }
     }
 }

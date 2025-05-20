@@ -15,7 +15,7 @@
             <!-- Main Menu Bar -->
             <MenuBar>
                 <Menu text="Accueil" >
-                    <MenuItem text="Acceuil" onAction="#home"/>
+                    <MenuItem text="Accueil" onAction="#home"/>
                 </Menu>    
                 <Menu text="Demarche Administratif">
                     <MenuItem text="Fiche" onAction="#fa"/>
@@ -28,6 +28,10 @@
                     <MenuItem text="Etat suivi" onAction="#ese"/>
                     <MenuItem text="Extrait de l'annuaire" onAction="#eae"/>
                     <MenuItem text="Graphes" onAction="#ge"/>
+                </Menu>
+                <Menu text="Prestation : Prospection Nationale">
+                    <MenuItem text="Fiche" onAction="#fp"/>
+                    <MenuItem text="Recapitulatif d'activites" onAction="#ra"/>
                 </Menu>
                 <!-- Right-aligned user section -->
                 <Menu text="Aide">

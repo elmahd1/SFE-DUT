@@ -11,7 +11,7 @@ public class EspaceEntrepriseDAO {
 
     // Create operation
     public void create(EspaceEntreprise espaceEntreprise) {
-        String sql = "INSERT INTO espace_entreprise (date_contact, heure_contact, objet_visite, nom_prenom, statut, telephone_fixe, telephone_gsm, email, accepte_envoi_ccis, adresse, ville, denomination, code_ice, nom_representant_legal, site_web, forme_juridique, taille_entreprise, secteur_activite, activite, nom_prenom_conseiller_ccis, qualite_conseiller_ccis, date_depart, heure_depart, date_depot, heure_depot) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO espace_entreprise (date_contact, heure_contact, objet_visite, nom_prenom, statut, telephone_fixe, telephone_gsm, email, accepte_envoi_ccis, adresse, ville, denomination, code_ice, nom_representant_legal, site_web, forme_juridique, taille_entreprise, secteur_activite, activite, nom_prenom_conseiller_ccis, qualite_conseiller_ccis, date_depart, heure_depart) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection connection = JDBCConnection.getConnection(); 
              PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -39,9 +39,7 @@ public class EspaceEntrepriseDAO {
                 stmt.setString(21, espaceEntreprise.getQualiteCCIS());
                 stmt.setString(22, espaceEntreprise.getDateDepart());
                 stmt.setString(23, espaceEntreprise.getHeureDepart());
-                stmt.setString(24, espaceEntreprise.getDateDepot());
-                stmt.setString(25, espaceEntreprise.getHeureDepot());
-                
+              
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -75,7 +73,6 @@ public class EspaceEntrepriseDAO {
                 espaceEntreprise.setNomRepLegal(rs.getString("nom_representant_legal"));
                 espaceEntreprise.setSiteWeb(rs.getString("site_web"));
                 espaceEntreprise.setFormeJuridique(rs.getString("forme_juridique"));
-                espaceEntreprise.setDateDepot(rs.getString("date_depot"));
                 espaceEntreprise.setTailleEntreprise(rs.getString("taille_entreprise"));
                 espaceEntreprise.setSecteurActivite(rs.getString("secteur_activite"));
                 espaceEntreprise.setActivite(rs.getString("activite"));
@@ -83,7 +80,6 @@ public class EspaceEntrepriseDAO {
                 espaceEntreprise.setQualiteCCIS(rs.getString("qualite_conseiller_ccis"));
                 espaceEntreprise.setDateDepart(rs.getString("date_depart"));
                 espaceEntreprise.setHeureContact(rs.getString("heure_contact"));
-espaceEntreprise.setHeureDepot(rs.getString("heure_depot"));
                 espaceEntreprise.setHeureDepart(rs.getString("heure_depart"));
             }
         } catch (SQLException e) {
@@ -95,7 +91,7 @@ espaceEntreprise.setHeureDepot(rs.getString("heure_depot"));
 
     // Update operation
     public void update(EspaceEntreprise espaceEntreprise) {
-        String sql = "UPDATE espace_entreprise SET date_contact = ?, heure_contact = ?, objet_visite = ?, nom_prenom = ?, statut = ?, telephone_fixe = ?, telephone_gsm = ?, email = ?, accepte_envoi_ccis = ?, adresse = ?, ville = ?, denomination = ?, code_ice = ?, nom_representant_legal = ?, site_web = ?, forme_juridique = ?, taille_entreprise = ?, secteur_activite = ?, activite = ?, nom_prenom_conseiller_ccis = ?, qualite_conseiller_ccis = ?, date_depart = ?, heure_depart = ?, date_depot = ?, heure_depot = ? WHERE id = ?";
+        String sql = "UPDATE espace_entreprise SET date_contact = ?, heure_contact = ?, objet_visite = ?, nom_prenom = ?, statut = ?, telephone_fixe = ?, telephone_gsm = ?, email = ?, accepte_envoi_ccis = ?, adresse = ?, ville = ?, denomination = ?, code_ice = ?, nom_representant_legal = ?, site_web = ?, forme_juridique = ?, taille_entreprise = ?, secteur_activite = ?, activite = ?, nom_prenom_conseiller_ccis = ?, qualite_conseiller_ccis = ?, date_depart = ?, heure_depart = ? WHERE id = ?";
 
         try (Connection connection = JDBCConnection.getConnection(); 
              PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -123,8 +119,6 @@ espaceEntreprise.setHeureDepot(rs.getString("heure_depot"));
                 stmt.setString(21, espaceEntreprise.getQualiteCCIS());
                 stmt.setString(22, espaceEntreprise.getDateDepart());
                 stmt.setString(23, espaceEntreprise.getHeureDepart());
-                stmt.setString(24, espaceEntreprise.getDateDepot());
-                stmt.setString(25, espaceEntreprise.getHeureDepot());
                 stmt.setInt(26, espaceEntreprise.getId());
                 
             stmt.executeUpdate();
@@ -172,7 +166,6 @@ espaceEntreprise.setHeureDepot(rs.getString("heure_depot"));
                 espaceEntreprise.setNomRepLegal(rs.getString("nom_representant_legal"));
                 espaceEntreprise.setSiteWeb(rs.getString("site_web"));
                 espaceEntreprise.setFormeJuridique(rs.getString("forme_juridique"));
-                espaceEntreprise.setDateDepot(rs.getString("date_depot"));
                 espaceEntreprise.setTailleEntreprise(rs.getString("taille_entreprise"));
                 espaceEntreprise.setSecteurActivite(rs.getString("secteur_activite"));
                 espaceEntreprise.setActivite(rs.getString("activite"));
@@ -180,7 +173,6 @@ espaceEntreprise.setHeureDepot(rs.getString("heure_depot"));
                 espaceEntreprise.setQualiteCCIS(rs.getString("qualite_conseiller_ccis"));
                 espaceEntreprise.setDateDepart(rs.getString("date_depart"));
                 espaceEntreprise.setHeureContact(rs.getString("heure_contact"));
-espaceEntreprise.setHeureDepot(rs.getString("heure_depot"));
                 espaceEntreprise.setHeureDepart(rs.getString("heure_depart"));
                 espaceEntreprises.add(espaceEntreprise);
             }

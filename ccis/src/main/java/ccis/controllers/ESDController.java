@@ -7,7 +7,9 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.FileChooser;
 
+import java.awt.Desktop;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -45,7 +47,7 @@ public class ESDController {
     @FXML private TableColumn<DemarcheAdministratif, String> colVilleCommunite;
     @FXML private TableColumn<DemarcheAdministratif, String> colInterlocuteur;
     @FXML private TableColumn<DemarcheAdministratif, String> colEmail;
-    @FXML private TableColumn<DemarcheAdministratif, Integer> colMontant;
+    @FXML private TableColumn<DemarcheAdministratif, Double> colMontant;
     @FXML private TableColumn<DemarcheAdministratif, String> colNomPrenom;
     @FXML private TableColumn<DemarcheAdministratif, String> colAccepteEnvoiCcis;
     @FXML private TableColumn<DemarcheAdministratif, String> colSiteWeb;
@@ -112,7 +114,18 @@ public class ESDController {
         colSiegeSocialeAdresse.setCellValueFactory(new PropertyValueFactory<>("adresse"));
         colVilleCommunite.setCellValueFactory(new PropertyValueFactory<>("ville"));
         colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
-        colMontant.setCellValueFactory(new PropertyValueFactory<>("montant"));
+colMontant.setCellValueFactory(new PropertyValueFactory<>("montant"));
+colMontant.setCellFactory(column -> new TableCell<DemarcheAdministratif, Double>() {
+    @Override
+    protected void updateItem(Double montant, boolean empty) {
+        super.updateItem(montant, empty);
+        if (empty || montant == null) {
+            setText(null);
+        } else {
+            setText(String.format("%.2f", montant));
+        }
+    }
+});
         colNomPrenom.setCellValueFactory(new PropertyValueFactory<>("nomPrenom"));
         colAccepteEnvoiCcis.setCellValueFactory(new PropertyValueFactory<>("accepteEnvoi"));
         colSiteWeb.setCellValueFactory(new PropertyValueFactory<>("siteWeb"));
@@ -122,7 +135,15 @@ public class ESDController {
     private void loadDemarches() {
         List<DemarcheAdministratif> demarches = dao.getAllDemarches();
         demarchesList.setAll(demarches);
-        tableView.setItems(demarchesList);
+        tableView.setItems(demarchesList); // Reverse the order of the list removed
+        demarchesList.sort((d1, d2) -> {
+            String date1 = d1.getDateContact();
+            String date2 = d2.getDateContact();
+            if (date1 == null && date2 == null) return 0;
+            if (date1 == null) return 1;
+            if (date2 == null) return -1;
+            return date2.compareTo(date1); // Descending order (most recent first)
+        });
     }
 
     @FXML
@@ -172,7 +193,7 @@ public class ESDController {
       row.createCell(3).setCellValue(d.getStatut());
       row.createCell(4).setCellValue(d.getObjetVisite());
       row.createCell(5).setCellValue(d.getMontant());
-      row.createCell(6).setCellValue(d.getNomPrenom());
+       row.createCell(6).setCellValue(d.getNomPrenom());
       row.createCell(7).setCellValue(d.getFixe());
       row.createCell(8).setCellValue(d.getGsm());
       row.createCell(9).setCellValue(d.getEmail());
@@ -196,15 +217,25 @@ public class ESDController {
       row.createCell(27).setCellValue(d.getHeureDelivrance());
   }
 
-    File exportDir=new File("C:\\ccis documents\\demarche administratif");
-    if (!exportDir.exists()) {
-        exportDir.mkdirs();
-    }
-    String filePath = "C:\\ccis documents\\demarche administratif\\demarche_administrati.xlsx";
-   
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Enregistrer le fichier généré");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel Files", "*.xlsx"));
+        fileChooser.setInitialFileName("Etat Suivi Demarche Administratif.xlsx");
+        File output = fileChooser.showSaveDialog(null);
+        if (output == null) {
+            // User cancelled the save dialog
+            return;
+        }
     // Sauvegarder le fichier Excel
-    try (FileOutputStream fileOut = new FileOutputStream(filePath)) {
+    try (FileOutputStream fileOut = new FileOutputStream(output)) {
         workbook.write(fileOut);
+       
+    if(Desktop.isDesktopSupported()){
+        Desktop.getDesktop().open(output);
+    }else {
+         showAlert("Exportation réussie", "Les données ont été exportées avec succès : " + output.getAbsolutePath());
+    }
+    
     } catch (IOException e) {
         e.printStackTrace();
         showAlert("Erreur d'exportation", "Une erreur s'est produite lors de l'exportation des données.");

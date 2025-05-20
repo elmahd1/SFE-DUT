@@ -6,6 +6,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
@@ -17,10 +18,12 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
+import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.embed.swing.SwingFXUtils;
 import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
+
+import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -28,17 +31,19 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 public class GrapheDemarcheController {
     // Circular Charts
     @FXML
     private PieChart chart1;
     @FXML
     private PieChart chart3;
+
+    @FXML
+    private BarChart<String, Number> chart4;
+
 
     // Bar Chart
     @FXML
@@ -47,6 +52,11 @@ public class GrapheDemarcheController {
     private CategoryAxis xAxis;
     @FXML
     private NumberAxis yAxis;
+
+    @FXML
+    private CategoryAxis xAxis2;
+    @FXML
+    private NumberAxis yAxis2;
 
     // Tables
     @FXML
@@ -165,7 +175,7 @@ public class GrapheDemarcheController {
         
         // Load data
         loadData();
-        File exportDir=new File("C:\\ccis documents\\demarche administratif");
+        File exportDir=new File("C:\\ccis documents application\\demarche administratif");
         if (!exportDir.exists()) {
             exportDir.mkdirs();
         }
@@ -236,7 +246,8 @@ public class GrapheDemarcheController {
             }
         });
     }
-private void loadData() {
+    
+void loadData() {
         List<DemarcheAdministratif> data = dao.getAllDemarches();
         int total = data.size();
 
@@ -268,7 +279,7 @@ private void loadData() {
                 String t1 = item.getHeureDepot();
                 String d2 = item.getDateDelivrance();
                 String t2 = item.getHeureDelivrance();
-                double montant = item.getMontant();
+                double montant = Math.round(item.getMontant() * 100.0) / 100.0;
                 totalMontant += montant;
                 objetMontants.put(objet, objetMontants.getOrDefault(objet, 0.0) + montant);
                 
@@ -308,12 +319,17 @@ private void loadData() {
         
         for (Map.Entry<String, Integer> entry : objetCounts.entrySet()) {
             double percent = (entry.getValue() * 100.0) / total;
-            chart1.getData().add(new PieChart.Data(entry.getKey() + " (" + String.format("%.1f", percent) + "%)", entry.getValue()));
-            
+            chart1.getData().add(new PieChart.Data(entry.getKey() + " (" + String.format("%.1f", percent) + "%):" + entry.getValue(), entry.getValue()));
+
             // Add to table1
             table1Data.add(new ObjetVisiteData(entry.getKey(), entry.getValue(), percent));
         }
-        
+        // Calcul du total pour table1
+int totalObjetVisite = table1Data.stream().mapToInt(ObjetVisiteData::getTotal).sum();
+double totalPercentageObjetVisite = table1Data.stream().mapToDouble(ObjetVisiteData::getPercentage).sum();
+
+// Ajouter la ligne de total
+table1Data.add(new ObjetVisiteData("Total", totalObjetVisite, totalPercentageObjetVisite));
         // Set Table 1 data
         table1.setItems(table1Data);
 
@@ -326,18 +342,24 @@ private void loadData() {
         
         for (Map.Entry<String, Integer> entry : formeCounts.entrySet()) {
             double percent = (entry.getValue() * 100.0) / total;
-            chart3.getData().add(new PieChart.Data(entry.getKey() + " (" + String.format("%.1f", percent) + "%)", entry.getValue()));
+            chart3.getData().add(new PieChart.Data(entry.getKey() + " (" + String.format("%.1f", percent) + "%):"+entry.getValue(), entry.getValue()));
             
             // Add to table3
             table3Data.add(new FormeJuridiqueData(entry.getKey(), entry.getValue(), percent));
         }
-        
+        // Calcul du total pour table3
+int totalNombreVisite = table3Data.stream().mapToInt(FormeJuridiqueData::getNombreVisite).sum();
+double totalPercentageForme = table3Data.stream().mapToDouble(FormeJuridiqueData::getPercentage).sum();
+
+// Ajouter la ligne de total
+table3Data.add(new FormeJuridiqueData("Total", totalNombreVisite, totalPercentageForme));
         // Set Table 3 data
         table3.setItems(table3Data);
 
         // BarChart 2: Délai moyen en heures by objet
         chart2.getData().clear();
-        chart2.setTitle("Délai Moyen et Montant par Objet de Visite");
+        chart2.setTitle("Délai Moyen par Objet de Visite");
+
 
         XYChart.Series<String, Number> montantSeries = new XYChart.Series<>();
         montantSeries.setName("Montant Total (DH)");
@@ -365,34 +387,106 @@ private void loadData() {
             table2Data.add(new ObjetVisiteDetailData(objet, montantTotal, delaiMoyenHeures, 
                                                     pourcentageMontant, pourcentageDelai));
         }
-        
-        chart2.getData().addAll(montantSeries, delaiSeries);
-        
+        // Calcul du total pour table2
+double totalMontant2 = table2Data.stream().mapToDouble(ObjetVisiteDetailData::getMontant).sum();
+double totalDelaiMoyen = table2Data.stream().mapToDouble(ObjetVisiteDetailData::getDelaiMoyen).average().orElse(0);
+double totalPourcentageMontant = table2Data.stream().mapToDouble(ObjetVisiteDetailData::getPourcentageMontant).sum();
+double totalPourcentageDelai = table2Data.stream().mapToDouble(ObjetVisiteDetailData::getPourcentageDelai).sum();
+
+// Ajouter la ligne de total
+table2Data.add(new ObjetVisiteDetailData("Total", totalMontant2, totalDelaiMoyen, totalPourcentageMontant, totalPourcentageDelai));
+        chart2.getData().add(delaiSeries);
+        chart4.getData().add(montantSeries);
+
+
+for (XYChart.Series<String, Number> series : chart2.getData()) {
+    for (XYChart.Data<String, Number> data5 : series.getData()) {
+        Label label = new Label(data5.getYValue().toString());
+        StackPane node = (StackPane) data5.getNode();
+
+        node.getChildren().add(label);
+
+        // Style optionnel pour le label
+        label.setStyle("-fx-font-size: 20px; -fx-text-fill: white;");
+        StackPane.setAlignment(label, Pos.TOP_CENTER);
+    }
+}
+for (XYChart.Series<String, Number> series : chart4.getData()) {
+    for (XYChart.Data<String, Number> data5 : series.getData()) {
+        Label label = new Label(data5.getYValue().toString());
+        StackPane node = (StackPane) data5.getNode();
+
+        node.getChildren().add(label);
+
+        // Style optionnel pour le label
+        label.setStyle("-fx-font-size: 20px; -fx-text-fill: white;");
+        StackPane.setAlignment(label, Pos.TOP_CENTER);
+    }
+}
+
         // Set Table 2 data
         table2.setItems(table2Data);
         
         // Set axes labels
         xAxis.setLabel("Objet de Visite");
         yAxis.setLabel("Valeur");
+
+        xAxis2.setLabel("Objet de Visite");
+        yAxis2.setLabel("Valeur");
     }
 
     public void savePieChartAsPng(PieChart chart, String filename) {
     WritableImage image = chart.snapshot(new SnapshotParameters(), null);
     File file = new File(filename);
+    FileChooser fileChooser = new FileChooser();
+    fileChooser.setTitle("Enregistrer le graphique");
+    fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PNG Files", "*.png"));
+    fileChooser.setInitialFileName(filename);
+    file = fileChooser.showSaveDialog(chart.getScene().getWindow());
+    if (file == null) {
+        return; // L'utilisateur a annulé la boîte de dialogue
+    }
+
     try {
         ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
-        System.out.println("Chart saved to: " + file.getAbsolutePath());
+if (Desktop.isDesktopSupported()) {
+    Desktop.getDesktop().open(file);
+} else {
+    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+    alert.setTitle("Exportation réussie");
+    alert.setHeaderText(null);
+    alert.setContentText("Le graphique a été exporté avec succès vers : " + file.getAbsolutePath());
+    alert.showAndWait();
+    
+}
     } catch (IOException e) {
         e.printStackTrace();
     }
 }
-    
+
+
 public void savebarChartAsPng(BarChart<String, Number> chart, String filename) {
             WritableImage image = chart.snapshot(new SnapshotParameters(), null);
             File file = new File(filename);
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Enregistrer le graphique");
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PNG Files", "*.png"));
+            fileChooser.setInitialFileName(filename);
+            file = fileChooser.showSaveDialog(chart.getScene().getWindow());
+            if (file == null) {
+                return; // L'utilisateur a annulé la boîte de dialogue
+            }
             try {
                 ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
-                System.out.println("Chart saved to: " + file.getAbsolutePath());
+if(Desktop.isDesktopSupported()){
+    Desktop.getDesktop().open(file);
+}else{
+          Alert alert = new Alert(Alert.AlertType.INFORMATION); 
+                alert.setTitle("Exportation réussie");
+                alert.setHeaderText(null);
+                alert.setContentText("Le graphique a été exporté avec succès vers : " + file.getAbsolutePath());
+                alert.showAndWait();
+}
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -423,35 +517,55 @@ private void copyChart1(ActionEvent event) {
             content.putImage(image);
             clipboard.setContent(content);
         }
+        @FXML
+        private void copyChart4(ActionEvent event) {
+            Clipboard clipboard = Clipboard.getSystemClipboard();
+            ClipboardContent content = new ClipboardContent();
+            WritableImage image = chart4.snapshot(new SnapshotParameters(), null);
+            content.putImage(image);
+            clipboard.setContent(content);
+        }
 
- String path = "C:/ccis documents/demarche administratif/";
+ 
        
 @FXML
 private void downloadChart1(ActionEvent event) {
-    savePieChartAsPng(chart1, path+"graphe objet de visite.png");
+    savePieChartAsPng(chart1, "graphe objet de visite.png");
 }
 @FXML
 private void downloadChart2(ActionEvent event) {
-    savebarChartAsPng(chart2, path+"graphe delai et montant moyen par objet de visite.png");
+    savebarChartAsPng(chart2, "graphe delai et montant moyen par objet de visite.png");
 }
 @FXML
 private void downloadChart3(ActionEvent event) {
-    savePieChartAsPng(chart3, path+"graphe forme juridique.png");
+    savePieChartAsPng(chart3, "graphe forme juridique.png");
+}
+@FXML
+private void downloadChart4(ActionEvent event) {
+    savebarChartAsPng(chart4, "graphe forme juridique.png");
 }
 @FXML
 private void downloadTable1(ActionEvent event) {
-    exportTableToCSV(table1, path+"table objet de visite.csv");
+    exportTableToCSV(table1, "table objet de visite.csv");
 }
 @FXML
 private void downloadTable2(ActionEvent event) {
-    exportTableToCSV(table2, path+"table delai et montant moyens par objet de visite.csv");
+    exportTableToCSV(table2, "table delai et montant moyens par objet de visite.csv");
 }
 @FXML
 private void downloadTable3(ActionEvent event) {
-    exportTableToCSV(table3, path+"table forme juridique.csv");
+    exportTableToCSV(table3, "table forme juridique.csv");
 }
 public <T> void exportTableToCSV(TableView<T> table, String filename) {
     File file = new File(filename);
+    FileChooser fileChooser = new FileChooser();
+    fileChooser.setTitle("Enregistrer le fichier CSV");
+    fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+    fileChooser.setInitialFileName(filename);
+    file = fileChooser.showSaveDialog(table.getScene().getWindow());
+    if (file == null) {
+        return; // L'utilisateur a annulé la boîte de dialogue
+    }
     try (PrintWriter writer = new PrintWriter(file)) {
         // En-têtes de colonnes
         for (TableColumn<T, ?> column : table.getColumns()) {
@@ -468,7 +582,15 @@ public <T> void exportTableToCSV(TableView<T> table, String filename) {
             writer.println();
         }
 
-        System.out.println("Table exported to: " + file.getAbsolutePath());
+       if(Desktop.isDesktopSupported()){
+        Desktop.getDesktop().open(file);
+       }else {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Exportation réussie");
+        alert.setHeaderText(null);
+        alert.setContentText("Le fichier a été exporté avec succès vers : " + file.getAbsolutePath());
+        alert.showAndWait();
+       }
     } catch (IOException e) {
         e.printStackTrace();
     }

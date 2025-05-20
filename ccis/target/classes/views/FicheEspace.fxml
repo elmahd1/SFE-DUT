@@ -165,26 +165,7 @@
                      <Label fx:id="formeJuridiqueError" styleClass="error-label" visible="false"/>
                   </children>
                </VBox>
-               
-               <!-- Row 13: Deposit Info -->
-               <HBox spacing="10" styleClass="form-section">
-                  <children>
-                     <VBox spacing="5">
-                        <children>
-                           <Label text="Date de dépôt" />
-                           <DatePicker fx:id="dateDepot" prefWidth="250.0" promptText="JJ/MM/AAAA"/>
-                           <Label fx:id="dateDepotError" styleClass="error-label" visible="false"/>
-                        </children>
-                     </VBox>
-                     <VBox spacing="5">
-                        <children>
-                           <Label text="Heure de dépôt" />
-                           <TextField fx:id="heureDepot" prefWidth="250.0" promptText="HH:MM"/>
-                           <Label fx:id="heureDepotError" styleClass="error-label" visible="false"/>
-                        </children>
-                     </VBox>
-                  </children>
-               </HBox>
+          
 
                      <VBox spacing="5" styleClass="forme-section">
                         <children>
@@ -257,15 +238,17 @@
                </HBox>
                
                <!-- Submit Button -->
-               <HBox alignment="CENTER" style="-fx-padding: 10 0 20 0;">
+               <VBox alignment="CENTER" style="-fx-padding: 10 0 20 0;">
                   <Button text="Enregistrer" prefWidth="300.0" onAction="#handleSubmit" 
                          style="-fx-font-size: 14px; -fx-padding: 12 20 12 20;"/>
                 <Button text="Importer (via Excel)" prefWidth="300.0" onAction="#handleImport" 
                          style="-fx-font-size: 14px; -fx-padding: 12 20 12 20;"/>
+                                         <Button text="Imprimer" prefWidth="300.0" onAction="#handlePrint" 
+                         style="-fx-font-size: 14px; -fx-padding: 12 20 12 20;"/>
                           <Button text="Annuler" prefWidth="300.0" onAction="#clearForm" 
                          style="-fx-font-size: 14px; -fx-padding: 12 20 12 20;"/>
                
-               </HBox>
+               </VBox>
             </children>
          </VBox>
       </content>

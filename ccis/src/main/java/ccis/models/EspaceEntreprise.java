@@ -38,10 +38,6 @@ public class EspaceEntreprise {
 
     private String formeJuridique;
 
-    private String dateDepot;
-
-    private String heureDepot;
-
     private String tailleEntreprise;
 
     private String secteurActivite;
@@ -162,12 +158,6 @@ public class EspaceEntreprise {
     public void setFormeJuridique(String formeJuridique) {
         this.formeJuridique = formeJuridique;
     }
-    public String getDateDepot() {
-        return dateDepot;
-    }
-    public void setDateDepot(String dateDepot) {
-        this.dateDepot = dateDepot;
-    }
     public String getTailleEntreprise() {
         return tailleEntreprise;
     }
@@ -207,14 +197,8 @@ public class EspaceEntreprise {
     public String getHeureDepart(){
        return heureDepart; 
     }
-    public String getHeureDepot(){
-        return heureDepot; 
-     }
      public String getHeureContact(){
         return heureContact; 
-     }
-     public void setHeureDepot(String heureDepot){
-        this.heureDepot=heureDepot; 
      }
      public void setHeureDepart(String heureDepart){
          this.heureDepart=heureDepart;

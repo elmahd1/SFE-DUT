@@ -17,7 +17,7 @@ public class DemarcheAdministratif {
 
     private String objetVisite;
 
-    private float montant;
+    private Double montant;
 
     private String nomPrenom;
 
@@ -91,10 +91,10 @@ public class DemarcheAdministratif {
     public void setStatut(String statut) {
         this.statut = statut;
     }
-    public float getMontant() {
+    public Double getMontant() {
         return montant;
     }
-    public void setMontant(float montant) {
+    public void setMontant(Double montant) {
         this.montant = montant;
     }
     public String getNomPrenom() {

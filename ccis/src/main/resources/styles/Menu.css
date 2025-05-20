@@ -17,7 +17,10 @@
     -fx-dark-gray: #555555;
     -fx-white: #FFFFFF;
 }
-
+.logo-container {
+    -fx-padding: 10;
+    -fx-background-color: white;
+}
 /* Applying font styles */
 .root {
     -fx-font-family: "Segoe UI", "Arial", sans-serif;

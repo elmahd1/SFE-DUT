@@ -12,90 +12,146 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.text.Font?>
 <?import javafx.scene.layout.Priority?>
+
 <AnchorPane xmlns="http://javafx.com/javafx/17" 
             xmlns:fx="http://javafx.com/fxml/1" 
             fx:controller="ccis.controllers.GrapheDemarcheController"
             styleClass="main-container" 
-            prefHeight="600" 
-            prefWidth="1260"
-             stylesheets="@/styles/graphesDemarche.css">
-      <ScrollPane fx:id="scrollPane" fitToWidth="true" 
+            prefHeight="650" 
+            prefWidth="1280"
+            stylesheets="@/styles/graphesDemarche.css">
+    <ScrollPane fx:id="scrollPane" fitToWidth="true" 
                hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" 
                AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"
                AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
-      <content>
-    <VBox spacing="30" AnchorPane.topAnchor="20.0" AnchorPane.leftAnchor="20.0" 
-         AnchorPane.rightAnchor="20.0" AnchorPane.bottomAnchor="20.0">
-        
-        <!-- First row: Two PieCharts side by side -->
-        <HBox spacing="20" alignment="CENTER">
-            <!-- First Circular Chart -->
-            <VBox spacing="10" alignment="CENTER" HBox.hgrow="ALWAYS">
-                <padding>
-                    <Insets top="10" right="10" bottom="10" left="10" />
-                </padding>
-                <Button text="telecharger"  onAction="#downloadChart1"/>
-                <Button text="copier"  onAction="#copyChart1"/>                
-                <PieChart fx:id="chart1" prefWidth="400" prefHeight="300"/>
-                <Button text="telecharger"  onAction="#downloadTable1"/>
-                <TableView fx:id="table1" prefHeight="150">
-                    <columns>
-                        <TableColumn fx:id="objetColumn" text="Objet de la Visite" prefWidth="200"/>
-                        <TableColumn fx:id="totalColumn" text="Total" prefWidth="160"/>
-                        <TableColumn fx:id="percentageColumn" text="Pourcentage" prefWidth="160"/>
-                    </columns>
-                </TableView>
+        <content>
+            <VBox spacing="40" AnchorPane.topAnchor="20.0" AnchorPane.leftAnchor="20.0" 
+                 AnchorPane.rightAnchor="20.0" AnchorPane.bottomAnchor="20.0">
+                
+                <!-- Titre principal -->
+                <Label text="Statistiques Démarches Administratives" styleClass="main-title">
+                    <font>
+                        <Font name="System Bold" size="22.0" />
+                    </font>
+                    <padding>
+                        <Insets top="5" bottom="10" />
+                    </padding>
+                </Label>
+                
+              
+                    <!-- First Circular Chart -->
+                    <VBox spacing="15" alignment="CENTER" HBox.hgrow="ALWAYS" styleClass="chart-container">
+                        <padding>
+                            <Insets top="15" right="15" bottom="15" left="15" />
+                        </padding>
+                        <Label text="Répartition par Objet de Visite" styleClass="section-title">
+                            <font>
+                                <Font name="System Bold" size="16.0" />
+                            </font>
+                        </Label>
+                        <PieChart fx:id="chart1" prefWidth="550" prefHeight="400"/>
+                        <HBox spacing="10" alignment="CENTER">
+                            <Button text="Télécharger le graphe" styleClass="action-button" onAction="#downloadChart1"/>
+                            <Button text="Copier le graphe" styleClass="action-button" onAction="#copyChart1"/>                
+                        </HBox>
+                        <TableView fx:id="table1" prefHeight="180">
+                            <columns>
+                                <TableColumn fx:id="objetColumn" text="Objet de la Visite" prefWidth="250"/>
+                                <TableColumn fx:id="totalColumn" text="Total" prefWidth="100"/>
+                                <TableColumn fx:id="percentageColumn" text="Pourcentage" prefWidth="100"/>
+                            </columns>
+                        </TableView>
+                        <Button text="Télécharger le tableau" styleClass="action-button" onAction="#downloadTable1"/>
+                    </VBox>
+                    
+                    <!-- Second Circular Chart -->
+                    <VBox spacing="15" alignment="CENTER" HBox.hgrow="ALWAYS" styleClass="chart-container">
+                        <padding>
+                            <Insets top="15" right="15" bottom="15" left="15" />
+                        </padding>
+                        <Label text="Répartition par Forme Juridique" styleClass="section-title">
+                            <font>
+                                <Font name="System Bold" size="16.0" />
+                            </font>
+                        </Label>
+                        <PieChart fx:id="chart3" prefWidth="550" prefHeight="400"/>
+                        <HBox spacing="10" alignment="CENTER">
+                            <Button text="Télécharger le graphe" styleClass="action-button" onAction="#downloadChart3"/>
+                            <Button text="Copier le graphe" styleClass="action-button" onAction="#copyChart3"/>
+                        </HBox>
+                        <TableView fx:id="table3" prefHeight="180">
+                            <columns>
+                                <TableColumn fx:id="formeColumn" text="Forme Juridique" prefWidth="250"/>
+                                <TableColumn fx:id="nombreVisiteColumn" text="Nombre de Visite" prefWidth="120"/>
+                                <TableColumn fx:id="percentageFormeColumn" text="Pourcentage" prefWidth="100"/>
+                            </columns>
+                        </TableView>
+                        <Button text="Télécharger le tableau" styleClass="action-button" onAction="#downloadTable3"/>
+                    </VBox>
+                
+                
+                <!-- Section Délai et Montant -->
+                <VBox spacing="20" alignment="CENTER" styleClass="chart-container">
+                    <padding>
+                        <Insets top="15" right="15" bottom="15" left="15" />
+                    </padding>
+                    <Label text="Comparaison des Délais et Montants par Objet de Visite" styleClass="section-title">
+                        <font>
+                            <Font name="System Bold" size="16.0" />
+                        </font>
+                    </Label>
+                    
+                    <!-- Bar Chart -->
+                    <BarChart fx:id="chart2" prefWidth="1200" prefHeight="450">
+                        <xAxis>
+                            <CategoryAxis fx:id="xAxis" label="Objet de Visite" />
+                        </xAxis>
+                        <yAxis>
+                            <NumberAxis fx:id="yAxis" label="Valeur" />
+                        </yAxis>
+                    </BarChart>
+                    <HBox spacing="10" alignment="CENTER">
+                        <Button text="Télécharger le graphe" styleClass="action-button" onAction="#downloadChart2"/>
+                        <Button text="Copier le graphe" styleClass="action-button" onAction="#copyChart2"/>
+                    </HBox>
+                     <BarChart fx:id="chart4" prefWidth="1200" prefHeight="450">
+                        <xAxis>
+                            <CategoryAxis fx:id="xAxis2" label="Objet de Visite" />
+                        </xAxis>
+                        <yAxis>
+                            <NumberAxis fx:id="yAxis2" label="Valeur" />
+                        </yAxis>
+                    </BarChart>
+                    <HBox spacing="10" alignment="CENTER">
+                        <Button text="Télécharger le graphe" styleClass="action-button" onAction="#downloadChart4"/>
+                        <Button text="Copier le graphe" styleClass="action-button" onAction="#copyChart4"/>
+                    </HBox>
+                    
+                    <!-- Tableau détaillé -->
+                    <Label text="Détails des Délais et Montants" styleClass="subsection-title">
+                        <font>
+                            <Font name="System Bold" size="14.0" />
+                        </font>
+                        <padding>
+                            <Insets top="10" bottom="5" />
+                        </padding>
+                    </Label>
+                    <TableView fx:id="table2" prefHeight="200">
+                        <columns>
+                            <TableColumn fx:id="objetVisiteColumn" text="Objet de Visite" prefWidth="250"/>
+                            <TableColumn fx:id="montantColumn" text="Montant (DH)" prefWidth="150"/>
+                            <TableColumn fx:id="delaiMoyenColumn" text="Délai Moyen (heures)" prefWidth="200"/>
+                            <TableColumn fx:id="pourcentageMontantColumn" text="Pourcentage Montant" prefWidth="200"/>
+                            <TableColumn fx:id="pourcentageDelaiColumn" text="Pourcentage Délai" prefWidth="180"/>
+                        </columns>
+                    </TableView>
+                    <Button text="Télécharger le tableau" styleClass="action-button" onAction="#downloadTable2"/>
+                </VBox>
             </VBox>
-            
-            <!-- Second Circular Chart -->
-            <VBox spacing="10" alignment="CENTER" HBox.hgrow="ALWAYS">
-                <padding>
-                    <Insets top="10" right="10" bottom="10" left="10" />
-                </padding>
-                <Button text="telecharger"  onAction="#downloadChart3"/>
-                <Button text="copier"  onAction="#copyChart3"/>
-                <PieChart fx:id="chart3" prefWidth="400" prefHeight="300"/>
-                <Button text="telecharger"  onAction="#downloadTable3"/>
-                <TableView fx:id="table3" prefHeight="150">
-                    <columns>
-                        <TableColumn fx:id="formeColumn" text="Forme Juridique" prefWidth="150"/>
-                        <TableColumn fx:id="nombreVisiteColumn" text="Nombre de Visite" prefWidth="120"/>
-                        <TableColumn fx:id="percentageFormeColumn" text="Pourcentage" prefWidth="100"/>
-                    </columns>
-                </TableView>
-            </VBox>
-        </HBox>
-        
-        <!-- Second row: Bar Chart -->
-        <VBox spacing="10" alignment="CENTER">
-            <padding>
-                <Insets top="10" right="10" bottom="10" left="10" />
-            </padding>
-            <Button text="telecharger" onAction="#downloadChart2"/>
-            <Button text="copier"  onAction="#copyChart2"/>
-            <BarChart fx:id="chart2" prefWidth="800" prefHeight="300">
-                <xAxis>
-                    <CategoryAxis fx:id="xAxis" label="Objet de Visite" />
-                </xAxis>
-                <yAxis>
-                    <NumberAxis fx:id="yAxis" label="Délai (heures)" />
-                </yAxis>
-            </BarChart>
-            <Button text="telecharger"  onAction="#downloadTable2"/>
-            <TableView fx:id="table2" prefHeight="150">
-                <columns>
-                    <TableColumn fx:id="objetVisiteColumn" text="Objet de Visite" prefWidth="260"/>
-                    <TableColumn fx:id="montantColumn" text="Montant (DH)" prefWidth="200"/>
-                    <TableColumn fx:id="delaiMoyenColumn" text="Délai Moyen (heures)" prefWidth="260"/>
-                    <TableColumn fx:id="pourcentageMontantColumn" text="Pourcentage Montant" prefWidth="260"/>
-                    <TableColumn fx:id="pourcentageDelaiColumn" text="Pourcentage Délai" prefWidth="240"/>
-                </columns>
-            </TableView>
-        </VBox>
-
-        
-    </VBox>
         </content>
-        </ScrollPane>
+    </ScrollPane>
 </AnchorPane>

@@ -7,6 +7,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.FileChooser;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -57,7 +58,7 @@ public class ESEController {
 
         configureColumns();
         // Charger les données depuis la base
-        loadDemarches();
+        loadEspaces();
       // Adding delete button in the "Actions" column
       setupActionColumn();
 
@@ -85,8 +86,6 @@ public class ESEController {
  private void configureColumns() {
         // Configure each column to display the appropriate property
         colFormeJuridique.setCellValueFactory(new PropertyValueFactory<>("formeJuridique"));
-        colDateDepot.setCellValueFactory(new PropertyValueFactory<>("dateDepot"));
-        colHeureDepot.setCellValueFactory(new PropertyValueFactory<>("heureDepot"));
         colSecteurActivite.setCellValueFactory(new PropertyValueFactory<>("secteurActivite"));
         colActivite.setCellValueFactory(new PropertyValueFactory<>("activite"));
         colNomRepresentantLegal.setCellValueFactory(new PropertyValueFactory<>("nomRepLegal"));
@@ -110,17 +109,25 @@ colCodeICE.setCellValueFactory(new PropertyValueFactory<>("codeICE"));
 colQualiteConseillerCcis.setCellValueFactory(new PropertyValueFactory<>("qualiteCCIS"));
         
     }
-    private void loadDemarches() {
-        List<EspaceEntreprise> demarches = dao.getAll();
-        demarchesList.setAll(demarches);
+    private void loadEspaces() {
+        List<EspaceEntreprise> espaces = dao.getAll();
+        demarchesList.setAll(espaces);
         tableView.setItems(demarchesList);
+           demarchesList.sort((d1, d2) -> {
+            String date1 = d1.getDateContact();
+            String date2 = d2.getDateContact();
+            if (date1 == null && date2 == null) return 0;
+            if (date1 == null) return 1;
+            if (date2 == null) return -1;
+            return date2.compareTo(date1); // Descending order (most recent first)
+        });
     }
 
     @FXML
-    private void handleDelete(EspaceEntreprise selectedDemarche) {
-        if (selectedDemarche != null) {
-            dao.delete(selectedDemarche.getId());
-            demarchesList.remove(selectedDemarche);
+    private void handleDelete(EspaceEntreprise selectedEspace) {
+        if (selectedEspace != null) {
+            dao.delete(selectedEspace.getId());
+            demarchesList.remove(selectedEspace);
         } else {
             showAlert("Erreur", "Impossible de supprimer : aucune sélection.");
         }
@@ -140,11 +147,11 @@ colQualiteConseillerCcis.setCellValueFactory(new PropertyValueFactory<>("qualite
     // Créer la ligne d'en-têtes
     Row headerRow = sheet.createRow(0);
     String[] headers = {
-        "Date Contact", "Heure Contact", "Type Demande", "Type", "Objet Visite", "Montant",
-        "Nom et Prénom",  "Status","Fixe", "GSM", "Email", "Accepte Envoi CCIS", "Site Web",
+        "Date Contact", "Heure Contact", "Type Demande", "Type", "Objet Visite", 
+        "Nom et Prénom",  "Fixe", "GSM", "Email", "Accepte Envoi CCIS", "Site Web",
         "Adresse Siege", "Ville/Commune", "Dénomination", "Code ICE", "Nom Représentant", "Forme Juridique",
-        "Date Depot", "Heure Depot", "Secteur Activité", "Activité", "Nom Conseiller CCIS",
-        "Qualité Conseiller CCIS", "Observation",
+         "Secteur Activité", "Activité", "Nom Conseiller CCIS",
+        "Qualité Conseiller CCIS", 
          "Date Départ", "Heure Départ"
     };
 
@@ -159,38 +166,47 @@ colQualiteConseillerCcis.setCellValueFactory(new PropertyValueFactory<>("qualite
       Row row = sheet.createRow(rowNum++);
       row.createCell(0).setCellValue(d.getDateContact());
       row.createCell(1).setCellValue(d.getHeureContact());
+        row.createCell(2).setCellValue(d.getObjetVisite());
       row.createCell(3).setCellValue(d.getStatut());
       row.createCell(4).setCellValue(d.getObjetVisite());
-      row.createCell(6).setCellValue(d.getNomPrenom());
-        row.createCell(7).setCellValue(d.getStatut());
-        row.createCell(8).setCellValue(d.getFixe());
-        row.createCell(9).setCellValue(d.getGsm());
-        row.createCell(10).setCellValue(d.getEmail());
-        row.createCell(11).setCellValue(d.getAccepteEnvoi());
-        row.createCell(12).setCellValue(d.getSiteWeb());
-        row.createCell(13).setCellValue(d.getAdresse());
-        row.createCell(14).setCellValue(d.getVille());
-        row.createCell(15).setCellValue(d.getDenomination());
-        row.createCell(16).setCellValue(d.getCodeICE());
-        row.createCell(17).setCellValue(d.getNomRepLegal());
-        row.createCell(18).setCellValue(d.getFormeJuridique());
-        row.createCell(19).setCellValue(d.getDateDepot());
-        row.createCell(20).setCellValue(d.getHeureDepot());
-        row.createCell(21).setCellValue(d.getSecteurActivite());
-        row.createCell(22).setCellValue(d.getActivite());
-        row.createCell(23).setCellValue(d.getNomPrenomCCIS());
-        row.createCell(24).setCellValue(d.getQualiteCCIS());
+      row.createCell(5).setCellValue(d.getNomPrenom());
+        row.createCell(6).setCellValue(d.getFixe());
+        row.createCell(7).setCellValue(d.getGsm());
+        row.createCell(8).setCellValue(d.getEmail());
+        row.createCell(9).setCellValue(d.getAccepteEnvoi());
+        row.createCell(10).setCellValue(d.getSiteWeb());
+        row.createCell(11).setCellValue(d.getAdresse());
+        row.createCell(12).setCellValue(d.getVille());
+        row.createCell(13).setCellValue(d.getDenomination());
+        row.createCell(14).setCellValue(d.getCodeICE());
+        row.createCell(15).setCellValue(d.getNomRepLegal());
+        row.createCell(16).setCellValue(d.getFormeJuridique());
+        row.createCell(17).setCellValue(d.getSecteurActivite());
+        row.createCell(18).setCellValue(d.getActivite());
+        row.createCell(19).setCellValue(d.getNomPrenomCCIS());
+        row.createCell(20).setCellValue(d.getQualiteCCIS());
+        row.createCell(21).setCellValue(d.getDateDepart()); 
+        row.createCell(22).setCellValue(d.getHeureDepart());
   }
 
-    File exportDir=new File("C:\\ccis documents\\espace entreprise");
-    if (!exportDir.exists()) {
-        exportDir.mkdirs();
-    }
-    String filePath = "C:\\ccis documents\\espace entreprise\\espace_entreprise.xlsx";
-   
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Enregistrer le fichier généré");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel Files", "*.xlsx"));
+        fileChooser.setInitialFileName("Etat Suivi Espace Entreprise.xlsx");
+        File output = fileChooser.showSaveDialog(null);
+        if (output == null) {
+            // User cancelled the save dialog
+            return;
+        }
     // Sauvegarder le fichier Excel
-    try (FileOutputStream fileOut = new FileOutputStream(filePath)) {
+    try (FileOutputStream fileOut = new FileOutputStream(output)) {
         workbook.write(fileOut);
+        if (java.awt.Desktop.isDesktopSupported()) {
+            java.awt.Desktop.getDesktop().open(output);
+        }
+        else {
+            showAlert("Fichier enregistré", "Le fichier a été enregistré avec succès : " + output.getAbsolutePath());
+        }
     } catch (IOException e) {
         e.printStackTrace();
         showAlert("Erreur d'exportation", "Une erreur s'est produite lors de l'exportation des données.");
