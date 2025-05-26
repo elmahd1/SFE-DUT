@@ -73,10 +73,27 @@
     -fx-background-radius: 5;
     -fx-border-radius: 5;
 }
-
+.form-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-white;
+}
 .default-color0.chart-bar { -fx-bar-fill: #3498db; }
 .default-color1.chart-bar { -fx-bar-fill: #e74c3c; }
+/* Styles pour la barre de défilement */
+.scroll-bar:vertical {
+    -fx-background-color: #f0f0f0;
+    -fx-background-radius: 0;
+}
 
+.scroll-bar:vertical .thumb {
+    -fx-background-color: #c0c0c0;
+    -fx-background-radius: 5px;
+}
+
+.scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #a0a0a0;
+}
 .axis {
     -fx-font-size: 12px;
     -fx-tick-label-fill: #2c3e50;

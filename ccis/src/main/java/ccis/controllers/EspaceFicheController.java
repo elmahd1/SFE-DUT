@@ -4,7 +4,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Control;
 import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.Alert;
@@ -12,18 +11,11 @@ import javafx.scene.control.CheckBox;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
-import javafx.application.Platform;
 import ccis.models.EspaceEntreprise;
-import org.apache.poi.ss.usermodel.Sheet;
-
 import java.awt.Desktop;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,17 +24,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiConsumer;
 
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.DateUtil;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
@@ -55,25 +37,8 @@ import ccis.dao.EspaceEntrepriseDAO;
  public class EspaceFicheController {
 
     @FXML private DatePicker dateContact;
-    @FXML private Label dateContactError;
     @FXML private TextField heureContact;
-    @FXML private Label heureContactError;
     @FXML private ComboBox<String> objetVisite;
-    @FXML private Label objetVisiteError;
-    @FXML private Label nomPrenomError;
-    @FXML private Label telephoneFixError;
-    @FXML private Label telephoneGSMError;
-    @FXML private Label emailError;
-    @FXML private Label adresseError;
-    @FXML private Label villeError;
-    @FXML private Label denominationError;
-    @FXML private Label nomRepresentantLegalError;
-    @FXML private Label formeJuridiqueError;
-    @FXML private Label dateDepotError;
-    @FXML private Label heureDepotError;
-    @FXML private Label secteurActiviteError;
-    @FXML private Label activiteError;
-    @FXML private Label erreurLabel;
     @FXML private CheckBox accepteEnvoiCCIS;
     @FXML private TextField nomPrenom;
     @FXML private TextField telephoneFix;
@@ -90,21 +55,13 @@ import ccis.dao.EspaceEntrepriseDAO;
     @FXML private TextField nomPrenomConseillerCCIS;
     @FXML private TextField qualiteConseillerCCIS;
     @FXML private DatePicker dateDepart;
-    @FXML private Label dateDepartError;
     @FXML private TextField heureDepart;
-    @FXML private Label heureDepartError;
     @FXML private ComboBox<String> statut;
-    @FXML private Label statutError;
     @FXML private TextField codeICE;
-    @FXML private Label codeICEError;
     @FXML private TextField tailleEntreprise;
-    @FXML private Label tailleEntrepriseError;
 
 
-    @FXML
-    private ScrollPane scrollPane;
-    @FXML
-    private VBox scrollContent;
+
  private DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     // Create an instance of dao
    EspaceEntrepriseDAO dao = new EspaceEntrepriseDAO();
@@ -119,14 +76,16 @@ import ccis.dao.EspaceEntrepriseDAO;
     });   
     nomPrenomConseillerCCIS.setText("Rachid BNINHA");
     qualiteConseillerCCIS.setText("Chef de département services aux ressortissants");
+    ville.setText("Essaouira");
 
 
         // Forme Juridique ComboBox
         ObservableList<String> formeJuridiqueOptions = FXCollections.observableArrayList(
+            "PP (Personne physique)",
+            "Auto-entrepreneur",
             "SARL", 
-            "SA", 
-            "Auto-entrepreneur", 
-            "Autre"
+            "SA"
+            
         );
         formeJuridique.setItems(formeJuridiqueOptions);
         formeJuridique.setEditable(true);
@@ -151,7 +110,7 @@ import ccis.dao.EspaceEntrepriseDAO;
  
 
         
-        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+     
 
         ObservableList<String> objetVisiteList = FXCollections.observableArrayList(
             "Programmes d'appui / aide aux entreprises",
@@ -177,68 +136,64 @@ import ccis.dao.EspaceEntrepriseDAO;
         // Add validation logic for all required fields here
         // Example:
         if (dateContact.getValue() == null) {
-            showError(dateContact, dateContactError, "La date de contact est requise");
+            showError(dateContact, "La date de contact est requise");
             isValid = false;
         }
         
         if (heureContact.getText().isEmpty()) {
-            showError(heureContact, heureContactError, "L'heure de contact est requise");
+            showError(heureContact, "L'heure de contact est requise");
             isValid = false;
         }
         if (objetVisite.getValue() == null) {
-            showError(objetVisite, objetVisiteError, "L'objet de la visite est requis");
+            showError(objetVisite, "L'objet de la visite est requis");
             isValid = false;
         }
         if (nomPrenom.getText().isEmpty()) {
-            showError(nomPrenom, nomPrenomError, "Le nom et prénom sont requis");
+            showError(nomPrenom, "Le nom et prénom sont requis");
             isValid = false;
         }
         if (telephoneGSM.getText().isEmpty()) {
-            showError(telephoneGSM, telephoneGSMError, "Le téléphone GSM est requis");
-            isValid = false;
-        }
-        if (email.getText().isEmpty()) {
-            showError(email, emailError, "L'email est requis");
+            showError(telephoneGSM, "Le téléphone GSM est requis");
             isValid = false;
         }
         if (adresse.getText().isEmpty()) {
-            showError(adresse, adresseError, "L'adresse est requise");
+            showError(adresse, "L'adresse est requise");
             isValid = false;
         }
         if (ville.getText().isEmpty()) {
-            showError(ville, villeError, "La ville est requise");
+            showError(ville, "La ville est requise");
             isValid = false;
         }
         if (denomination.getText().isEmpty()) {
-            showError(denomination, denominationError, "La dénomination est requise");
+            showError(denomination, "La dénomination est requise");
             isValid = false;
         }
         if (nomRepresentantLegal.getText().isEmpty()) {
-            showError(nomRepresentantLegal, nomRepresentantLegalError, "Le nom du représentant légal est requis");
+            showError(nomRepresentantLegal, "Le nom du représentant légal est requis");
             isValid = false;
         }
         if (formeJuridique.getValue() == null) {
-            showError(formeJuridique, formeJuridiqueError, "La forme juridique est requise");
+            showError(formeJuridique, "La forme juridique est requise");
             isValid = false;
         }
         if (secteurActivite.getValue() == null) {
-            showError(secteurActivite, secteurActiviteError, "Le secteur d'activité est requis");
+            showError(secteurActivite, "Le secteur d'activité est requis");
             isValid = false;
         }
         if (activite.getText().isEmpty()) {
-            showError(activite, activiteError, "L'activité est requise");
+            showError(activite, "L'activité est requise");
             isValid = false;
         }
         if(statut.getValue() == null) {
-            showError(statut, statutError, "Le statut est requis");
+            showError(statut, "Le statut est requis");
             isValid = false;
         }
         if (tailleEntreprise.getText().isEmpty()) {
-            showError(tailleEntreprise, tailleEntrepriseError, "La taille de l'entreprise est requise");
+            showError(tailleEntreprise, "La taille de l'entreprise est requise");
             isValid = false;
         }
         if (dateDepart.getValue() == null) {
-            showError(dateDepart, dateDepartError, "La date de départ est requise");
+            showError(dateDepart, "La date de départ est requise");
             isValid = false;
         }
 
@@ -345,40 +300,47 @@ else {
 
         }
     // Method to show errors for any control
-    private void showError(Control control, Label errorLabel, String message) {
-        control.setStyle("-fx-border-color: red; -fx-border-width: 1px;");
-        errorLabel.setText(message);
-        errorLabel.setVisible(true);
-        control.setTooltip(new Tooltip(message));
+private void showError(Control control, String message) {
+    control.setStyle("-fx-border-color: red; -fx-border-width: 1px;");
+    if (control instanceof TextField) {
+        ((TextField) control).setPromptText(message);
+    } else if (control instanceof ComboBox) {
+        ((ComboBox<?>) control).setPromptText(message);
     }
+    // Optionally: errorLabel.setVisible(false);
+    control.setTooltip(new Tooltip(message));
+}
 
-    // Method to clear errors
-    private void clearError(Control control, Label errorLabel) {
-        control.setStyle("");
-        errorLabel.setVisible(false);
-        control.setTooltip(null);
+private void clearError(Control control) {
+    control.setStyle("");
+    if (control instanceof TextField) {
+        ((TextField) control).setPromptText("");
+    } else if (control instanceof ComboBox) {
+        ((ComboBox<?>) control).setPromptText("");
     }
+    // Optionally: errorLabel.setVisible(false);
+    control.setTooltip(null);
+}
 
     // Method to clear all errors
     private void clearAllErrors() {
-        clearError(dateContact, dateContactError);
-        clearError(heureContact, heureContactError);
-        clearError(nomPrenom, nomPrenomError);
-        clearError(telephoneGSM, telephoneGSMError);
-        clearError(email, emailError);
-        clearError(adresse, adresseError);
-        clearError(ville, villeError);
-        clearError(denomination, denominationError);
-        clearError(nomRepresentantLegal, nomRepresentantLegalError);
-        clearError(formeJuridique, formeJuridiqueError);
-        clearError(secteurActivite, secteurActiviteError);
-        clearError(activite, activiteError);
-        clearError(statut, statutError);
+        clearError(dateContact);
+        clearError(heureContact);
+        clearError(nomPrenom);
+        clearError(telephoneGSM);
+        clearError(email);
+        clearError(adresse);
+        clearError(ville);
+        clearError(denomination);
+        clearError(nomRepresentantLegal);
+        clearError(formeJuridique);
+        clearError(secteurActivite);
+        clearError(activite);
+        clearError(statut);
+        clearError(tailleEntreprise);
     }
 
-    public void scrollToBottom() {
-        Platform.runLater(() -> scrollPane.setVvalue(1.0));
-    }
+
     // Helper methods
 private void validateTimeFormat(String time, String fieldName) {
     if (time != null && !time.isEmpty() && !time.matches("^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$")) {
@@ -397,120 +359,7 @@ private void showErrorAlert(String title, String message) {
     alert.setContentText(message);
     alert.showAndWait();
 }
-@FXML
-private void handleImport(ActionEvent event) {
-    FileChooser fileChooser = new FileChooser();
-    fileChooser.setTitle("Sélectionner un fichier Excel");
-    fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel Files", "*.xlsx"));
-    File file = fileChooser.showOpenDialog(null); // tu peux passer ici le Stage si tu l’as
 
-    if (file != null) {
-        importFromExcel(file);
-    }
-}
-
-        // Fonction d'aide pour les cases à cocher
-        String caseACocher(boolean value) {
-            return value ? "✓" : "☐";
-        }
-private void importFromExcel(File file) {
-    try (FileInputStream fis = new FileInputStream(file);
-         Workbook workbook = new XSSFWorkbook(fis)) {
-
-        Sheet sheet = workbook.getSheetAt(0);
-        Row headerRow = sheet.getRow(0);
-
-        if (headerRow == null) {
-            System.out.println("Fichier Excel vide ou sans en-tête.");
-            return;
-        }
-
-        // Map header titles to their column indexes
-        Map<String, Integer> columnIndexes = new HashMap<>();
-        for (Cell cell : headerRow) {
-            columnIndexes.put(cell.getStringCellValue().trim(), cell.getColumnIndex());
-        }
-
-        // Define mapping from Excel column name to Java object setter
-        Map<String, BiConsumer<EspaceEntreprise, String>> fieldMapping = new HashMap<>();
-        fieldMapping.put("Dénomination", (d, v) -> d.setDenomination(v));
-        fieldMapping.put("Forme Juridique", (d, v) -> d.setFormeJuridique(v));
-        fieldMapping.put("Secteur Activité", (d, v) -> d.setSecteurActivite(v));
-        fieldMapping.put("Activité", (d, v) -> d.setActivite(v));
-        fieldMapping.put("Téléphone Fixe", (d, v) -> d.setFixe(v));
-        fieldMapping.put("Téléphone GSM", (d, v) -> d.setGsm(v));
-        fieldMapping.put("Adresse", (d, v) -> d.setAdresse(v));
-        fieldMapping.put("Ville", (d, v) -> d.setVille(v));
-        fieldMapping.put("Email", (d, v) -> d.setEmail(v));
-        fieldMapping.put("Date de contact", (d, v) -> d.setDateContact(v));
-        fieldMapping.put("Heure de contact", (d, v) -> d.setHeureContact(v));
-        fieldMapping.put("Objet de la visite", (d, v) -> d.setObjetVisite(v));
-        fieldMapping.put("Nom et Prénom", (d, v) -> d.setNomPrenom(v));
-        fieldMapping.put("Accepte Envoi CCIS", (d, v) -> d.setAccepteEnvoi(v));
-        fieldMapping.put("Site Web", (d, v) -> d.setSiteWeb(v));
-        fieldMapping.put("Nom du Représentant Légal", (d, v) -> d.setNomRepLegal(v));
-       fieldMapping.put("Nom et Prénom Conseiller CCIS", (d, v) -> d.setNomPrenomCCIS(v));
-        fieldMapping.put("Qualité Conseiller CCIS", (d, v) -> d.setQualiteCCIS(v));
-        fieldMapping.put("Date de Départ", (d, v) -> d.setDateDepart(v));
-        fieldMapping.put("Heure de Départ", (d, v) -> d.setHeureDepart(v));
-        fieldMapping.put("Code ICE", (d, v) -> d.setCodeICE(v));
-        fieldMapping.put("Taille Entreprise", (d, v) -> d.setTailleEntreprise(v));
-        fieldMapping.put("Statut", (d, v) -> d.setStatut(v));
-
-        for (int i = 1; i <= sheet.getLastRowNum(); i++) {
-            Row row = sheet.getRow(i);
-            if (row == null) continue;
-
-            EspaceEntreprise d = new EspaceEntreprise();
-
-            for (String header : fieldMapping.keySet()) {
-                Integer colIndex = columnIndexes.get(header);
-                if (colIndex == null) continue;
-
-                Cell cell = row.getCell(colIndex);
-                String value = getCellAsString(cell);
-
-                try {
-                    fieldMapping.get(header).accept(d, value);
-                } catch (Exception e) {
-                    System.out.println("Erreur lors du traitement de la colonne '" + header + "' à la ligne " + (i + 1) + ": " + e.getMessage());
-                }
-            }
-
-            new EspaceEntrepriseDAO().create(d);
-        }
-
-        System.out.println("Importation terminée avec succès.");
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Succès");
-        alert.setHeaderText(null);
-        alert.setContentText("L'importation a été effectuée avec succès!");
-
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-}
-
-private String getCellAsString(Cell cell) {
-    if (cell == null) return "";
-    switch (cell.getCellType()) {
-        case STRING: return cell.getStringCellValue();
-        case NUMERIC:
-            if (DateUtil.isCellDateFormatted(cell)) {
-                return cell.getDateCellValue().toString();
-            } else {
-                return String.valueOf(cell.getNumericCellValue());
-            }
-        case BOOLEAN: return String.valueOf(cell.getBooleanCellValue());
-        case FORMULA:
-            try {
-                return cell.getStringCellValue(); // or cell.getNumericCellValue() depending
-            } catch (IllegalStateException e) {
-                return String.valueOf(cell.getNumericCellValue());
-            }
-        default: return "";
-    }
-}
 @FXML
 public void handlePrint() {
    try {
@@ -519,6 +368,8 @@ public void handlePrint() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Enregistrer le PDF généré");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
+        fileChooser.setInitialDirectory(new File("C:/fichiers application ccis/espace entreprise"));
+        
         fileChooser.setInitialFileName("Fiche Espace Entreprise.pdf");
         File outputPdf = fileChooser.showSaveDialog(null);
         if (outputPdf == null) {
@@ -555,7 +406,7 @@ public void handlePrint() {
         
         // Open the generated PDF file
          if (Desktop.isDesktopSupported()) {
-             Desktop.getDesktop().open(outputPdf);
+             Desktop.getDesktop().print(outputPdf);
          }
          else {
              // Show success message
@@ -570,6 +421,10 @@ public void handlePrint() {
         showErrorAlert("Erreur", "Une erreur est survenue lors de la génération du document : " + e.getMessage());
     }
 }
+ // Fonction d'aide pour les cases à cocher
+        String caseACocher(boolean value) {
+            return value ? "✓" : "☐";
+        }
 private void convertDocxToPdf(File wordFile, File pdfFile) {
     try {
           // Check if Python is installed

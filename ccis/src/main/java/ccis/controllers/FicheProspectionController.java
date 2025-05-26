@@ -1,27 +1,13 @@
 package ccis.controllers;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
 import java.awt.Desktop;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
-import org.apache.poi.xwpf.usermodel.XWPFParagraph;
-import org.apache.poi.xwpf.usermodel.XWPFRun;
-import org.apache.poi.xwpf.usermodel.XWPFTable;
-import org.apache.poi.xwpf.usermodel.XWPFTableCell;
-import org.apache.poi.xwpf.usermodel.XWPFTableRow;
-
+import org.apache.poi.xwpf.usermodel.*;
 import ccis.dao.ProspectionDAO;
 import ccis.models.Prospection;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 
 public class FicheProspectionController {
@@ -42,49 +28,120 @@ public class FicheProspectionController {
     @FXML private TextField particulariteField;
     @FXML private DatePicker dateField;
     @FXML private TextField nomETPArabicField;
-@FXML private TextField adresseArabicField;
-@FXML private TextField nomPrenomArabicField;
-@FXML private TextField fonctionArabicField;
+    @FXML private TextField adresseArabicField;
+    @FXML private TextField nomPrenomArabicField;
+    @FXML private TextField fonctionArabicField;
 
-// Error labels
-@FXML private Label nomETPError;
-@FXML private Label nomETPArabicError;
-@FXML private Label adresseError;
-@FXML private Label adresseArabicError;
-@FXML private Label telephoneETPError;
-@FXML private Label emailETPError;
-@FXML private Label nomPrenomError;
-@FXML private Label nomPrenomArabicError;
-@FXML private Label fonctionError;
-@FXML private Label fonctionArabicError;
-@FXML private Label telephoneError;
-@FXML private Label emailError;
-@FXML private Label typeProspectionError;
-@FXML private Label secteurActiviteError;
-@FXML private Label psaProspecterError;
-@FXML private Label marcheCibleError;
-@FXML private Label periodeProspectionError;
-@FXML private Label particulariteError;
-@FXML private Label dateError;
+  
 
     private final ProspectionDAO dao = new ProspectionDAO();
 
-@FXML
+    @FXML
     private void initialize() {
-        typeProspectionField.getItems().addAll("Prospection nationale استكشاف تجاري وطني", "Prospection internationale استكشاف تجاري دولي");
-    dateField.setValue(java.time.LocalDate.now());
-    
+        typeProspectionField.getItems().addAll(
+            "Prospection nationale استكشاف تجاري وطني",
+            "Prospection internationale استكشاف تجاري دولي"
+        );
+        dateField.setValue(java.time.LocalDate.now());
     }
 
     @FXML
     private void handleSave() {
-      
-        if ( validateFields() == false) {
+        boolean isValid = true;
+        clearAllErrors();
+
+        // Nom ETP
+        if (nomETPField.getText().isEmpty() && nomETPArabicField.getText().isEmpty()) {
+            showError(nomETPField, "Nom de l'ETP est requis");
+            showError(nomETPArabicField, "اسم المؤسسة مطلوب");
+            isValid = false;
+        }
+
+        // Adresse
+        if (adresseField.getText().isEmpty() && adresseArabicField.getText().isEmpty()) {
+            showError(adresseField, "Adresse est requise");
+            showError(adresseArabicField, "العنوان مطلوب");
+            isValid = false;
+        }
+
+        // Téléphone ETP
+        if (telephoneETPField.getText().isEmpty()) {
+            showError(telephoneETPField, "Téléphone est requis");
+            isValid = false;
+        }
+
+        
+
+        // Nom Prenom
+        if (nomPrenomField.getText().isEmpty() && nomPrenomArabicField.getText().isEmpty()) {
+            showError(nomPrenomField, "Nom et prénom sont requis");
+            showError(nomPrenomArabicField, "الاسم واللقب مطلوبان");
+            isValid = false;
+        }
+
+        // Fonction
+        if (fonctionField.getText().isEmpty() && fonctionArabicField.getText().isEmpty()) {
+            showError(fonctionField, "Fonction est requise");
+            showError(fonctionArabicField, "الوظيفة مطلوبة");
+            isValid = false;
+        }
+
+        // Téléphone
+        if (telephoneField.getText().isEmpty()) {
+            showError(telephoneField, "Téléphone est requis");
+            isValid = false;
+        }
+
+       
+
+        // Type Prospection
+        if (typeProspectionField.getValue() == null) {
+            showError(typeProspectionField, "Type de prospection est requis");
+            isValid = false;
+        }
+
+        // Secteur Activité
+        if (secteurActiviteField.getText().isEmpty()) {
+            showError(secteurActiviteField, "Secteur d'activité est requis");
+            isValid = false;
+        }
+
+        // PSA Prospecter
+        if (psaProspecterField.getText().isEmpty()) {
+            showError(psaProspecterField, "PSA à prospecter est requis");
+            isValid = false;
+        }
+
+        // Marché Cible
+        if (marcheCibleField.getText().isEmpty()) {
+            showError(marcheCibleField, "Marché cible est requis");
+            isValid = false;
+        }
+
+        // Date
+        if (dateField.getValue() == null) {
+            showError(dateField.getEditor(), "Date est requise");
+            isValid = false;
+        }
+
+        // Période Prospection
+        if (periodeProspectionField.getText().isEmpty()) {
+            showError(periodeProspectionField, "Période prospection requise");
+            isValid = false;
+        }
+
+        // Particularité
+        if (particulariteField.getText().isEmpty()) {
+            showError(particulariteField, "Particularité requise");
+            isValid = false;
+        }
+
+        if (!isValid) {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Veuillez corriger les erreurs dans le formulaire.");
             alert.showAndWait();
             return;
         }
-        else {
+
         Prospection p = new Prospection();
         p.setNomETP(nomETPField.getText());
         p.setNomETPArabic(nomETPArabicField.getText());
@@ -108,14 +165,86 @@ public class FicheProspectionController {
 
         dao.insertProspection(p);
 
-        // Optionally, show a confirmation dialog or clear the form
         Alert alert = new Alert(Alert.AlertType.INFORMATION, "Enregistré avec succès !");
-        alert.showAndWait();}
+        alert.showAndWait();
+    }
+
+private void showError(Control control, String message) {
+    control.setStyle("-fx-border-color: red; -fx-border-width: 1px;");
+    if (control instanceof TextField) {
+        TextField tf = (TextField) control;
+        tf.promptTextProperty().unbind(); // Unbind before setting
+        tf.setPromptText(message);
+    } else if (control instanceof ComboBox) {
+        ComboBox<?> cb = (ComboBox<?>) control;
+        cb.promptTextProperty().unbind();
+        cb.setPromptText(message);
+    }
+ 
+    
+    // Unbind tooltip property if it's bound
+    if (control.tooltipProperty().isBound()) {
+        control.tooltipProperty().unbind();
+    }
+    control.setTooltip(new Tooltip(message));
+}
+
+private void clearError(Control control) {
+    control.setStyle("");
+    if (control instanceof TextField) {
+        TextField tf = (TextField) control;
+        tf.promptTextProperty().unbind();
+        tf.setPromptText("");
+    } else if (control instanceof ComboBox) {
+        ComboBox<?> cb = (ComboBox<?>) control;
+        cb.promptTextProperty().unbind();
+        cb.setPromptText("");
+    }
+   
+    
+    // Safely clear the tooltip
+    try {
+        // Check if this is a FakeFocusTextField or if tooltip is bound
+        boolean isFakeFocusTextField = control.getClass().getSimpleName().equals("FakeFocusTextField");
+        
+        if (isFakeFocusTextField || (control.tooltipProperty() != null && control.tooltipProperty().isBound())) {
+            // For bound tooltips, use Tooltip.uninstall
+            Tooltip.uninstall(control, control.getTooltip());
+        } else {
+            // For other controls, set tooltip to null normally
+            control.setTooltip(null);
+        }
+    } catch (Exception e) {
+        // Fall back to not touching the tooltip at all
+        System.err.println("Could not clear tooltip: " + e.getMessage());
+    }
+}
+
+    // Clear all errors at the start of handleSave
+    private void clearAllErrors() {
+        clearError(nomETPField);
+        clearError(nomETPArabicField);
+        clearError(adresseField);
+        clearError(adresseArabicField);
+        clearError(telephoneETPField);
+        clearError(emailETPField);
+        clearError(nomPrenomField);
+        clearError(nomPrenomArabicField);
+        clearError(fonctionField);
+        clearError(fonctionArabicField);
+        clearError(telephoneField);
+        clearError(emailField);
+        clearError(typeProspectionField);
+        clearError(secteurActiviteField);
+        clearError(psaProspecterField);
+        clearError(marcheCibleField);
+        clearError(dateField.getEditor());
+        clearError(periodeProspectionField);
+        clearError(particulariteField);
     }
 
     @FXML
     private void handleCancel() {
-        // Clear all fields
         nomETPField.clear();
         adresseField.clear();
         telephoneETPField.clear();
@@ -131,65 +260,58 @@ public class FicheProspectionController {
         periodeProspectionField.clear();
         particulariteField.clear();
         dateField.setValue(null);
+        nomETPArabicField.clear();
+        adresseArabicField.clear();
+        nomPrenomArabicField.clear();
+        fonctionArabicField.clear();
+        clearAllErrors();
     }
+
     @FXML
     private void handlePrint() {
- try {
-        // Create a temporary file for the processed Word document
-        File outputDocx = new File("Fiche Prospection.docx");
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Enregistrer le PDF généré");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
-        fileChooser.setInitialFileName("Fiche Prospection.pdf");
-        File outputPdf = fileChooser.showSaveDialog(null);
-        if (outputPdf == null) {
-            // User cancelled the save dialog
-            return;
-        }
+        try {
+            File outputDocx = new File("Fiche Prospection.docx");
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Enregistrer le PDF généré");
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
+            fileChooser.setInitialFileName("Fiche Prospection.pdf");
+            fileChooser.setInitialDirectory(new File("C:/fichiers application ccis/prospection"));
+            File outputPdf = fileChooser.showSaveDialog(null);
+            if (outputPdf == null) return;
 
-        // Load the template Word document
-        String templatePath = "/templates/template_word_prospection.docx";
-        InputStream templateStream = getClass().getResourceAsStream(templatePath);
-        
-        if (templateStream == null) {
-            showErrorAlert("Erreur", "Le fichier modèle Word est introuvable : " + templatePath);
-            return;
-        }
-        
-        // Create a new Word document from the template
-        XWPFDocument doc = new XWPFDocument(templateStream);
+            String templatePath = "/templates/template_word_prospection.docx";
+            InputStream templateStream = getClass().getResourceAsStream(templatePath);
+            if (templateStream == null) {
+                showErrorAlert("Erreur", "Le fichier modèle Word est introuvable : " + templatePath);
+                return;
+            }
 
-        // Replace all placeholders in the document
-        Map<String, String> replacements = createReplacementMap();
-        replaceText(doc, replacements);
-        
-        // Save the modified document
-        try (FileOutputStream out = new FileOutputStream(outputDocx)) {
-            doc.write(out);
+            XWPFDocument doc = new XWPFDocument(templateStream);
+            Map<String, String> replacements = createReplacementMap();
+            replaceText(doc, replacements);
+
+            try (FileOutputStream out = new FileOutputStream(outputDocx)) {
+                doc.write(out);
+            }
+            outputDocx.deleteOnExit();
+
+            convertDocxToPdf(outputDocx, outputPdf);
+
+            if (Desktop.isDesktopSupported()) {
+                Desktop.getDesktop().print(outputPdf);
+            } else {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Succès");
+                alert.setHeaderText(null);
+                alert.setContentText("Le document PDF a été généré avec succès : " + outputPdf.getAbsolutePath());
+                alert.showAndWait();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorAlert("Erreur", "Une erreur est survenue lors de la génération du document : " + e.getMessage());
         }
-       outputDocx.deleteOnExit(); // Delete the file on exit
-        
-        // Convert the Word document to PDF using a better library
-        convertDocxToPdf(outputDocx, outputPdf);
-        
-     
-        // Open the generated PDF file
-         if (Desktop.isDesktopSupported()) {
-             Desktop.getDesktop().open(outputPdf);
-         }else {
-               // Show success message
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Succès");
-        alert.setHeaderText(null);
-        alert.setContentText("Le document PDF a été généré avec succès : " + outputPdf.getAbsolutePath());
-        alert.showAndWait();
-        
-         }
-    } catch (Exception e) {
-        e.printStackTrace();
-        showErrorAlert("Erreur", "Une erreur est survenue lors de la génération du document : " + e.getMessage());
     }
-    }
+
     private void showErrorAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
@@ -199,301 +321,130 @@ public class FicheProspectionController {
     }
 
     private void convertDocxToPdf(File wordFile, File pdfFile) {
-    try {
-          // Check if Python is installed
-    ProcessBuilder checkPython = new ProcessBuilder("python", "--version");
-    Process checkProcess = checkPython.start();
-    int checkExit = checkProcess.waitFor();
-    if (checkExit != 0) {
-        showErrorAlert("Erreur", "Python n'est pas installé sur cet ordinateur. Veuillez installer Python pour activer la génération de PDF.");
-        return;
-    }
-        // Get the path to the Python script
-        InputStream scriptStream = getClass().getResourceAsStream("/scripts/convert.py");
-        if (scriptStream == null) {
-            throw new IOException("Cannot find Python script in resources");
-        }
-
-        // Create a temporary file for the Python script
-        File tempScript = File.createTempFile("convert", ".py");
-        tempScript.deleteOnExit();
-
-        // Copy the script content to the temporary file
-        try (FileOutputStream fos = new FileOutputStream(tempScript)) {
-            byte[] buffer = new byte[1024];
-            int bytesRead;
-            while ((bytesRead = scriptStream.read(buffer)) != -1) {
-                fos.write(buffer, 0, bytesRead);
+        try {
+            ProcessBuilder checkPython = new ProcessBuilder("python", "--version");
+            Process checkProcess = checkPython.start();
+            int checkExit = checkProcess.waitFor();
+            if (checkExit != 0) {
+                showErrorAlert("Erreur", "Python n'est pas installé sur cet ordinateur. Veuillez installer Python pour activer la génération de PDF.");
+                return;
             }
-        }
-        
-        // Build the command
-        ProcessBuilder pb = new ProcessBuilder(
-            "python",
-            tempScript.getAbsolutePath(),
-            wordFile.getAbsolutePath(),
-            pdfFile.getAbsolutePath()
-        );
-        
-        // Redirect error stream to output stream
-        pb.redirectErrorStream(true);
-        
-        // Start the process
-        Process process = pb.start();
-        
-        // Read the output
-        try (BufferedReader reader = new BufferedReader(
-                new InputStreamReader(process.getInputStream()))) {
-            String line;
-            StringBuilder output = new StringBuilder();
-            while ((line = reader.readLine()) != null) {
-                output.append(line).append("\n");
+            InputStream scriptStream = getClass().getResourceAsStream("/scripts/convert.py");
+            if (scriptStream == null) {
+                throw new IOException("Cannot find Python script in resources");
             }
-            
-            // Wait for the process to complete
-            int exitCode = process.waitFor();
-            
-            if (exitCode != 0 || !pdfFile.exists()) {
-                throw new IOException("PDF conversion failed: " + output.toString());
-            }
-        }
-    } catch (Exception e) {
-        e.printStackTrace();
-        showErrorAlert("Erreur", "La conversion en PDF a échoué : " + e.getMessage());
-    }
-}
-private void replaceText(XWPFDocument doc, Map<String, String> replacements) {
-    // Replace text in paragraphs
-    for (XWPFParagraph paragraph : doc.getParagraphs()) {
-        List<XWPFRun> runs = paragraph.getRuns();
-        if (runs != null) {
-            // Combine all runs text
-            StringBuilder builder = new StringBuilder();
-            for (XWPFRun run : runs) {
-                String text = run.getText(0);
-                if (text != null) {
-                    builder.append(text);
+            File tempScript = File.createTempFile("convert", ".py");
+            tempScript.deleteOnExit();
+            try (FileOutputStream fos = new FileOutputStream(tempScript)) {
+                byte[] buffer = new byte[1024];
+                int bytesRead;
+                while ((bytesRead = scriptStream.read(buffer)) != -1) {
+                    fos.write(buffer, 0, bytesRead);
                 }
             }
-            
-            // Get the full text
-            String text = builder.toString();
-            
-            // Apply all replacements
-            for (Map.Entry<String, String> entry : replacements.entrySet()) {
-                text = text.replace(entry.getKey(), entry.getValue());
+            ProcessBuilder pb = new ProcessBuilder(
+                "python",
+                tempScript.getAbsolutePath(),
+                wordFile.getAbsolutePath(),
+                pdfFile.getAbsolutePath()
+            );
+            pb.redirectErrorStream(true);
+            Process process = pb.start();
+            try (BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(process.getInputStream()))) {
+                String line;
+                StringBuilder output = new StringBuilder();
+                while ((line = reader.readLine()) != null) {
+                    output.append(line).append("\n");
+                }
+                int exitCode = process.waitFor();
+                if (exitCode != 0 || !pdfFile.exists()) {
+                    throw new IOException("PDF conversion failed: " + output.toString());
+                }
             }
-            
-            // Remove all runs except first
-            for (int i = runs.size() - 1; i > 0; i--) {
-                paragraph.removeRun(i);
-            }
-            
-            // Set the new text in the first run
-            if (runs.size() > 0) {
-                XWPFRun run = runs.get(0);
-                run.setText(text, 0);
-            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorAlert("Erreur", "La conversion en PDF a échoué : " + e.getMessage());
         }
     }
-    
-    // Replace text in tables
-    for (XWPFTable table : doc.getTables()) {
-        for (XWPFTableRow row : table.getRows()) {
-            for (XWPFTableCell cell : row.getTableCells()) {
-                for (XWPFParagraph paragraph : cell.getParagraphs()) {
-                    List<XWPFRun> runs = paragraph.getRuns();
-                    if (runs != null) {
-                        // Combine all runs text
-                        StringBuilder builder = new StringBuilder();
-                        for (XWPFRun run : runs) {
-                            String text = run.getText(0);
-                            if (text != null) {
-                                builder.append(text);
+
+    private void replaceText(XWPFDocument doc, Map<String, String> replacements) {
+        for (XWPFParagraph paragraph : doc.getParagraphs()) {
+            List<XWPFRun> runs = paragraph.getRuns();
+            if (runs != null) {
+                StringBuilder builder = new StringBuilder();
+                for (XWPFRun run : runs) {
+                    String text = run.getText(0);
+                    if (text != null) builder.append(text);
+                }
+                String text = builder.toString();
+                for (Map.Entry<String, String> entry : replacements.entrySet()) {
+                    text = text.replace(entry.getKey(), entry.getValue());
+                }
+                for (int i = runs.size() - 1; i > 0; i--) {
+                    paragraph.removeRun(i);
+                }
+                if (runs.size() > 0) {
+                    XWPFRun run = runs.get(0);
+                    run.setText(text, 0);
+                }
+            }
+        }
+        for (XWPFTable table : doc.getTables()) {
+            for (XWPFTableRow row : table.getRows()) {
+                for (XWPFTableCell cell : row.getTableCells()) {
+                    for (XWPFParagraph paragraph : cell.getParagraphs()) {
+                        List<XWPFRun> runs = paragraph.getRuns();
+                        if (runs != null) {
+                            StringBuilder builder = new StringBuilder();
+                            for (XWPFRun run : runs) {
+                                String text = run.getText(0);
+                                if (text != null) builder.append(text);
                             }
-                        }
-                        
-                        // Get the full text
-                        String text = builder.toString();
-                        
-                        // Apply all replacements
-                        for (Map.Entry<String, String> entry : replacements.entrySet()) {
-                            text = text.replace(entry.getKey(), entry.getValue());
-                        }
-                        
-                        // Remove all runs except first
-                        for (int i = runs.size() - 1; i > 0; i--) {
-                            paragraph.removeRun(i);
-                        }
-                        
-                        // Set the new text in the first run
-                        if (runs.size() > 0) {
-                            XWPFRun run = runs.get(0);
-                            run.setText(text, 0);
+                            String text = builder.toString();
+                            for (Map.Entry<String, String> entry : replacements.entrySet()) {
+                                text = text.replace(entry.getKey(), entry.getValue());
+                            }
+                            for (int i = runs.size() - 1; i > 0; i--) {
+                                paragraph.removeRun(i);
+                            }
+                            if (runs.size() > 0) {
+                                XWPFRun run = runs.get(0);
+                                run.setText(text, 0);
+                            }
                         }
                     }
                 }
             }
         }
     }
-}
-private Map<String, String> createReplacementMap() {
-    Map<String, String> replacements = new HashMap<>();
-    
-    replacements.put("{nom_entreprise}", nomETPField.getText());
-    replacements.put("{adresse}", adresseField.getText());
-    replacements.put("{telephone1}", telephoneETPField.getText());
-    replacements.put("{email1}", emailETPField.getText());
-    replacements.put("{nom_prenom}", nomPrenomField.getText());
-    replacements.put("{fonction}", fonctionField.getText());
-    replacements.put("{telephone2}", telephoneField.getText());
-    replacements.put("{email2}", emailField.getText());
-    String selectedType = typeProspectionField.getValue();
-    replacements.put("{type1}", "Prospection nationale استكشاف تجاري وطني".equals(selectedType) ? "☑" : "☐");
-    replacements.put("{type2}", "Prospection internationale استكشاف تجاري دولي".equals(selectedType) ? "☑" : "☐");
-    replacements.put("{secteur_activite}", secteurActiviteField.getText());
-    replacements.put("{psa_prospecter}", psaProspecterField.getText());
-    replacements.put("{marche_cible}", marcheCibleField.getText());
-    replacements.put("{periode}", periodeProspectionField.getText());
-    replacements.put("{particularite}", particulariteField.getText());
-    replacements.put("{date}", dateField.getValue() != null ? dateField.getValue().toString() : "");
-    replacements.put("{اسمالشركة}", nomETPArabicField.getText());
-    replacements.put("{العنوان}", adresseArabicField.getText());
-    replacements.put("{اسمالكامل}", nomPrenomArabicField.getText());
-    replacements.put("{الوظيفة}", fonctionArabicField.getText());
 
-    return replacements;
-}
-
- 
-@FXML
-    private void handleExportRecap() {
+    private Map<String, String> createReplacementMap() {
+        Map<String, String> replacements = new HashMap<>();
+        replacements.put("{nom_entreprise}", nomETPField.getText());
+        replacements.put("{adresse}", adresseField.getText());
+        replacements.put("{telephone1}", telephoneETPField.getText());
+        replacements.put("{email1}", emailETPField.getText());
+        replacements.put("{nom_prenom}", nomPrenomField.getText());
+        replacements.put("{fonction}", fonctionField.getText());
+        replacements.put("{telephone2}", telephoneField.getText());
+        replacements.put("{email2}", emailField.getText());
+        String selectedType = typeProspectionField.getValue();
+        replacements.put("{type1}", "Prospection nationale استكشاف تجاري وطني".equals(selectedType) ? "☑" : "☐");
+        replacements.put("{type2}", "Prospection internationale استكشاف تجاري دولي".equals(selectedType) ? "☑" : "☐");
+        replacements.put("{secteur_activite}", secteurActiviteField.getText());
+        replacements.put("{psa_prospecter}", psaProspecterField.getText());
+        replacements.put("{marche_cible}", marcheCibleField.getText());
+        replacements.put("{periode}", periodeProspectionField.getText());
+        replacements.put("{particularite}", particulariteField.getText());
+        replacements.put("{date}", dateField.getValue() != null ? dateField.getValue().toString() : "");
+        replacements.put("{اسمالشركة}", nomETPArabicField.getText());
+        replacements.put("{العنوان}", adresseArabicField.getText());
+        replacements.put("{اسمالكامل}", nomPrenomArabicField.getText());
+        replacements.put("{الوظيفة}", fonctionArabicField.getText());
+        return replacements;
     }
-    private Boolean validateFields() {
-       Boolean isValid = true;
 
-        if (nomETPField.getText().isEmpty() && nomETPArabicField.getText().isEmpty()) {
-            nomETPError.setText("Nom de l'ETP est requis");
-            nomETPArabicError.setText("اسم المؤسسة مطلوب");
-            isValid = false;
-        } else {
-            nomETPError.setText("");
-            nomETPArabicError.setText("");
-        }
-
-        if (adresseField.getText().isEmpty() && adresseArabicField.getText().isEmpty()) {
-            adresseError.setText("Adresse est requise");
-            adresseArabicError.setText("العنوان مطلوب");
-            isValid = false;
-        } else {
-            adresseError.setText("");
-            adresseArabicError.setText("");
-        }
-        if (telephoneETPField.getText().isEmpty()) {
-            telephoneETPError.setText("Téléphone est requis");
-            isValid = false;
-        } else {
-            telephoneETPError.setText("");
-        }
-        if (emailETPField.getText().isEmpty()) {
-            emailETPError.setText("Email est requis");
-            isValid = false;
-        } else {
-            emailETPError.setText("");
-        }
-        if (!validateEmail(emailETPField.getText())) {
-            emailETPError.setText("Email invalide");
-            isValid = false;
-        } else {
-            emailETPError.setText("");
-        }
-        if (nomPrenomField.getText().isEmpty() && nomPrenomArabicField.getText().isEmpty()) {
-            nomPrenomError.setText("Nom et prénom sont requis");
-            nomPrenomArabicError.setText("الاسم واللقب مطلوبان");
-            isValid = false;
-        } else {
-            nomPrenomError.setText("");
-            nomPrenomArabicError.setText("");
-        }
-        if (fonctionField.getText().isEmpty() && fonctionArabicField.getText().isEmpty()) {
-            fonctionError.setText("Fonction est requise");
-            fonctionArabicError.setText("الوظيفة مطلوبة");
-            isValid = false;
-        } else {
-            fonctionError.setText("");
-            fonctionArabicError.setText("");
-        }
-        if (telephoneField.getText().isEmpty()) {
-            telephoneError.setText("Téléphone est requis");
-            isValid = false;
-        } else {
-            telephoneError.setText("");
-        }
-        if (emailField.getText().isEmpty()) {
-            emailError.setText("Email est requis");
-            isValid = false;
-        } else {
-            emailError.setText("");
-        }
-        if (!validateEmail(emailField.getText())) {
-            emailError.setText("Email invalide");
-            isValid = false;
-        } else {
-            emailError.setText("");
-        }
-        if (typeProspectionField.getValue() == null) {
-            typeProspectionError.setText("Type de prospection est requis");
-            isValid = false;
-        } else {
-            typeProspectionError.setText("");
-        }
-        if (secteurActiviteField.getText().isEmpty()) {
-            secteurActiviteError.setText("Secteur d'activité est requis");
-            isValid = false;
-        } else {
-            secteurActiviteError.setText("");
-        }
-        if (psaProspecterField.getText().isEmpty()) {
-            psaProspecterError.setText("PSA à prospecter est requis");
-            isValid = false;
-        } else {
-            psaProspecterError.setText("");
-        }
-        if (marcheCibleField.getText().isEmpty()) {
-            marcheCibleError.setText("Marché cible est requis");
-            isValid = false;
-        } else {
-            marcheCibleError.setText("");
-        }
-
-        if (dateField.getValue() == null) {
-            dateError.setText("Date est requise");
-            isValid = false;
-        } else {
-            dateError.setText("");
-        } 
-        
-        if (periodeProspectionField.getText().isEmpty()) {
-            periodeProspectionError.setText("فترة الاستكشاف مطلوبة");
-            isValid = false;
-        } else {
-            periodeProspectionError.setText("");
-        }
-        if (particulariteField.getText().isEmpty()) {
-            particulariteError.setText("الخصوصية مطلوبة");
-            isValid = false;
-        } else {
-            particulariteError.setText("");
-        }
-        if(dateField.getValue()== null) {
-            dateError.setText("Date est requise");
-            isValid = false;
-        } else {
-            dateError.setText("");
-        }
-        return isValid;
-
-    }
     private Boolean validateEmail(String email) {
         String emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
         return email.matches(emailRegex);

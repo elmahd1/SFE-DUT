@@ -6,17 +6,23 @@
 /* Base colors from the logo */
 * {
     -fx-primary-blue: #0074B2;
-    -fx-primary-orange: #FF8A00;
+    -fx-primary-orange: #ff7300;
     -fx-secondary-blue: #83C4E8;
     -fx-secondary-orange: #FFBB66;
-    -fx-light-green: #8DBC66;
+    -fx-light-green: #83c150;
     -fx-dark-green: #44883E;
     -fx-light-gray: #F4F6F9;
     -fx-medium-gray: #E0E0E0;
     -fx-dark-gray: #555555;
     -fx-white: #FFFFFF;
 }
-
+.home-title {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-primary-blue;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 3, 0, 0, 1);
+    align-content: center;
+}
 /* Applying font styles */
 .root {
     -fx-font-family: "Segoe UI", "Arial", sans-serif;
@@ -54,7 +60,14 @@
     -fx-border-width: 0 0 0 5px;
     -fx-border-radius: 10 0 0 10;
 }
-
+.green-card {
+    -fx-border-color: -fx-light-green;
+    -fx-border-width: 0 0 0 5px;
+    -fx-border-radius: 10 0 0 10;
+}
+.green-card:hover {
+    -fx-background-color: derive(-fx-light-green, 95%);
+}
 .blue-card:hover {
     -fx-background-color: derive(-fx-primary-blue, 95%);
 }
@@ -90,7 +103,19 @@
     -fx-font-weight: bold;
     -fx-text-fill: -fx-primary-orange;
 }
-
+.count-green {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-light-green;
+}
+.action-button-green{
+    -fx-background-color: -fx-light-green;
+    -fx-text-fill: -fx-white;
+    -fx-font-weight: bold;
+    -fx-padding: 10px 20px;
+    -fx-background-radius: 5px;
+    -fx-cursor: hand;
+}
 /* Card description */
 .card-description {
     -fx-font-size: 13px;

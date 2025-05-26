@@ -31,7 +31,7 @@
                  AnchorPane.rightAnchor="20.0" AnchorPane.bottomAnchor="20.0">
                 
                 <!-- Titre principal -->
-                <Label text="Statistiques Espace Entreprise" styleClass="main-title">
+                <Label text="Statistiques Espace Entreprise" styleClass="form-title">
                     <font>
                         <Font name="System Bold" size="22.0" />
                     </font>

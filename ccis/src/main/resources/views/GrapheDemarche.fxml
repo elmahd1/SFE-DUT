@@ -33,7 +33,7 @@
                  AnchorPane.rightAnchor="20.0" AnchorPane.bottomAnchor="20.0">
                 
                 <!-- Titre principal -->
-                <Label text="Statistiques Démarches Administratives" styleClass="main-title">
+                <Label text="Statistiques Démarches Administratives" styleClass="forme-title">
                     <font>
                         <Font name="System Bold" size="22.0" />
                     </font>
@@ -99,7 +99,7 @@
                     <padding>
                         <Insets top="15" right="15" bottom="15" left="15" />
                     </padding>
-                    <Label text="Comparaison des Délais et Montants par Objet de Visite" styleClass="section-title">
+                    <Label text="Délais moyens par Objet de Visite" styleClass="section-title">
                         <font>
                             <Font name="System Bold" size="16.0" />
                         </font>
@@ -118,7 +118,44 @@
                         <Button text="Télécharger le graphe" styleClass="action-button" onAction="#downloadChart2"/>
                         <Button text="Copier le graphe" styleClass="action-button" onAction="#copyChart2"/>
                     </HBox>
-                     <BarChart fx:id="chart4" prefWidth="1200" prefHeight="450">
+                   <Label text="Tableau du Délais" styleClass="subsection-title">
+                        <font>
+                            <Font name="System Bold" size="14.0" />
+                        </font>
+                        <padding>
+                            <Insets top="10" bottom="5" />
+                        </padding>
+                    </Label>
+                     <TableView fx:id="table4" prefHeight="200">
+                        <columns>
+                            <TableColumn fx:id="objetVisiteDelaiColumn" text="Objet de Visite" prefWidth="250"/>
+                            <TableColumn fx:id="delaiMoyenColumn" text="Délai Moyen (heures)" prefWidth="200"/>
+                            <TableColumn fx:id="pourcentageDelaiColumn" text="Pourcentage Délai" prefWidth="180"/>
+                        </columns>
+                    </TableView>
+                    <Button text="Télécharger le tableau" styleClass="action-button" onAction="#downloadTable4"/>
+               
+                    
+                  
+                                        <Label text="Détails des Délais et Montants" styleClass="subsection-title">
+                        <font>
+                            <Font name="System Bold" size="14.0" />
+                        </font>
+                        <padding>
+                            <Insets top="10" bottom="5" />
+                        </padding>
+                    </Label>
+                    </VBox>
+                 <VBox spacing="20" alignment="CENTER" styleClass="chart-container">
+                    <padding>
+                        <Insets top="15" right="15" bottom="15" left="15" />
+                    </padding>
+                    <Label text="Montants moyens par Objet de Visite" styleClass="section-title">
+                        <font>
+                            <Font name="System Bold" size="16.0" />
+                        </font>
+                    </Label>
+   <BarChart fx:id="chart4" prefWidth="1200" prefHeight="450">
                         <xAxis>
                             <CategoryAxis fx:id="xAxis2" label="Objet de Visite" />
                         </xAxis>
@@ -130,9 +167,8 @@
                         <Button text="Télécharger le graphe" styleClass="action-button" onAction="#downloadChart4"/>
                         <Button text="Copier le graphe" styleClass="action-button" onAction="#copyChart4"/>
                     </HBox>
-                    
-                    <!-- Tableau détaillé -->
-                    <Label text="Détails des Délais et Montants" styleClass="subsection-title">
+                      <!-- Tableau détaillé -->
+                    <Label text="Tableau Montants" styleClass="subsection-title">
                         <font>
                             <Font name="System Bold" size="14.0" />
                         </font>
@@ -144,13 +180,12 @@
                         <columns>
                             <TableColumn fx:id="objetVisiteColumn" text="Objet de Visite" prefWidth="250"/>
                             <TableColumn fx:id="montantColumn" text="Montant (DH)" prefWidth="150"/>
-                            <TableColumn fx:id="delaiMoyenColumn" text="Délai Moyen (heures)" prefWidth="200"/>
                             <TableColumn fx:id="pourcentageMontantColumn" text="Pourcentage Montant" prefWidth="200"/>
-                            <TableColumn fx:id="pourcentageDelaiColumn" text="Pourcentage Délai" prefWidth="180"/>
                         </columns>
                     </TableView>
                     <Button text="Télécharger le tableau" styleClass="action-button" onAction="#downloadTable2"/>
-                </VBox>
+                    
+                    </VBox>
             </VBox>
         </content>
     </ScrollPane>

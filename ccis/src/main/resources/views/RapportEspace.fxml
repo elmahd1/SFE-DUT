@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.cell.*?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.ScrollPane?>
+<ScrollPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="ccis.controllers.RapportEspaceController"
+            fitToWidth="true"
+            hbarPolicy="NEVER"
+            vbarPolicy="AS_NEEDED"
+            stylesheets="@/styles/Rapport.css"
+            prefHeight="600.0" prefWidth="1265.0">
+    <content>
+        <GridPane hgap="16" vgap="8" style="-fx-padding: 16;">
+            <columnConstraints>
+                <!-- <ColumnConstraints minWidth="180"/>
+                <ColumnConstraints minWidth="220"/>
+                <ColumnConstraints minWidth="180"/>
+                <ColumnConstraints minWidth="200"/> -->
+            </columnConstraints>
+
+<DatePicker fx:id="date1" GridPane.columnIndex="0" GridPane.rowIndex="3" promptText="debut de la periode couverte"/>
+<DatePicker fx:id="date2" GridPane.columnIndex="0" GridPane.rowIndex="4" promptText="fin de la periode couverte"/>
+<Label prefWidth="300" text="SUIVI DE PERFORMANCE Back Office" GridPane.columnIndex="0" GridPane.rowIndex="5" styleClass="title-label"/>
+<TableView prefHeight="180" prefWidth="900" fx:id="bo" GridPane.columnIndex="0" GridPane.rowIndex="6" styleClass="table-view" editable="true">
+    <columns>
+        <TableColumn fx:id="col1" text="Indicateur" prefWidth="150"/>
+        <TableColumn fx:id="col2" text="Fréquence" prefWidth="150"/>
+        <TableColumn fx:id="col3" text="Objectif" prefWidth="150"/>
+        <TableColumn fx:id="col4" text="Tolérance" prefWidth="150"/>
+        <TableColumn fx:id="col5" text="Méthode de calcul" prefWidth="150"/>
+        <TableColumn fx:id="col6" text="Responsabilité et suivi" prefWidth="150"/>
+    </columns>
+</TableView>
+
+<!-- Table 2 -->
+<TableView prefHeight="225" fx:id="table2" prefWidth="900" GridPane.columnIndex="0" GridPane.rowIndex="7" styleClass="table-view" editable="true">
+    <columns>
+        <TableColumn fx:id="col7" text="Indicateurs d’activité :" prefWidth="150"/>
+        <TableColumn fx:id="col8" text="Objectifs annuel [B]" prefWidth="150"/>
+        <TableColumn fx:id="col9" text="Réalisé durant la période couverte [C]" prefWidth="150"/>
+        <TableColumn fx:id="col10" text="Pourcentage de réalisation par rapport à l’objectif fixé [C]/ [B]" prefWidth="150"/>
+    </columns>
+</TableView>
+
+<Label text="B * Chiffres de référence : Chiffres Objectifs de performance (tableau de Suivi de Performance)" GridPane.columnIndex="0" GridPane.rowIndex="8" styleClass="title-label"/>
+
+<BarChart fx:id="chart1"  prefWidth="1200" prefHeight="450" GridPane.columnIndex="0" GridPane.rowIndex="9">
+    <xAxis>
+        <CategoryAxis fx:id="xAxis1" label="Catégorie" />
+    </xAxis>
+    <yAxis>
+        <NumberAxis fx:id="yAxis1" label="Valeur" />
+    </yAxis>
+</BarChart>
+
+<Label text="Indicateurs d’activité de l'espace entreprise" GridPane.columnIndex="0" GridPane.rowIndex="10" styleClass="title-label"/>
+<Label prefWidth="300" text="SUIVI DE PERFORMANCE Back Office" GridPane.columnIndex="0" GridPane.rowIndex="11" styleClass="title-label"/>
+
+<TableView prefHeight="180" prefWidth="900" fx:id="fo" GridPane.columnIndex="0" GridPane.rowIndex="12" styleClass="table-view" editable="true">
+    <columns>
+        <TableColumn fx:id="col11" text="Indicateur" prefWidth="150"/>
+        <TableColumn fx:id="col12" text="Fréquence" prefWidth="150"/>
+        <TableColumn fx:id="col13" text="Objectif n-1" prefWidth="150"/>
+        <TableColumn fx:id="col14" text="Tolérance" prefWidth="150"/>
+        <TableColumn fx:id="col15" text="Méthode de calcul" prefWidth="150"/>
+        <TableColumn fx:id="col16" text="Responsabilité" prefWidth="150"/>
+    </columns>
+</TableView>
+
+<!-- Table 4, moved to a unique row -->
+<TableView prefHeight="225" fx:id="table4" prefWidth="900" GridPane.columnIndex="0" GridPane.rowIndex="13" styleClass="table-view" editable="true">
+    <columns>
+        <TableColumn fx:id="col17" text="Indicateurs d’activité :" prefWidth="150"/>
+        <TableColumn fx:id="col18" text="Objectifs annuel [B]" prefWidth="150"/>
+        <TableColumn fx:id="col19" text="Réalisé durant la période couverte [C]" prefWidth="150"/>
+        <TableColumn fx:id="col20" text="Pourcentage de réalisation par rapport à l’objectif fixé [C]/ [B]" prefWidth="150"/>
+    </columns>
+</TableView>
+
+<BarChart fx:id="chart2" prefWidth="1200" prefHeight="450" GridPane.columnIndex="0" GridPane.rowIndex="14">
+    <xAxis>
+        <CategoryAxis fx:id="xAxis2" label="Catégorie" />
+    </xAxis>
+    <yAxis>
+        <NumberAxis fx:id="yAxis2" label="Valeur" />
+    </yAxis>
+</BarChart>
+
+<TextArea fx:id="rapportTextArea" promptText="Analyse des donnees" GridPane.columnSpan="4" GridPane.rowIndex="15" wrapText="true" editable="true" prefHeight="200"/>
+<Button fx:id="btnGenerer" text="Générer le rapport" GridPane.columnIndex="0" GridPane.rowIndex="16"/>        </GridPane>
+    </content>
+</ScrollPane>

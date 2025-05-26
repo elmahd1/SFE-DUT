@@ -5,22 +5,28 @@
 <?import javafx.scene.control.*?>
 <?import javafx.geometry.Insets?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/21"
+<BorderPane xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1"
             style="-fx-background-color: #f4f6f9;"
             fx:controller="ccis.controllers.HomeController"
-            stylesheets="@/styles/home.css" prefWidth="1400" prefHeight="600">
+            stylesheets="@/styles/home.css"
+            prefWidth="1250" prefHeight="600">
 
-    <VBox spacing="30" AnchorPane.topAnchor="40" AnchorPane.leftAnchor="40" AnchorPane.rightAnchor="40">
-        <!-- Header with welcome message and date/time -->
-        <HBox alignment="CENTER_LEFT" spacing="20">
-            <Text text="Accueil" styleClass="home-title" />
+    <!-- Header -->
+    <top>
+    
+        <HBox alignment="CENTER_LEFT" spacing="20" BorderPane.alignment="CENTER">
+        <!-- Title -->
+            <Label text="Accueil" styleClass="home-title" />
+
             <Region HBox.hgrow="ALWAYS" />
             <Label fx:id="dateTimeLabel" styleClass="date-time" />
         </HBox>
-        
-        <!-- Dashboard Cards -->
-        <HBox spacing="40">
+    </top>
+
+    <!-- Dashboard Cards -->
+    <center>
+        <HBox spacing="40" alignment="CENTER">
             <!-- Démarche Administratif Card -->
             <VBox styleClass="dashboard-card, blue-card" spacing="10">
                 <VBox spacing="5">
@@ -30,7 +36,7 @@
                 </VBox>
                 <Region VBox.vgrow="ALWAYS" />
                 <HBox alignment="CENTER_RIGHT">
-                    <Button text="Détails" styleClass="action-button" onAction="#fa"/>
+                    <Button text="Détails" styleClass="action-button" />
                 </HBox>
             </VBox>
 
@@ -43,25 +49,41 @@
                 </VBox>
                 <Region VBox.vgrow="ALWAYS" />
                 <HBox alignment="CENTER_RIGHT">
-                    <Button text="Détails" styleClass="action-button-secondary" onAction="#fe"/>
+                    <Button text="Détails" styleClass="action-button-secondary" />
+                </HBox>
+            </VBox>
+
+            <!-- Prospection Card -->
+            <VBox styleClass="dashboard-card, green-card" spacing="10">
+                <VBox spacing="5">
+                    <Text text="Prospection" styleClass="card-title"/>
+                    <Label fx:id="prospectionCount" styleClass="count-green"/>
+                    <Text text="Entreprises en prospection" styleClass="card-description"/>
+                </VBox>
+                <Region VBox.vgrow="ALWAYS" />
+                <HBox alignment="CENTER_RIGHT">
+                    <Button text="Détails" styleClass="action-button-green" />
                 </HBox>
             </VBox>
         </HBox>
-        
-        <!-- Quick Actions Section -->
-        <VBox spacing="15">
-            <Text text="Actions Rapides" styleClass="section-header"/>
-            <HBox spacing="20">
-                <Button text="Nouvelle Démarche" styleClass="action-button" />
-                <Button text="Nouvelle Entreprise" styleClass="action-button-secondary" />
-                <Button text="Rapports" styleClass="action-button" />
+    </center>
+
+    <!-- Quick Actions and Footer -->
+    <bottom>
+        <VBox spacing="10" BorderPane.alignment="BOTTOM_CENTER">
+            <!-- Quick Actions Section -->
+            <!-- <VBox spacing="15">
+                <Text text="Actions Rapides" styleClass="section-header"/>
+                <HBox spacing="20">
+                    <Button text="Nouvelle Démarche" styleClass="action-button" />
+                    <Button text="Nouvelle Entreprise" styleClass="action-button-secondary" />
+                    <Button text="Rapports" styleClass="action-button" />
+                </HBox>
+            </VBox> -->
+            <!-- Status Footer -->
+            <HBox styleClass="footer" alignment="BOTTOM_CENTER">
+                <Label text="CCIS - Système de Gestion © 2025" styleClass="status-label"/>
             </HBox>
         </VBox>
-        
-        <!-- Status Footer (Optional) -->
-        <HBox styleClass="footer" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" 
-              AnchorPane.bottomAnchor="0" alignment="CENTER_RIGHT" >
-            <Label text="CCIS - Système de Gestion © 2025" styleClass="status-label"/>
-        </HBox>
-    </VBox>
-</AnchorPane>
+    </bottom>
+</BorderPane>

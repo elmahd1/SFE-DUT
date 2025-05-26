@@ -177,6 +177,7 @@ private void loadDemarches() {
 FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Enregistrer le fichier Excel");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel Files", "*.xlsx"));
+        fileChooser.setInitialDirectory(new File("C:/fichiers application ccis/prospection"));
         fileChooser.setInitialFileName("Recapitulatif activitès.xlsx");
         File file = fileChooser.showSaveDialog(null);
         if (file == null) {
@@ -206,6 +207,7 @@ FileChooser fileChooser = new FileChooser();
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Enregistrer le PDF généré");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
+        fileChooser.setInitialDirectory(new File("C:/fichiers application ccis/prospection"));
         fileChooser.setInitialFileName("Recapitulatif activitès.pdf");
         File outputPdf = fileChooser.showSaveDialog(null);
         if (outputPdf == null) {
@@ -243,7 +245,7 @@ fillTableWithProspections(doc, prospections);
         
         // Open the generated PDF file
          if (Desktop.isDesktopSupported()) {
-             Desktop.getDesktop().open(outputPdf);
+             Desktop.getDesktop().print(outputPdf);
          }else {
                 showAlert("Exportation réussie", "Le document a été généré avec succès." + outputPdf.getAbsolutePath());
          }

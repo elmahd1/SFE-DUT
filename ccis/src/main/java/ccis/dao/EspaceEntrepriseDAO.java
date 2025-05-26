@@ -24,7 +24,7 @@ public class EspaceEntrepriseDAO {
                 stmt.setString(6, espaceEntreprise.getFixe());
                 stmt.setString(7, espaceEntreprise.getGsm());
                 stmt.setString(8, espaceEntreprise.getEmail());
-                stmt.setBoolean(9, Boolean.parseBoolean(espaceEntreprise.getAccepteEnvoi())); // convert String to boolean
+                stmt.setString(9, espaceEntreprise.getAccepteEnvoi()); // convert String to boolean
                 stmt.setString(10, espaceEntreprise.getAdresse());
                 stmt.setString(11, espaceEntreprise.getVille());
                 stmt.setString(12, espaceEntreprise.getDenomination());
@@ -104,7 +104,7 @@ public class EspaceEntrepriseDAO {
                 stmt.setString(6, espaceEntreprise.getFixe());
                 stmt.setString(7, espaceEntreprise.getGsm());
                 stmt.setString(8, espaceEntreprise.getEmail());
-                stmt.setBoolean(9, Boolean.parseBoolean(espaceEntreprise.getAccepteEnvoi()));
+                stmt.setString(9, (espaceEntreprise.getAccepteEnvoi()));
                 stmt.setString(10, espaceEntreprise.getAdresse());
                 stmt.setString(11, espaceEntreprise.getVille());
                 stmt.setString(12, espaceEntreprise.getDenomination());

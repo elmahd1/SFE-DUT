@@ -19,7 +19,7 @@ public class App extends Application {
                 stage.getIcons().add(new javafx.scene.image.Image(iconStream));
             }
 
-            stage.setTitle("CCIS");
+            stage.setTitle("Département Services aux Ressortissants");
             stage.setScene(scene);
             stage.show();
         } catch (Exception e) {

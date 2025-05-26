@@ -41,6 +41,20 @@ public class ProspectionDAO {
             e.printStackTrace();
         }
     }
+public Long count() {
+        String query = "SELECT COUNT(*) FROM prospection";
+        long count = 0;
+        try (Connection connection = JDBCConnection.getConnection();
+             Statement st = connection.createStatement();
+             ResultSet rs = st.executeQuery(query)) {
+            if (rs.next()) {
+                count = rs.getLong(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return count;
+    }
 
     // Read (Select by ID)
     public Prospection getProspectionById(int id) {

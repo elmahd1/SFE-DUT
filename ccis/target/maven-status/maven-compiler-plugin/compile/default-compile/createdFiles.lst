@@ -13,14 +13,15 @@ ccis\controllers\DemarcheFicheController.class
 ccis\models\Prospection.class
 ccis\controllers\EAEController.class
 ccis\controllers\ESEController$1.class
+ccis\controllers\GrapheDemarcheController$5.class
 ccis\controllers\GrapheEspaceController$1.class
 ccis\controllers\ESEController.class
+ccis\controllers\ESDController$3.class
 ccis\controllers\GrapheDemarcheController$2.class
 ccis\controllers\GrapheEspaceController.class
 ccis\models\DemarcheAdministratif.class
 ccis\controllers\ESDController$1.class
 ccis\dao\ProspectionDAO.class
-ccis\controllers\DemarcheFicheController$1.class
 ccis\App.class
 ccis\controllers\GrapheDemarcheController$1.class
 ccis\controllers\GrapheDemarcheController$ObjetVisiteDetailData.class
@@ -32,8 +33,9 @@ ccis\models\EspaceEntreprise.class
 ccis\controllers\RecapitulatifController$1.class
 ccis\controllers\FicheProspectionController.class
 ccis\controllers\EspaceFicheController.class
+ccis\controllers\GrapheDemarcheController$DelaiMoyenData.class
 ccis\controllers\ESDController$2.class
-ccis\controllers\EspaceFicheController$1.class
+ccis\controllers\ESEController$2.class
 ccis\controllers\GrapheDemarcheController$4.class
 ccis\controllers\GrapheDemarcheController$FormeJuridiqueData.class
 ccis\controllers\GrapheEspaceController$3.class

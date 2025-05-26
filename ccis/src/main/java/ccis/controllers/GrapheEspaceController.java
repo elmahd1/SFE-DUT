@@ -156,10 +156,7 @@ public class GrapheEspaceController {
         
         // Load data
         loadData();
-        File exportDir=new File("C:\\ccis documents application\\espace entreprise");
-        if (!exportDir.exists()) {
-            exportDir.mkdirs();
-        }
+       
     }
 
     private void setupTableColumns() {
@@ -226,7 +223,6 @@ private void loadData() {
 
         long totalMinutes = 0;
 
-        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm");
 
         for (EspaceEntreprise item : data) {
@@ -291,7 +287,7 @@ String forme ="";
             // Add to table1
             table1Data.add(new ObjetVisiteData(entry.getKey(), entry.getValue(), percent));
         }
-        
+         table1Data.add(new ObjetVisiteData("Total", total, 100.0));
         // Set Table 1 data
         table1.setItems(table1Data);
 
@@ -309,7 +305,8 @@ String forme ="";
             // Add to table3
             table3Data.add(new FormeJuridiqueData(entry.getKey(), entry.getValue(), percent));
         }
-        
+        table3Data.add(new FormeJuridiqueData("Total", total, 100.0));
+
         // Set Table 3 data
         table3.setItems(table3Data);
 
@@ -352,10 +349,21 @@ for (XYChart.Series<String, Number> series : chart2.getData()) {
         StackPane.setAlignment(label, Pos.TOP_CENTER);
     }
 }
+// Calcul du délai moyen global (en heures)
+long totalDelaiMinutes = 0;
+int totalDelaiCount = 0;
 
+for (String objet : objetCounts.keySet()) {
+    totalDelaiMinutes += objetDelaiTotal.getOrDefault(objet, 0L);
+    totalDelaiCount += objetDelaiCount.getOrDefault(objet, 0);
+}
+
+double totalDelaiMoyen = totalDelaiCount > 0 ? (totalDelaiMinutes / 60.0) / totalDelaiCount : 0;
+
+// Ajoute la ligne "Total" avec la moyenne globale et 100%
+table2Data.add(new ObjetVisiteDetailData("Total", totalDelaiMoyen, 100.0));
         // Set Table 2 data
         table2.setItems(table2Data);
-        
         // Set axes labels
         xAxis.setLabel("Objet de Visite");
         yAxis.setLabel("Valeur");
@@ -397,6 +405,7 @@ public void savebarChartAsPng(BarChart<String, Number> chart, String filename) {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Save Chart as PNG");
             fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PNG files (*.png)", "*.png"));
+            fileChooser.setInitialDirectory(new File("C:/fichiers application ccis/espace entreprise"));
             fileChooser.setInitialFileName(filename);
 
             file = fileChooser.showSaveDialog(null);

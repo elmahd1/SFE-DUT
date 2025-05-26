@@ -146,6 +146,7 @@ private void loadDemarches() {
         fileChooser.setTitle("Enregistrer le fichier généré");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel Files", "*.xlsx"));
         fileChooser.setInitialFileName("Extrait annuaire Espace Entreprise.xlsx");
+        fileChooser.setInitialDirectory(new File("C:/fichiers application ccis/espace entreprise"));
         File output = fileChooser.showSaveDialog(null);
         if (output == null) {
             // User cancelled the save dialog

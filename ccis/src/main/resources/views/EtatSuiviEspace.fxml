@@ -4,12 +4,17 @@
 <?import javafx.scene.control.cell.*?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <AnchorPane stylesheets="@/styles/ES.css" xmlns:fx="http://javafx.com/fxml"  fx:controller="ccis.controllers.ESEController" styleClass="main-container" >
+   <VBox spacing="8" AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.bottomAnchor="0">
+     <HBox styleClass="title-bar">
+       <Label text="Etat Suivi Espace Entreprise" styleClass="form-title"/>
+</HBox>
     <!-- Barre de recherche et boutons en haut -->
     <HBox layoutX="10" layoutY="10" spacing="10" alignment="CENTER_LEFT">
         <TextField fx:id="searchField" promptText="Rechercher..." onKeyReleased="#onSearch" prefWidth="250" styleClass="search-field"/>
         <Button onAction="#onSearch" mnemonicParsing="false" text="Rechercher" styleClass="search-button"/>
         <Region HBox.hgrow="ALWAYS" />
         <Button onAction="#exportD" mnemonicParsing="false" text="Exporter les démarches" styleClass="export-button"/>
+        <Button text="Importer (via Excel)" onAction="#handleImport" mnemonicParsing="false" styleClass="export-button"/>
     </HBox>
     
     <!-- TableView avec marge en haut pour laisser de la place à la barre de recherche -->
@@ -40,4 +45,5 @@
             <TableColumn fx:id="colActions" text="Actions" styleClass="table-column"/>
         </columns>
     </TableView>
+    </VBox>
 </AnchorPane>

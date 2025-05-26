@@ -1,44 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.image.ImageView?>
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml/1"
             stylesheets="@/styles/Menu.css"
             fx:controller="ccis.controllers.MenuController">
-
+    
     <top>
         <VBox>
-            <!-- Main Menu Bar -->
-            <MenuBar>
-                <Menu text="Accueil" >
-                    <MenuItem text="Accueil" onAction="#home"/>
-                </Menu>    
-                <Menu text="Demarche Administratif">
-                    <MenuItem text="Fiche" onAction="#fa"/>
-                    <MenuItem text="Etat suivi" onAction="#esd"/>
-                    <MenuItem text="Extrait de l'annuaire" onAction="#ead"/>
-                    <MenuItem text="Graphes" onAction="#gd"/>
-                </Menu>
-                <Menu text="Espace Entreprise">
-                    <MenuItem text="Fiche" onAction="#fe"/>
-                    <MenuItem text="Etat suivi" onAction="#ese"/>
-                    <MenuItem text="Extrait de l'annuaire" onAction="#eae"/>
-                    <MenuItem text="Graphes" onAction="#ge"/>
-                </Menu>
-                <Menu text="Prestation : Prospection Nationale">
-                    <MenuItem text="Fiche" onAction="#fp"/>
-                    <MenuItem text="Recapitulatif d'activites" onAction="#ra"/>
-                </Menu>
-                <!-- Right-aligned user section -->
-                <Menu text="Aide">
-                    <MenuItem text="Documentation" />
-                    <MenuItem text="À propos" />
-                </Menu>
-            </MenuBar>
+            <!-- Main Menu Bar with integrated logo -->
+            <HBox styleClass="menu-container">
+                <!-- Logo container with proper styling -->
+                <HBox styleClass="logo-container" alignment="CENTER_LEFT">
+                    <ImageView fitHeight="40" fitWidth="40" styleClass="menu-logo">
+                        <image>
+                            <Image url="@/images/CCIS-logo-Copy-_2_.png"/>
+                        </image>
+                    </ImageView>
+                </HBox>
+                
+                <!-- Enlarged MenuBar -->
+                <MenuBar HBox.hgrow="ALWAYS" styleClass="enlarged-menu-bar">
+                    <Menu text="Accueil">
+                        <MenuItem text="Accueil" onAction="#home"/>
+                    </Menu>
+                    <Menu text="Demarche Administratif">
+                        <MenuItem text="Fiche" onAction="#fa"/>
+                        <MenuItem text="Etat suivi" onAction="#esd"/>
+                        <MenuItem text="Extrait de l'annuaire" onAction="#ead"/>
+                        <MenuItem text="Graphes" onAction="#gd"/>   
+                        <MenuItem text="Rapports" onAction="#rd"/>
+                    </Menu>
+                    <Menu text="Espace Entreprise">
+                        <MenuItem text="Fiche" onAction="#fe"/>
+                        <MenuItem text="Etat suivi" onAction="#ese"/>
+                        <MenuItem text="Extrait de l'annuaire" onAction="#eae"/>
+                        <MenuItem text="Graphes" onAction="#ge"/>
+                        <MenuItem text="Rapports" onAction="#re"/>
+                    </Menu>
+                    <Menu text="Prospection Nationale">
+                        <MenuItem text="Fiche" onAction="#fp"/>
+                        <MenuItem text="Recapitulatif d'activites" onAction="#ra"/>
+                    </Menu>
+                    <!-- Right-aligned user section -->
+                    <Menu text="Aide">
+                        <MenuItem text="Documentation" />
+                        <MenuItem text="À propos" />
+                    </Menu>
+                </MenuBar>
+            </HBox>
             
             <!-- Breadcrumb Navigation Bar (Optional) -->
             <!-- <HBox styleClass="breadcrumb-bar">
@@ -46,18 +61,13 @@
             </HBox> -->
         </VBox>
     </top>
-
-    <center>
-        <StackPane fx:id="contentArea" styleClass="stack-pane"/>
-    </center>
     
     <!-- <bottom>
-       
         <HBox styleClass="status-bar">
             <Label fx:id="statusLabel" styleClass="status-label" text="Prêt"/>
             <Region HBox.hgrow="ALWAYS"/>
             <Label fx:id="versionLabel" styleClass="status-label" text="Version 1.0"/>
         </HBox>
     </bottom> -->
-
+    
 </BorderPane>

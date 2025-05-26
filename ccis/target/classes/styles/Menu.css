@@ -6,7 +6,7 @@
 /* Base colors from the logo */
 * {
     -fx-primary-blue: #0074B2;
-    -fx-primary-orange: #FF8A00;
+    -fx-primary-orange: #ff7300;
     -fx-secondary-blue: #83C4E8;
     -fx-secondary-orange: #FFBB66;
     -fx-light-green: #8DBC66;
@@ -17,26 +17,46 @@
     -fx-dark-gray: #555555;
     -fx-white: #FFFFFF;
 }
-.logo-container {
-    -fx-padding: 10;
-    -fx-background-color: white;
-}
+
 /* Applying font styles */
 .root {
     -fx-font-family: "Segoe UI", "Arial", sans-serif;
     -fx-background-color: -fx-white;
 }
 
-/* Menu Bar styling */
-.menu-bar {
+/* Container for the menu and logo */
+.menu-container {
     -fx-background-color: linear-gradient(to bottom, -fx-primary-blue, derive(-fx-primary-blue, -10%));
-    -fx-padding: 0 0 0 0;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 2);
+    -fx-alignment: center-left;
+}
+
+/* Logo container styling */
+.logo-container {
+    -fx-padding: 0 10 0 15;
+    -fx-background-color: transparent;
+}
+
+/* Menu logo specific styling */
+.menu-logo {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 3, 0, 0, 0);
+}
+
+/* Menu Bar styling - now with transparent background to blend with menu-container */
+.menu-bar {
+    -fx-background-color: transparent;
+    -fx-padding: 0 0 0 0;
+}
+
+/* Enlarged menu bar */
+.enlarged-menu-bar {
+    -fx-font-size: 16px;
+    -fx-pref-height: 50px;
 }
 
 .menu-bar > .container > .menu-button {
     -fx-background-color: transparent;
-    -fx-padding: 6px 12px;
+    -fx-padding: 8px 16px;
 }
 
 .menu-bar > .container > .menu-button:hover,
@@ -48,7 +68,7 @@
 .menu-bar > .container > .menu-button > .label {
     -fx-text-fill: -fx-white;
     -fx-font-weight: bold;
-    -fx-font-size: 14px;
+    -fx-font-size: 16px;
 }
 
 /* Menu styling */
@@ -60,12 +80,12 @@
 /* Menu Item styling */
 .menu-item {
     -fx-background-color: -fx-white;
-    -fx-padding: 8px 15px;
+    -fx-padding: 10px 20px;
 }
 
 .menu-item > .label {
     -fx-text-fill: -fx-dark-gray;
-    -fx-font-size: 13px;
+    -fx-font-size: 14px;
 }
 
 .menu-item:focused, .menu-item:hovered {
@@ -94,12 +114,6 @@
 
 .menu > .separator {
     -fx-padding: 3px 0px 3px 0px;
-}
-
-/* Logo styling */
-.logo {
-    -fx-fill: -fx-white;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 3, 0, 0, 0);
 }
 
 /* User profile section in menu */

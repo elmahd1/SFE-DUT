@@ -21,13 +21,13 @@
 }
 
 .search-field:focused {
-    -fx-border-color: #FF8A00;
+    -fx-border-color: #ff7300;
     -fx-effect: dropshadow(three-pass-box, rgba(46, 134, 222, 0.4), 5, 0, 0, 0);
 }
 
 /* Style pour les boutons */
 .button {
-    -fx-background-color: #FF8A00;
+    -fx-background-color: #ff7300;
     -fx-text-fill: white;
     -fx-background-radius: 5px;
     -fx-padding: 8px 15px;
@@ -48,7 +48,7 @@
 }
 
 .export-button {
-    -fx-background-color: #FF8A00;
+    -fx-background-color: #ff7300;
     
 }
 
@@ -66,7 +66,7 @@
 }
 
 .table-view .column-header {
-    -fx-background-color: #3498db;
+    -fx-background-color: #0074B2;
     -fx-padding: 10px 5px;
 }
 
@@ -87,6 +87,7 @@
 
 .table-view .table-row-cell:selected {
     -fx-background-color: #b3d9ff;
+    -fx-text-fill: #000000;
 }
 
 /* Style pour les cellules du tableau */
@@ -99,14 +100,48 @@
 .scroll-bar:vertical {
     -fx-background-color: #f0f0f0;
     -fx-background-radius: 0;
+    
 }
 
 .scroll-bar:vertical .thumb {
     -fx-background-color: #c0c0c0;
     -fx-background-radius: 5px;
 }
+.form-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-padding: 0 18 0 0;
+    -fx-effect: dropshadow(three-pass-box, #ff8c2e99, 8, 0, 0, 2);
+    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-letter-spacing: 1px;
+}
 
+.title-bar {
+    -fx-background-color: linear-gradient(to right, #ff7300 0%, #ff9800 100%);
+    -fx-padding: 16 0 16 24;
+    -fx-background-radius: 12 12 0 0;
+    -fx-effect: dropshadow(three-pass-box, #ff730055, 10, 0, 0, 2);
+    -fx-alignment: center-left;
+}
 .scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #a0a0a0;
+}
+.scroll-bar:horizontal {
+    -fx-background-color: #f0f0f0;
+    -fx-background-radius: 0;
+    -fx-pref-height: 18px;
+    -fx-min-height: 18px;
+    -fx-max-height: 18px;
+    -fx-width: 100%;
+}
+
+.scroll-bar:horizontal .thumb {
+    -fx-background-color: #c0c0c0;
+    -fx-background-radius: 5px;
+}
+
+.scroll-bar:horizontal .thumb:hover {
     -fx-background-color: #a0a0a0;
 }
 
@@ -120,7 +155,6 @@
     -fx-text-fill: #666;
     -fx-font-style: italic;
 }
-
 /* Style pour les actions */
 .table-column .action-button {
     -fx-background-color: transparent;

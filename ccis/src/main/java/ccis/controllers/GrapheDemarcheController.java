@@ -67,7 +67,9 @@ public class GrapheDemarcheController {
     private TableColumn<ObjetVisiteData, Integer> totalColumn;
     @FXML
     private TableColumn<ObjetVisiteData, Double> percentageColumn;
-
+@FXML private TableColumn<DelaiMoyenData, String> objetVisiteDelaiColumn;
+@FXML private TableColumn<DelaiMoyenData, Double> delaiMoyenColumn;
+@FXML private TableColumn<DelaiMoyenData, Double> pourcentageDelaiColumn;
     @FXML
     private TableView<ObjetVisiteDetailData> table2;
     @FXML
@@ -75,11 +77,8 @@ public class GrapheDemarcheController {
     @FXML
     private TableColumn<ObjetVisiteDetailData, Double> montantColumn;
     @FXML
-    private TableColumn<ObjetVisiteDetailData, Double> delaiMoyenColumn;
-    @FXML
     private TableColumn<ObjetVisiteDetailData, Double> pourcentageMontantColumn;
-    @FXML
-    private TableColumn<ObjetVisiteDetailData, Double> pourcentageDelaiColumn;
+    
 
     @FXML
     private TableView<FormeJuridiqueData> table3;
@@ -89,6 +88,9 @@ public class GrapheDemarcheController {
     private TableColumn<FormeJuridiqueData, Integer> nombreVisiteColumn;
     @FXML
     private TableColumn<FormeJuridiqueData, Double> percentageFormeColumn;
+
+        @FXML
+    private TableView<DelaiMoyenData> table4;
 
     // Buttons
     @FXML
@@ -148,25 +150,34 @@ public class GrapheDemarcheController {
     public static class ObjetVisiteDetailData {
         private final String objetVisite;
         private final double montant;
-        private final double delaiMoyen;
         private final double pourcentageMontant;
-        private final double pourcentageDelai;
 
-        public ObjetVisiteDetailData(String objetVisite, double montant, double delaiMoyen, 
-                                     double pourcentageMontant, double pourcentageDelai) {
+        public ObjetVisiteDetailData(String objetVisite, double montant,  
+                                     double pourcentageMontant) {
             this.objetVisite = objetVisite;
             this.montant = montant;
-            this.delaiMoyen = delaiMoyen;
             this.pourcentageMontant = pourcentageMontant;
-            this.pourcentageDelai = pourcentageDelai;
         }
 
         public String getObjetVisite() { return objetVisite; }
         public double getMontant() { return montant; }
-        public double getDelaiMoyen() { return delaiMoyen; }
         public double getPourcentageMontant() { return pourcentageMontant; }
-        public double getPourcentageDelai() { return pourcentageDelai; }
     }
+    public static class DelaiMoyenData {
+    private final String objetVisite;
+    private final double delaiMoyen;
+    private final double pourcentageDelai;
+
+    public DelaiMoyenData(String objetVisite, double delaiMoyen, double pourcentageDelai) {
+        this.objetVisite = objetVisite;
+        this.delaiMoyen = delaiMoyen;
+        this.pourcentageDelai = pourcentageDelai;
+    }
+
+    public String getObjetVisite() { return objetVisite; }
+    public double getDelaiMoyen() { return delaiMoyen; }
+    public double getPourcentageDelai() { return pourcentageDelai; }
+}
 
     @FXML
     public void initialize() {
@@ -175,10 +186,7 @@ public class GrapheDemarcheController {
         
         // Load data
         loadData();
-        File exportDir=new File("C:\\ccis documents application\\demarche administratif");
-        if (!exportDir.exists()) {
-            exportDir.mkdirs();
-        }
+      
     }
 
     private void setupTableColumns() {
@@ -201,9 +209,7 @@ public class GrapheDemarcheController {
         // Table 2 columns
         objetVisiteColumn.setCellValueFactory(new PropertyValueFactory<>("objetVisite"));
         montantColumn.setCellValueFactory(new PropertyValueFactory<>("montant"));
-        delaiMoyenColumn.setCellValueFactory(new PropertyValueFactory<>("delaiMoyen"));
-        pourcentageMontantColumn.setCellValueFactory(new PropertyValueFactory<>("pourcentageMontant"));
-        pourcentageDelaiColumn.setCellValueFactory(new PropertyValueFactory<>("pourcentageDelai"));
+       pourcentageMontantColumn.setCellValueFactory(new PropertyValueFactory<>("pourcentageMontant"));
         
         // Format percentage columns in Table 2
         pourcentageMontantColumn.setCellFactory(column -> new TableCell<ObjetVisiteDetailData, Double>() {
@@ -217,8 +223,8 @@ public class GrapheDemarcheController {
                 }
             }
         });
-        
-        pourcentageDelaiColumn.setCellFactory(column -> new TableCell<ObjetVisiteDetailData, Double>() {
+
+        pourcentageDelaiColumn.setCellFactory(column -> new TableCell<DelaiMoyenData, Double>() {
             @Override
             protected void updateItem(Double item, boolean empty) {
                 super.updateItem(item, empty);
@@ -245,6 +251,17 @@ public class GrapheDemarcheController {
                 }
             }
         });
+
+        objetVisiteDelaiColumn.setCellValueFactory(new PropertyValueFactory<>("objetVisite"));
+delaiMoyenColumn.setCellValueFactory(new PropertyValueFactory<>("delaiMoyen"));
+pourcentageDelaiColumn.setCellValueFactory(new PropertyValueFactory<>("pourcentageDelai"));
+pourcentageDelaiColumn.setCellFactory(column -> new TableCell<DelaiMoyenData, Double>() {
+    @Override
+    protected void updateItem(Double item, boolean empty) {
+        super.updateItem(item, empty);
+        setText(empty || item == null ? null : String.format("%.1f%%", item));
+    }
+});
     }
     
 void loadData() {
@@ -268,9 +285,16 @@ void loadData() {
             // Count objetVisite
             String objet = item.getObjetVisite();
             objetCounts.put(objet, objetCounts.getOrDefault(objet, 0) + 1);
-
+            String forme = "";
             // Count formeJuridique
-            String forme = item.getFormeJuridique();
+            if (!item.getFormeJuridique().equals("Auto-entrepreneur") &&
+                !item.getFormeJuridique().equals("SARL") &&
+                !item.getFormeJuridique().equals("SA") &&
+                !item.getFormeJuridique().equals("PP (Personne physique)")) {
+                forme = "Autre";
+            } else {
+                forme = item.getFormeJuridique();
+            }
             formeCounts.put(forme, formeCounts.getOrDefault(forme, 0) + 1);
 
             // Calculate delay and montant
@@ -340,6 +364,7 @@ table1Data.add(new ObjetVisiteData("Total", totalObjetVisite, totalPercentageObj
         // Create data for Table 3
         ObservableList<FormeJuridiqueData> table3Data = FXCollections.observableArrayList();
         
+        
         for (Map.Entry<String, Integer> entry : formeCounts.entrySet()) {
             double percent = (entry.getValue() * 100.0) / total;
             chart3.getData().add(new PieChart.Data(entry.getKey() + " (" + String.format("%.1f", percent) + "%):"+entry.getValue(), entry.getValue()));
@@ -368,7 +393,8 @@ table3Data.add(new FormeJuridiqueData("Total", totalNombreVisite, totalPercentag
         
         // Create data for Table 2
         ObservableList<ObjetVisiteDetailData> table2Data = FXCollections.observableArrayList();
-        
+        ObservableList<DelaiMoyenData> table4Data = FXCollections.observableArrayList();
+
         // Add bars for each objet visite with their montant and average delay
         for (String objet : objetCounts.keySet()) {
             // Montant
@@ -384,20 +410,21 @@ table3Data.add(new FormeJuridiqueData("Total", totalNombreVisite, totalPercentag
             delaiSeries.getData().add(new XYChart.Data<>(objet, delaiMoyenHeures));
             
             // Add to table2
-            table2Data.add(new ObjetVisiteDetailData(objet, montantTotal, delaiMoyenHeures, 
-                                                    pourcentageMontant, pourcentageDelai));
+            table2Data.add(new ObjetVisiteDetailData(objet, montantTotal,  
+                                                    pourcentageMontant));
+            table4Data.add(new DelaiMoyenData(objet, delaiMoyenHeures, pourcentageDelai));
         }
         // Calcul du total pour table2
-double totalMontant2 = table2Data.stream().mapToDouble(ObjetVisiteDetailData::getMontant).sum();
-double totalDelaiMoyen = table2Data.stream().mapToDouble(ObjetVisiteDetailData::getDelaiMoyen).average().orElse(0);
+double totalMontant2 = table2Data.stream().mapToDouble(ObjetVisiteDetailData::getMontant).sum()/table2Data.size();
 double totalPourcentageMontant = table2Data.stream().mapToDouble(ObjetVisiteDetailData::getPourcentageMontant).sum();
-double totalPourcentageDelai = table2Data.stream().mapToDouble(ObjetVisiteDetailData::getPourcentageDelai).sum();
-
+Double totalDelaiMoyen = table4Data.stream().mapToDouble(DelaiMoyenData::getDelaiMoyen).sum()/table4Data.size();
+double totalPourcentageDelai = table4Data.stream().mapToDouble(DelaiMoyenData::getPourcentageDelai).sum();
 // Ajouter la ligne de total
-table2Data.add(new ObjetVisiteDetailData("Total", totalMontant2, totalDelaiMoyen, totalPourcentageMontant, totalPourcentageDelai));
-        chart2.getData().add(delaiSeries);
-        chart4.getData().add(montantSeries);
+table2Data.add(new ObjetVisiteDetailData("Total", totalMontant2, totalPourcentageMontant));
+     table4Data.add(new DelaiMoyenData("Total", totalDelaiMoyen, totalPourcentageDelai));
 
+chart2.getData().add(delaiSeries);
+        chart4.getData().add(montantSeries);
 
 for (XYChart.Series<String, Number> series : chart2.getData()) {
     for (XYChart.Data<String, Number> data5 : series.getData()) {
@@ -426,13 +453,11 @@ for (XYChart.Series<String, Number> series : chart4.getData()) {
 
         // Set Table 2 data
         table2.setItems(table2Data);
+        table4.setItems(table4Data);
         
-        // Set axes labels
-        xAxis.setLabel("Objet de Visite");
-        yAxis.setLabel("Valeur");
+    
 
-        xAxis2.setLabel("Objet de Visite");
-        yAxis2.setLabel("Valeur");
+        
     }
 
     public void savePieChartAsPng(PieChart chart, String filename) {
@@ -471,6 +496,7 @@ public void savebarChartAsPng(BarChart<String, Number> chart, String filename) {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Enregistrer le graphique");
             fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PNG Files", "*.png"));
+            fileChooser.setInitialDirectory(new File("C:/fichiers application ccis/demarche administratif"));
             fileChooser.setInitialFileName(filename);
             file = fileChooser.showSaveDialog(chart.getScene().getWindow());
             if (file == null) {
@@ -556,11 +582,17 @@ private void downloadTable2(ActionEvent event) {
 private void downloadTable3(ActionEvent event) {
     exportTableToCSV(table3, "table forme juridique.csv");
 }
+@FXML
+private void downloadTable4(ActionEvent event) {
+    exportTableToCSV(table4, "table forme juridique.csv");
+}
 public <T> void exportTableToCSV(TableView<T> table, String filename) {
     File file = new File(filename);
     FileChooser fileChooser = new FileChooser();
     fileChooser.setTitle("Enregistrer le fichier CSV");
     fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+    fileChooser.setInitialDirectory(new File("C:/fichiers application ccis/demarche administratif"));
+
     fileChooser.setInitialFileName(filename);
     file = fileChooser.showSaveDialog(table.getScene().getWindow());
     if (file == null) {

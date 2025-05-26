@@ -4,253 +4,112 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml"
+<ScrollPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="ccis.controllers.EspaceFicheController"
-            prefHeight="600.0" prefWidth="1265.0"
-            stylesheets="@/styles/demarchefiche.css">
-   
-   <ScrollPane fx:id="scrollPane" fitToWidth="true" 
-               hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
-               AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"
-               AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
-      <content>
-         <VBox fx:id="scrollContent" prefWidth="780.0" spacing="20" 
-               style="-fx-padding: 20;">
-            <children>
-               <!-- Form Title -->
-               <HBox alignment="CENTER" style="-fx-padding: 0 0 15 0;">
-                  <Label text="FICHE ESPACE ENTREPRISE" styleClass="form-title"/>
-               </HBox>
-               
-               <!-- Row 1: Date and Time Contact -->
-               <HBox spacing="10" styleClass="form-section">
-                  <children>
-                     <VBox spacing="5">
-                        <children>
-                           <Label text="Date de contact" />
-                           <DatePicker fx:id="dateContact" prefWidth="250.0" promptText="JJ/MM/AAAA"/>
-                           <Label fx:id="dateContactError" styleClass="error-label" visible="false"/>
-                        </children>
-                     </VBox>
-                     <VBox spacing="5">
-                        <children>
-                           <Label text="Heure de contact" />
-                           <TextField fx:id="heureContact" prefWidth="250.0" promptText="HH:MM"/>
-                           <Label fx:id="heureContactError" styleClass="error-label" visible="false"/>
-                        </children>
-                     </VBox>
-                  </children>
-               </HBox>
-               
-               <!-- Row 3: Objet Visite -->
-               <VBox spacing="5" styleClass="form-section">
-                  <children>
-                     <Label text="Objet de visite" />
-                     <ComboBox fx:id="objetVisite" prefWidth="530.0" promptText="Sélectionnez l'objet de visite"/>
-                     <Label fx:id="objetVisiteError" styleClass="error-label" visible="false"/>
-                  </children>
-               </VBox>
-               
+            fitToWidth="true"
+            hbarPolicy="NEVER"
+            vbarPolicy="AS_NEEDED"
+            stylesheets="@/styles/fiche.css"
+            prefHeight="600.0" prefWidth="1265.0">
+    <content>
+        <GridPane hgap="16" vgap="8" style="-fx-padding: 16;">
+            <columnConstraints>
+                <ColumnConstraints minWidth="180"/>
+                <ColumnConstraints minWidth="220"/>
+                <ColumnConstraints minWidth="180"/>
+                <ColumnConstraints minWidth="220"/>
+            </columnConstraints>
 
-               
-               <!-- Row 5: Personal Information -->
-               <VBox spacing="5" styleClass="form-section">
-                  <children>
-                     <Label text="Nom et prénom" />
-                     <TextField fx:id="nomPrenom" prefWidth="530.0" promptText="Nom complet"/>
-                     <Label fx:id="nomPrenomError" styleClass="error-label" visible="false"/>
-                  </children>
-               </VBox>
-               
-               <VBox spacing="5" styleClass="form-section">
-                  <children>
-                     <Label text="Statut" />
-                     <ComboBox fx:id="statut" prefWidth="530.0" promptText="Sélectionnez le statut"/>
-                     <Label fx:id="statutError" styleClass="error-label" visible="false"/>
-                  </children>
-               </VBox>
+            <!-- Titre -->
+            <Label text="FICHE ESPACE ENTREPRISE"
+                styleClass="form-title"
+                GridPane.columnSpan="4"
+                GridPane.rowIndex="0"
+                GridPane.columnIndex="0"
+                alignment="CENTER"
+                style="-fx-font-size: 30px; -fx-alignment: center;"/>
 
-               <!-- Row 6: Phone Numbers -->
-               <HBox spacing="10" styleClass="form-section">
-                  <children>
-                     <VBox spacing="5">
-                        <children>
-                           <Label text="Téléphone fixe" />
-                           <TextField fx:id="telephoneFix" prefWidth="250.0" promptText="Numéro de fixe"/>
-                           <Label fx:id="telephoneFixError" styleClass="error-label" visible="false"/>
-                        </children>
-                     </VBox>
-                     <VBox spacing="5">
-                        <children>
-                           <Label text="Téléphone GSM" />
-                           <TextField fx:id="telephoneGSM" prefWidth="250.0" promptText="Numéro de GSM"/>
-                           <Label fx:id="telephoneGSMError" styleClass="error-label" visible="false"/>
-                        </children>
-                     </VBox>
-                  </children>
-               </HBox>
-               
-               <!-- Row 7: Email and Accept -->
-               <VBox spacing="5" styleClass="form-section">
-                  <children>
-                     <Label text="Adresse email" />
-                     <TextField fx:id="email" prefWidth="530.0" promptText="exemple@email.com"/>
-                     <Label fx:id="emailError" styleClass="error-label" visible="false"/>
-                     
-                     <CheckBox fx:id="accepteEnvoiCCIS" text="J'accepte de recevoir les envois de la CCIS" 
-                              mnemonicParsing="false" style="-fx-padding: 15 0 0 0;"/>
-                  </children>
-               </VBox>
-               
+            <!-- Date de contact / Heure de contact -->
+            <Label text="Date de contact" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <DatePicker fx:id="dateContact" prefWidth="180" promptText="JJ/MM/AAAA" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+            <Label text="Heure de contact" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
+            <TextField fx:id="heureContact" prefWidth="180" promptText="HH:MM" GridPane.rowIndex="1" GridPane.columnIndex="3"/>
 
-               
-               <!-- Row 9: Address Information -->
-               <VBox spacing="5" styleClass="form-section">
-                  <children>
-                     <Label text="Adresse de contact" />
-                     <TextField fx:id="adresse" prefWidth="530.0" promptText="Adresse complète"/>
-                     <Label fx:id="adresseError" styleClass="error-label" visible="false"/>
-                  </children>
-               </VBox>
-               
-               <!-- Row 10: City and Denomination -->
-               <HBox spacing="10" styleClass="form-section">
-                  <children>
-                     <VBox spacing="5">
-                        <children>
-                           <Label text="Ville" />
-                           <TextField fx:id="ville" prefWidth="250.0" promptText="Nom de la ville"/>
-                           <Label fx:id="villeError" styleClass="error-label" visible="false"/>
-                        </children>
-                     </VBox>
-                     <VBox spacing="5">
-                        <children>
-                           <Label text="Dénomination" />
-                           <TextField fx:id="denomination" prefWidth="250.0" promptText="Dénomination"/>
-                           <Label fx:id="denominationError" styleClass="error-label" visible="false"/>
-                        </children>
-                     </VBox>
-                  </children>
-               </HBox>
-               
-               <VBox spacing="5" styleClass="form-section">
-                  <children>
-                     <Label text="Code ICE" />
-                     <TextField fx:id="codeICE" prefWidth="530.0" promptText="Code ICE"/>
-                     <Label fx:id="codeICEError" styleClass="error-label" visible="false"/>
-                  </children>
-               </VBox>
+            <!-- Objet de visite / Statut -->
+            <Label text="Objet de visite" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+            <ComboBox fx:id="objetVisite" prefWidth="180" promptText="Sélectionnez l'objet" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+            <Label text="Statut" GridPane.rowIndex="3" GridPane.columnIndex="2"/>
+            <ComboBox fx:id="statut" prefWidth="180" promptText="Sélectionnez le statut" GridPane.rowIndex="3" GridPane.columnIndex="3"/>
 
-               <!-- Row 11: Legal Information -->
-               <VBox spacing="5" styleClass="form-section">
-                  <children>
-                     <Label text="Représentant légal" />
-                     <TextField fx:id="nomRepresentantLegal" prefWidth="530.0" promptText="Nom du représentant"/>
-                     <Label fx:id="nomRepresentantLegalError" styleClass="error-label" visible="false"/>
-                  </children>
-               </VBox>
-                              <!-- Row 8: Website -->
-               <VBox spacing="5" styleClass="form-section">
-                  <children>
-                     <Label text="Site web" />
-                     <TextField fx:id="siteweb" prefWidth="530.0" promptText="www.exemple.com"/>
-                     <Label fx:id="sitewebError" styleClass="error-label" visible="false"/>
-                  </children>
-               </VBox>
-               <!-- Row 12: Legal Form -->
-               <VBox spacing="5" styleClass="form-section">
-                  <children>
-                     <Label text="Forme juridique" />
-                     <ComboBox fx:id="formeJuridique" prefWidth="250.0" promptText="Sélectionnez la forme juridique"/>
-                     <Label fx:id="formeJuridiqueError" styleClass="error-label" visible="false"/>
-                  </children>
-               </VBox>
-          
 
-                     <VBox spacing="5" styleClass="forme-section">
-                        <children>
-                           <Label text="Taille de l'entreprise" />
-                           <TextField fx:id="tailleEntreprise" prefWidth="250.0" promptText="Taille de l'entreprise"/>
-                           <Label fx:id="tailleEntrepriseError" styleClass="error-label" visible="false"/>
-                        </children>
-                     </VBox>
-               
-               <!-- Row 14: Activity Info -->
-               <HBox spacing="10" styleClass="form-section">
-                  <children>
-                     <VBox spacing="5">
-                        <children>
-                           <Label text="Secteur d'activité" />
-                           <ComboBox fx:id="secteurActivite" prefWidth="250.0" promptText="Sélectionnez le secteur"/>
-                           <Label fx:id="secteurActiviteError" styleClass="error-label" visible="false"/>
-                        </children>
-                     </VBox>
-                     <VBox spacing="5">
-                        <children>
-                           <Label text="Activité" />
-                           <TextField fx:id="activite" prefWidth="250.0" promptText="Description de l'activité"/>
-                           <Label fx:id="activiteError" styleClass="error-label" visible="false"/>
-                        </children>
-                     </VBox>
-                  </children>
-               </HBox>
-               
-               <!-- Row 15: CCIS Info -->
-               <HBox spacing="10" styleClass="form-section">
-                  <children>
-                     <VBox spacing="5">
-                        <children>
-                           <Label text="Conseiller CCIS" />
-                           <TextField fx:id="nomPrenomConseillerCCIS" prefWidth="250.0" promptText="Nom du conseiller"/>
-                           <Label fx:id="nomPrenomConseillerCCISError" styleClass="error-label" visible="false"/>
-                        </children>
-                     </VBox>
-                     <VBox spacing="5">
-                        <children>
-                           <Label text="Qualité du conseiller" />
-                           <TextField fx:id="qualiteConseillerCCIS" prefWidth="250.0" promptText="Fonction/Qualité"/>
-                           <Label fx:id="qualiteConseillerCCISError" styleClass="error-label" visible="false"/>
-                        </children>
-                     </VBox>
-                  </children>
-               </HBox>
-               
+<Label text ="IDENTIFICATION DU DEMANDEUR :" styleClass="form-title" GridPane.rowIndex="4" GridPane.columnSpan="1"/>
+            <!-- Nom et prénom / Téléphone fixe -->
+            <Label text="Nom et prénom" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+            <TextField fx:id="nomPrenom" prefWidth="180" promptText="Nom complet" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+            <Label text="Téléphone fixe" GridPane.rowIndex="5" GridPane.columnIndex="2"/>
+            <TextField fx:id="telephoneFix" prefWidth="180" promptText="Numéro de fixe" GridPane.rowIndex="5" GridPane.columnIndex="3"/>
 
-               
-               <!-- Row 18: Delivery Info -->
-               <HBox spacing="10" styleClass="form-section">
-                  <children>
-                     <VBox spacing="5">
-                        <children>
-                           <Label text="Date de depart" />
-                           <DatePicker fx:id="dateDepart" prefWidth="250.0" promptText="JJ/MM/AAAA"/>
-                           <Label fx:id="dateDepartError" styleClass="error-label" visible="false"/>
-                        </children>
-                     </VBox>
-                     <VBox spacing="5">
-                        <children>
-                           <Label text="Heure de depart" />
-                           <TextField fx:id="heureDepart" prefWidth="250.0" promptText="HH:MM"/>
-                           <Label fx:id="heureDepartError" styleClass="error-label" visible="false"/>
-                        </children>
-                     </VBox>
-                  </children>
-               </HBox>
-               
-               <!-- Submit Button -->
-               <VBox alignment="CENTER" style="-fx-padding: 10 0 20 0;">
-                  <Button text="Enregistrer" prefWidth="300.0" onAction="#handleSubmit" 
-                         style="-fx-font-size: 14px; -fx-padding: 12 20 12 20;"/>
-                <Button text="Importer (via Excel)" prefWidth="300.0" onAction="#handleImport" 
-                         style="-fx-font-size: 14px; -fx-padding: 12 20 12 20;"/>
-                                         <Button text="Imprimer" prefWidth="300.0" onAction="#handlePrint" 
-                         style="-fx-font-size: 14px; -fx-padding: 12 20 12 20;"/>
-                          <Button text="Annuler" prefWidth="300.0" onAction="#clearForm" 
-                         style="-fx-font-size: 14px; -fx-padding: 12 20 12 20;"/>
-               
-               </VBox>
-            </children>
-         </VBox>
-      </content>
-   </ScrollPane>
-</AnchorPane>
+            <!-- Téléphone GSM / Email -->
+            <Label text="Téléphone GSM" GridPane.rowIndex="7" GridPane.columnIndex="0"/>
+            <TextField fx:id="telephoneGSM" prefWidth="180" promptText="Numéro de GSM" GridPane.rowIndex="7" GridPane.columnIndex="1"/>
+            <Label text="Adresse email" GridPane.rowIndex="7" GridPane.columnIndex="2"/>
+            <TextField fx:id="email" prefWidth="180" promptText="exemple@email.com" GridPane.rowIndex="7" GridPane.columnIndex="3"/>
+
+            <!-- Accept CCIS -->
+            <CheckBox fx:id="accepteEnvoiCCIS" text="J'accepte de recevoir les envois de la CCIS"
+                      GridPane.rowIndex="8" GridPane.columnIndex="0" GridPane.columnSpan="4" style="-fx-padding: 10 0 0 0;"/>
+
+            <!-- Adresse de contact / Ville -->
+            <Label text="Adresse de contact" GridPane.rowIndex="9" GridPane.columnIndex="0"/>
+            <TextField fx:id="adresse" prefWidth="180" promptText="Adresse complète" GridPane.rowIndex="9" GridPane.columnIndex="1"/>
+            <Label text="Ville" GridPane.rowIndex="9" GridPane.columnIndex="2"/>
+            <TextField fx:id="ville" prefWidth="180" promptText="Nom de la ville" GridPane.rowIndex="9" GridPane.columnIndex="3"/>
+
+<Label text ="IDENTIFICATION DE L'ENTREPRISE :" styleClass="form-title" GridPane.rowIndex="10" GridPane.columnSpan="4"/>
+            <!-- Dénomination / Code ICE -->
+            <Label text="Dénomination" GridPane.rowIndex="11" GridPane.columnIndex="0"/>
+            <TextField fx:id="denomination" prefWidth="180" promptText="Dénomination" GridPane.rowIndex="11" GridPane.columnIndex="1"/>
+            <Label text="Code ICE" GridPane.rowIndex="11" GridPane.columnIndex="2"/>
+            <TextField fx:id="codeICE" prefWidth="180" promptText="Code ICE" GridPane.rowIndex="11" GridPane.columnIndex="3"/>
+
+            <!-- Représentant légal / Site web -->
+            <Label text="Représentant légal" GridPane.rowIndex="13" GridPane.columnIndex="0"/>
+            <TextField fx:id="nomRepresentantLegal" prefWidth="180" promptText="Nom du représentant" GridPane.rowIndex="13" GridPane.columnIndex="1"/>
+            <Label text="Site web" GridPane.rowIndex="13" GridPane.columnIndex="2"/>
+            <TextField fx:id="siteweb" prefWidth="180" promptText="www.exemple.com" GridPane.rowIndex="13" GridPane.columnIndex="3"/>
+
+            <!-- Forme juridique / Taille entreprise -->
+            <Label text="Forme juridique" GridPane.rowIndex="15" GridPane.columnIndex="0"/>
+            <ComboBox fx:id="formeJuridique" prefWidth="180" promptText="Sélectionnez la forme" GridPane.rowIndex="15" GridPane.columnIndex="1"/>
+            <Label text="Taille de l'entreprise" GridPane.rowIndex="15" GridPane.columnIndex="2"/>
+            <TextField fx:id="tailleEntreprise" prefWidth="180" promptText="Taille de l'entreprise" GridPane.rowIndex="15" GridPane.columnIndex="3"/>
+
+            <!-- Secteur d'activité / Activité -->
+            <Label text="Secteur d'activité" GridPane.rowIndex="17" GridPane.columnIndex="0"/>
+            <ComboBox fx:id="secteurActivite" prefWidth="180" promptText="Sélectionnez le secteur" GridPane.rowIndex="17" GridPane.columnIndex="1"/>
+            <Label text="Activité" GridPane.rowIndex="17" GridPane.columnIndex="2"/>
+            <TextField fx:id="activite" prefWidth="180" promptText="Description de l'activité" GridPane.rowIndex="17" GridPane.columnIndex="3"/>
+
+            <!-- Conseiller CCIS / Qualité du conseiller -->
+            <Label text="Conseiller CCIS" GridPane.rowIndex="19" GridPane.columnIndex="0"/>
+            <TextField fx:id="nomPrenomConseillerCCIS" prefWidth="180" promptText="Nom du conseiller" GridPane.rowIndex="19" GridPane.columnIndex="1"/>
+            <Label text="Qualité du conseiller" GridPane.rowIndex="19" GridPane.columnIndex="2"/>
+            <TextField fx:id="qualiteConseillerCCIS" prefWidth="180" promptText="Fonction/Qualité" GridPane.rowIndex="19" GridPane.columnIndex="3"/>
+
+            <!-- Date de depart / Heure de depart -->
+            <Label text="Date de depart" GridPane.rowIndex="21" GridPane.columnIndex="0"/>
+            <DatePicker fx:id="dateDepart" prefWidth="180" promptText="JJ/MM/AAAA" GridPane.rowIndex="21" GridPane.columnIndex="1"/>
+            <Label text="Heure de depart" GridPane.rowIndex="21" GridPane.columnIndex="2"/>
+            <TextField fx:id="heureDepart" prefWidth="180" promptText="HH:MM" GridPane.rowIndex="21" GridPane.columnIndex="3"/>
+
+            <!-- Boutons -->
+            <HBox spacing="10" alignment="CENTER" GridPane.rowIndex="24" GridPane.columnIndex="0" GridPane.columnSpan="4">
+                <children>
+                    <Button text="Enregistrer" prefWidth="180" onAction="#handleSubmit"/>
+                    <Button text="Imprimer" prefWidth="180" onAction="#handlePrint"/>
+                    <Button text="Annuler" prefWidth="180" onAction="#clearForm"/>
+                </children>
+            </HBox>
+        </GridPane>
+    </content>
+</ScrollPane>

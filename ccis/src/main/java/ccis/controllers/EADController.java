@@ -171,6 +171,7 @@ private void loadDemarches() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Enregistrer le fichier généré");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel Files", "*.xlsx"));
+        fileChooser.setInitialDirectory(new File("C:/fichiers application ccis/demarche administratif"));
         fileChooser.setInitialFileName("Extrait annuaire Demarche Administratif.xlsx");
         File output= fileChooser.showSaveDialog(null);
         if (output == null) {

@@ -2,7 +2,7 @@
 
 /* Styles généraux et couleurs principales */
 * {
-    -fx-primary-blue: #1a5fb4;
+    -fx-primary-blue: #0074B2;
     -fx-secondary-blue: #3584e4;
     -fx-light-blue: #dfeaf8;
     
@@ -18,7 +18,11 @@
     -fx-light-text: #ffffff;
     -fx-medium-text: #555555;
 }
-
+.form-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-white;
+}
 .root {
     -fx-background-color: #f8f9fa;
     -fx-font-family: "Segoe UI", "Arial", sans-serif;

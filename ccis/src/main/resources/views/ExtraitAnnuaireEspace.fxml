@@ -3,6 +3,10 @@
 <?import javafx.scene.layout.*?>
 
 <AnchorPane stylesheets="@/styles/ES.css" xmlns:fx="http://javafx.com/fxml" fx:controller="ccis.controllers.EAEController" styleClass="main-container">
+    <VBox spacing="8" AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.bottomAnchor="0">
+     <HBox styleClass="title-bar">
+        <Label text="Extrait Annuaire Espace Entreprise" styleClass="form-title"/>
+</HBox>
     <!-- Barre de recherche et boutons en haut -->
     <HBox layoutX="10" layoutY="10" spacing="10" alignment="CENTER_LEFT">
       <Region HBox.hgrow="ALWAYS" />
@@ -28,4 +32,5 @@
             <TableColumn fx:id="siteWebCol" text="Site Web" styleClass="table-column"/>
         </columns>
     </TableView>
+    </VBox>
 </AnchorPane>

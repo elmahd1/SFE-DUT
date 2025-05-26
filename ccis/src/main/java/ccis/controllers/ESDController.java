@@ -4,17 +4,29 @@ import ccis.dao.DemarcheAdministratifDao;
 import ccis.models.DemarcheAdministratif;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.FileChooser;
 
+import java.util.function.BiConsumer;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DateUtil;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.awt.Desktop;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.BiConsumer;
 
+import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -220,6 +232,7 @@ colMontant.setCellFactory(column -> new TableCell<DemarcheAdministratif, Double>
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Enregistrer le fichier généré");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel Files", "*.xlsx"));
+        fileChooser.setInitialDirectory(new File("C:/fichiers application ccis/demarche administratif"));
         fileChooser.setInitialFileName("Etat Suivi Demarche Administratif.xlsx");
         File output = fileChooser.showSaveDialog(null);
         if (output == null) {
@@ -268,5 +281,149 @@ private void onSearch() {
         tableView.setItems(filteredList);
     }
 }
+
+@FXML
+private void handleImport(ActionEvent event) {
+    FileChooser fileChooser = new FileChooser();
+    fileChooser.setTitle("Sélectionner un fichier Excel");
+    fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel Files", "*.xlsx"));
+    File file = fileChooser.showOpenDialog(null); // tu peux passer ici le Stage si tu l’as
+
+    if (file != null) {
+        importFromExcel(file);
+    }
+}
+private void importFromExcel(File file) {
+    try (FileInputStream fis = new FileInputStream(file);
+         Workbook workbook = new XSSFWorkbook(fis)) {
+
+        Sheet sheet = workbook.getSheetAt(0);
+        Row headerRow = sheet.getRow(0);
+
+        if (headerRow == null) {
+            System.out.println("Fichier Excel vide ou sans en-tête.");
+            return;
+        }
+
+        // Map header titles to their column indexes
+        Map<String, Integer> columnIndexes = new HashMap<>();
+        for (Cell cell : headerRow) {
+            columnIndexes.put(cell.getStringCellValue().trim(), cell.getColumnIndex());
+        }
+
+        // Define mapping from Excel column name to Java object setter
+        Map<String, BiConsumer<DemarcheAdministratif, String>> fieldMapping = new HashMap<>();
+        fieldMapping.put("Dénomination", (d, v) -> d.setDenomination(v));
+        fieldMapping.put("Type de demmande", (d, v) -> d.setTypeDemande(v));
+        fieldMapping.put("Forme juridique", (d, v) -> d.setFormeJuridique(v));
+        fieldMapping.put("Secteur Activité", (d, v) -> d.setSecteurActivite(v));
+        fieldMapping.put("Activité", (d, v) -> d.setActivite(v));
+        fieldMapping.put("Type", (d, v) -> d.setStatut(v));
+        fieldMapping.put("FIXE", (d, v) -> d.setFixe(v));
+        fieldMapping.put("GSM 1", (d, v) -> d.setGsm(v));
+        fieldMapping.put("Siège Sociale / Adresses", (d, v) -> d.setAdresse(v));
+        fieldMapping.put("Ville / Communité", (d, v) -> d.setVille(v));
+        fieldMapping.put("Interloculeur", (d, v) -> d.setInterlocuteur(v));
+        fieldMapping.put("Email 1", (d, v) -> d.setEmail(v));
+        fieldMapping.put("Date de contact", (d, v) -> d.setDateContact(v));
+        fieldMapping.put("Heure de contact", (d, v) -> d.setHeureContact(v));
+        fieldMapping.put("Objet de la visite", (d, v) -> d.setObjetVisite(v));
+        fieldMapping.put("Montant", (d, v) -> d.setMontant(Double.parseDouble(v)));
+        fieldMapping.put("Nom et Prénom", (d, v) -> d.setNomPrenom(v));
+        fieldMapping.put("Accepte Envoi CCIS", (d, v) -> d.setAccepteEnvoi(v));
+        fieldMapping.put("Site Web", (d, v) -> d.setSiteWeb(v));
+        fieldMapping.put("Nom du représentant légal", (d, v) -> d.setNomRepLegal(v));
+        fieldMapping.put("Date de dépôt", (d, v) -> d.setDateDepot(v));
+        fieldMapping.put("Heure de dépôt", (d, v) -> d.setHeureDepot(v));
+        fieldMapping.put("Nom et Prénom du conseiller CCIS", (d, v) -> d.setNomPrenomCCIS(v));
+        fieldMapping.put("Qualité du conseiller CCIS", (d, v) -> d.setQualiteCCIS(v));
+        fieldMapping.put("Etat du dossier fourni", (d, v) -> d.setEtatDossier(v));
+        fieldMapping.put("Suite accordée à la commande", (d, v) -> d.setSuiteDemande(v));
+        fieldMapping.put("0bservation", (d, v) -> d.setObservation(v));
+        fieldMapping.put("Date de délivrance", (d, v) -> d.setDateDelivrance(v));
+        fieldMapping.put("Heure de délivrance", (d, v) -> d.setHeureDelivrance(v));
+
+        for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+            Row row = sheet.getRow(i);
+            if (row == null) continue;
+
+            DemarcheAdministratif d = new DemarcheAdministratif();
+
+            for (String header : fieldMapping.keySet()) {
+                Integer colIndex = columnIndexes.get(header);
+                if (colIndex == null) continue;
+
+                Cell cell = row.getCell(colIndex);
+                String value = getCellAsString(cell);
+
+                try {
+                    fieldMapping.get(header).accept(d, value);
+                } catch (Exception e) {
+                    System.out.println("Erreur lors du traitement de la colonne '" + header + "' à la ligne " + (i + 1) + ": " + e.getMessage());
+                }
+            }
+
+            new DemarcheAdministratifDao().insertDemarche(d);
+        }
+
+        
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Succès");
+        alert.setHeaderText(null);
+        alert.setContentText("L'importation a été effectuée avec succès!");
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+private String getCellAsString(Cell cell) {
+    if (cell == null) return "";
+    switch (cell.getCellType()) {
+        case STRING: 
+            return cell.getStringCellValue();
+        case NUMERIC:
+            if (DateUtil.isCellDateFormatted(cell)) {
+                // Format dates properly
+                java.util.Date date = cell.getDateCellValue();
+                return new java.text.SimpleDateFormat("yyyy-MM-dd").format(date);
+            } else {
+                // Check if this is the Montant column
+                int columnIndex = cell.getColumnIndex();
+                String columnHeader = cell.getSheet().getRow(0).getCell(columnIndex).getStringCellValue();
+                if ("Montant".equals(columnHeader)) {
+                    // Use DecimalFormat for consistent 2 decimal places
+                    java.text.DecimalFormat df = new java.text.DecimalFormat("0.00");
+                    return df.format(cell.getNumericCellValue());
+                }
+                // For other numeric values, return as is
+                return String.valueOf((int) cell.getNumericCellValue());
+            }
+        case BOOLEAN: 
+            return String.valueOf(cell.getBooleanCellValue());
+        case FORMULA:
+            try {
+                if (DateUtil.isCellDateFormatted(cell)) {
+                    java.util.Date date = cell.getDateCellValue();
+                    return new java.text.SimpleDateFormat("yyyy-MM-dd").format(date);
+                }
+                // Check if formula result is in Montant column
+                int columnIndex = cell.getColumnIndex();
+                String columnHeader = cell.getSheet().getRow(0).getCell(columnIndex).getStringCellValue();
+                if ("Montant".equals(columnHeader)) {
+                    java.text.DecimalFormat df = new java.text.DecimalFormat("0.00");
+                    return df.format(cell.getNumericCellValue());
+                }
+                return String.valueOf((int) cell.getNumericCellValue());
+            } catch (IllegalStateException e) {
+                return cell.getStringCellValue();
+            }
+        default: 
+            return "";
+    }
+}
+        // Fonction d'aide pour les cases à cocher
+        String caseACocher(boolean value) {
+            return value ? "✓" : "☐";
+        }
 
 }
