@@ -8,8 +8,11 @@ ccis\dao\DemarcheAdministratifDao.class
 ccis\controllers\GrapheEspaceController$2.class
 ccis\controllers\EADController.class
 ccis\controllers\GrapheDemarcheController$3.class
+ccis\controllers\RapportDemarcheController.class
 ccis\config\JDBCConnection.class
 ccis\controllers\DemarcheFicheController.class
+ccis\controllers\RapportDemarcheController$RecetteRow.class
+ccis\controllers\RapportEspaceController.class
 ccis\models\Prospection.class
 ccis\controllers\EAEController.class
 ccis\controllers\ESEController$1.class
@@ -21,6 +24,7 @@ ccis\controllers\GrapheDemarcheController$2.class
 ccis\controllers\GrapheEspaceController.class
 ccis\models\DemarcheAdministratif.class
 ccis\controllers\ESDController$1.class
+ccis\controllers\RapportDemarcheController$IndicateurRow.class
 ccis\dao\ProspectionDAO.class
 ccis\App.class
 ccis\controllers\GrapheDemarcheController$1.class
@@ -30,7 +34,9 @@ ccis\controllers\GrapheDemarcheController$ObjetVisiteData.class
 ccis\controllers\GrapheEspaceController$ObjetVisiteDetailData.class
 ccis\controllers\MainController.class
 ccis\models\EspaceEntreprise.class
+ccis\controllers\RapportEspaceController$IndicateurRow.class
 ccis\controllers\RecapitulatifController$1.class
+ccis\controllers\RapportEspaceController$RapportRow.class
 ccis\controllers\FicheProspectionController.class
 ccis\controllers\EspaceFicheController.class
 ccis\controllers\GrapheDemarcheController$DelaiMoyenData.class
@@ -40,3 +46,4 @@ ccis\controllers\GrapheDemarcheController$4.class
 ccis\controllers\GrapheDemarcheController$FormeJuridiqueData.class
 ccis\controllers\GrapheEspaceController$3.class
 ccis\dao\EspaceEntrepriseDAO.class
+ccis\controllers\RapportDemarcheController$SimpleRow.class

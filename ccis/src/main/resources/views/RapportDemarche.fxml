@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.cell.*?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.ScrollPane?>
+
+<ScrollPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="ccis.controllers.RapportDemarcheController"
+            fitToWidth="true"
+            hbarPolicy="NEVER"
+            vbarPolicy="AS_NEEDED"
+            stylesheets="@/styles/Rapport.css"
+            prefHeight="600.0" prefWidth="1265.0">
+    <content>
+        <GridPane hgap="16" vgap="8" style="-fx-padding: 16;">
+            <columnConstraints>
+                <!-- <ColumnConstraints minWidth="180"/>
+                <ColumnConstraints minWidth="220"/>
+                <ColumnConstraints minWidth="180"/>
+                <ColumnConstraints minWidth="200"/> -->
+            </columnConstraints>
+
+<DatePicker fx:id="date1" GridPane.columnIndex="0" GridPane.rowIndex="3" promptText="debut de la periode couverte"/>
+<DatePicker fx:id="date2" GridPane.columnIndex="1" GridPane.rowIndex="3" promptText="fin de la periode couverte"/>
+<DatePicker fx:id="date3" GridPane.columnIndex="0" GridPane.rowIndex="4" promptText="Date d’élaboration"/>
+
+
+
+<TableView prefHeight="200" fx:id="table1" prefWidth="900" GridPane.columnIndex="0" GridPane.rowIndex="5" editable="true">
+    <columns>
+        <TableColumn fx:id="col1" text="Indicateurs de performance :" prefWidth="150"/>
+        <TableColumn fx:id="col2" text="Objectif partiel relatif à la période [B]*" prefWidth="150"/>
+        <TableColumn fx:id="col3" text="Réalisé durant la période couverte [C]" prefWidth="150"/>
+        <TableColumn fx:id="col4" text="Taux de réalisation par rapport à l’objectif partiel [C]/ [B]" prefWidth="150"/>
+    </columns>
+</TableView>
+<Label fx:id="label1" text="* Période de référence  premier semestre " GridPane.columnIndex="0" GridPane.rowIndex="6"/>
+
+<Label text="Nombre de ressortissants accueillis par objet de la visite et par lieu" GridPane.columnIndex="0" GridPane.rowIndex="7"/>
+<TableView prefHeight="200" fx:id="table2" prefWidth="900" GridPane.columnIndex="0" GridPane.rowIndex="8" editable="true">
+    <columns>
+        <TableColumn fx:id="col5" text="Objet de la visite :" prefWidth="150"/>
+        <TableColumn fx:id="col6" text="Nombre de demandes :" prefWidth="150"/>
+    </columns>
+</TableView>
+
+<Label text="Nombre de de demandes de documents administratifs acceptées par type de document et par lieu:" GridPane.columnIndex="0" GridPane.rowIndex="9"/>
+<TableView prefHeight="200" fx:id="table3" prefWidth="900" GridPane.columnIndex="0" GridPane.rowIndex="10" editable="true">
+    <columns>
+        <TableColumn fx:id="col7" text="Étiquettes de lignes" prefWidth="150"/>
+        <TableColumn fx:id="col8" text="Le nombre de demandes :" prefWidth="150"/>
+    </columns>
+</TableView>
+<PieChart fx:id="pieChart" GridPane.columnIndex="0" GridPane.rowIndex="11"/>
+
+<Label text="Etat de traitement des demandes de documents (acceptés / Rejetés):" GridPane.columnIndex="0" GridPane.rowIndex="12"/>
+<TableView prefHeight="200" fx:id="table4" prefWidth="900" GridPane.columnIndex="0" GridPane.rowIndex="13" editable="true">
+    <columns>
+        <TableColumn fx:id="col9" text="Etat de traitement de la demande" prefWidth="150"/>
+        <TableColumn fx:id="col10" text="Nombre des demandes :" prefWidth="150"/>
+    </columns>
+</TableView>
+
+<Label text="Recettes générées par document administratif et par lieu:" GridPane.columnIndex="0" GridPane.rowIndex="14"/>
+<TableView prefHeight="200" fx:id="table5" prefWidth="900" GridPane.columnIndex="0" GridPane.rowIndex="15" editable="true">
+    <columns>
+        <TableColumn fx:id="col11" text="Document administratif" prefWidth="150"/>
+        <TableColumn fx:id="col12" text="Somme de Recette en dh" prefWidth="150"/>
+    </columns>
+</TableView>
+
+
+<BarChart fx:id="barChart"  GridPane.columnIndex="0" GridPane.rowIndex="16">
+    <xAxis>
+        <CategoryAxis fx:id="xAxis1" label="Document administratif" />
+    </xAxis>
+    <yAxis>
+        <NumberAxis fx:id="yAxis1" label="Somme de Recette en dh" />
+    </yAxis>
+</BarChart>
+
+
+<TextArea fx:id="rapportTextArea" promptText="Analyse des donnees" GridPane.columnSpan="4" GridPane.rowIndex="17" wrapText="true" editable="true" prefHeight="200"/>
+<Button onAction="generateRap" text="Générer le rapport" GridPane.columnIndex="0" GridPane.rowIndex="18"/>        </GridPane>
+    </content>
+</ScrollPane>

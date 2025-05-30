@@ -22,11 +22,12 @@
                 <ColumnConstraints minWidth="180"/>
                 <ColumnConstraints minWidth="200"/> -->
             </columnConstraints>
-
-<DatePicker fx:id="date1" GridPane.columnIndex="0" GridPane.rowIndex="3" promptText="debut de la periode couverte"/>
-<DatePicker fx:id="date2" GridPane.columnIndex="0" GridPane.rowIndex="4" promptText="fin de la periode couverte"/>
+<Label text="dates de début et fin de la période couverte" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+<DatePicker fx:id="date1" GridPane.columnIndex="1" GridPane.rowIndex="3" promptText="debut de la periode couverte"/>
+<DatePicker fx:id="date2" GridPane.columnIndex="2" GridPane.rowIndex="3" promptText="fin de la periode couverte"/>
+<DatePicker fx:id="date3" GridPane.columnIndex="0" GridPane.rowIndex="4" promptText="Date d’élaboration"/>
 <Label prefWidth="300" text="SUIVI DE PERFORMANCE Back Office" GridPane.columnIndex="0" GridPane.rowIndex="5" styleClass="title-label"/>
-<TableView prefHeight="180" prefWidth="900" fx:id="bo" GridPane.columnIndex="0" GridPane.rowIndex="6" styleClass="table-view" editable="true">
+<TableView prefHeight="200" prefWidth="900" fx:id="bo" GridPane.columnIndex="0" GridPane.rowIndex="6" styleClass="table-view" editable="true">
     <columns>
         <TableColumn fx:id="col1" text="Indicateur" prefWidth="150"/>
         <TableColumn fx:id="col2" text="Fréquence" prefWidth="150"/>
@@ -38,7 +39,7 @@
 </TableView>
 
 <!-- Table 2 -->
-<TableView prefHeight="225" fx:id="table2" prefWidth="900" GridPane.columnIndex="0" GridPane.rowIndex="7" styleClass="table-view" editable="true">
+<TableView prefHeight="200" fx:id="table2" prefWidth="900" GridPane.columnIndex="0" GridPane.rowIndex="7" styleClass="table-view" editable="true">
     <columns>
         <TableColumn fx:id="col7" text="Indicateurs d’activité :" prefWidth="150"/>
         <TableColumn fx:id="col8" text="Objectifs annuel [B]" prefWidth="150"/>
@@ -49,7 +50,7 @@
 
 <Label text="B * Chiffres de référence : Chiffres Objectifs de performance (tableau de Suivi de Performance)" GridPane.columnIndex="0" GridPane.rowIndex="8" styleClass="title-label"/>
 
-<BarChart fx:id="chart1"  prefWidth="1200" prefHeight="450" GridPane.columnIndex="0" GridPane.rowIndex="9">
+<BarChart fx:id="chart1"  GridPane.columnIndex="0" GridPane.rowIndex="9">
     <xAxis>
         <CategoryAxis fx:id="xAxis1" label="Catégorie" />
     </xAxis>
@@ -73,7 +74,7 @@
 </TableView>
 
 <!-- Table 4, moved to a unique row -->
-<TableView prefHeight="225" fx:id="table4" prefWidth="900" GridPane.columnIndex="0" GridPane.rowIndex="13" styleClass="table-view" editable="true">
+<TableView prefHeight="250" fx:id="table4" prefWidth="900" GridPane.columnIndex="0" GridPane.rowIndex="13" styleClass="table-view" editable="true">
     <columns>
         <TableColumn fx:id="col17" text="Indicateurs d’activité :" prefWidth="150"/>
         <TableColumn fx:id="col18" text="Objectifs annuel [B]" prefWidth="150"/>
@@ -82,7 +83,7 @@
     </columns>
 </TableView>
 
-<BarChart fx:id="chart2" prefWidth="1200" prefHeight="450" GridPane.columnIndex="0" GridPane.rowIndex="14">
+<BarChart fx:id="chart2"  GridPane.columnIndex="0" GridPane.rowIndex="14">
     <xAxis>
         <CategoryAxis fx:id="xAxis2" label="Catégorie" />
     </xAxis>
@@ -92,6 +93,6 @@
 </BarChart>
 
 <TextArea fx:id="rapportTextArea" promptText="Analyse des donnees" GridPane.columnSpan="4" GridPane.rowIndex="15" wrapText="true" editable="true" prefHeight="200"/>
-<Button fx:id="btnGenerer" text="Générer le rapport" GridPane.columnIndex="0" GridPane.rowIndex="16"/>        </GridPane>
+<Button onAction="generateRap" text="Générer le rapport" GridPane.columnIndex="0" GridPane.rowIndex="16"/>        </GridPane>
     </content>
 </ScrollPane>
