@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane stylesheets="@/styles/ES.css" xmlns:fx="http://javafx.com/fxml" fx:controller="ccis.controllers.IndicateurPerformanceController" styleClass="main-container">
+   
+    <VBox spacing="8" AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.bottomAnchor="0">
+      <HBox styleClass="title-bar">
+       <Label text="Indicateur de performance" styleClass="form-title"/>
+</HBox>
+    <!-- Barre de recherche et boutons en haut -->
+    <HBox layoutX="10" layoutY="10" spacing="10" alignment="CENTER_LEFT">
+      <Region HBox.hgrow="ALWAYS" />
+        <Button onAction="#generate" mnemonicParsing="false" text="generer le document" styleClass="export-button"/>
+ </HBox>
+    
+    <!-- TableView avec marge en haut pour laisser de la place à la barre de recherche -->
+    <TableView fx:id="tableView" layoutX="10" layoutY="50" prefWidth="1250" prefHeight="560" styleClass="table-view" editable="true">
+        <columns>
+            <TableColumn fx:id="indicPerf" text="Indicateur Performance" styleClass="table-column"/>
+            <TableColumn fx:id="description" text="Description" styleClass="table-column"/>
+            <TableColumn fx:id="frequence" text="Frequence" styleClass="table-column"/>
+            <TableColumn fx:id="ProposObj" text="Proposition d'objectifs" styleClass="table-column"/>
+            <TableColumn fx:id="ValActuelle" text="Valeur Actuelle" styleClass="table-column"/>
+
+        </columns>
+    </TableView>
+    </VBox>
+</AnchorPane>

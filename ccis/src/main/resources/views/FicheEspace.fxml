@@ -36,10 +36,19 @@
             <TextField fx:id="heureContact" prefWidth="180" promptText="HH:MM" GridPane.rowIndex="1" GridPane.columnIndex="3"/>
 
             <!-- Objet de visite / Statut -->
-            <Label text="Objet de visite" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-            <ComboBox fx:id="objetVisite" prefWidth="180" promptText="Sélectionnez l'objet" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
-            <Label text="Statut" GridPane.rowIndex="3" GridPane.columnIndex="2"/>
-            <ComboBox fx:id="statut" prefWidth="180" promptText="Sélectionnez le statut" GridPane.rowIndex="3" GridPane.columnIndex="3"/>
+           <!-- ... -->
+<Label text="Objet de visite" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+<HBox spacing="10" GridPane.rowIndex="3" GridPane.columnIndex="1" GridPane.columnSpan="3">
+    <children>
+        <CheckBox fx:id="objet1" text="Programmes d'appui / aide aux entreprises"/>
+        <CheckBox fx:id="objet2" text="Demarches administratives"/>
+        <CheckBox fx:id="objet3" text="Annuaire des entreprises"/>
+        <CheckBox fx:id="objet4" text="Repertoire de contact des administrations"/>
+    </children>
+</HBox>
+<!-- ... -->
+           <Label text="Statut" GridPane.rowIndex="3" GridPane.columnIndex="2"/>
+            <ComboBox fx:id="statut" prefWidth="180" promptText="Sélectionnez le statut" GridPane.rowIndex="3" GridPane.columnIndex="4"/>
 
 
 <Label text ="IDENTIFICATION DU DEMANDEUR :" styleClass="form-title" GridPane.rowIndex="4" GridPane.columnSpan="1"/>
@@ -82,7 +91,7 @@
             <Label text="Forme juridique" GridPane.rowIndex="15" GridPane.columnIndex="0"/>
             <ComboBox fx:id="formeJuridique" prefWidth="180" promptText="Sélectionnez la forme" GridPane.rowIndex="15" GridPane.columnIndex="1"/>
             <Label text="Taille de l'entreprise" GridPane.rowIndex="15" GridPane.columnIndex="2"/>
-            <TextField fx:id="tailleEntreprise" prefWidth="180" promptText="Taille de l'entreprise" GridPane.rowIndex="15" GridPane.columnIndex="3"/>
+            <ComboBox fx:id="tailleEntreprise" prefWidth="180" promptText="Taille de l'entreprise" GridPane.rowIndex="15" GridPane.columnIndex="3"/>
 
             <!-- Secteur d'activité / Activité -->
             <Label text="Secteur d'activité" GridPane.rowIndex="17" GridPane.columnIndex="0"/>
@@ -101,7 +110,8 @@
             <DatePicker fx:id="dateDepart" prefWidth="180" promptText="JJ/MM/AAAA" GridPane.rowIndex="21" GridPane.columnIndex="1"/>
             <Label text="Heure de depart" GridPane.rowIndex="21" GridPane.columnIndex="2"/>
             <TextField fx:id="heureDepart" prefWidth="180" promptText="HH:MM" GridPane.rowIndex="21" GridPane.columnIndex="3"/>
-
+            <Label text="Recommandation" GridPane.rowIndex="22" GridPane.columnIndex="0"/>
+            <TextField fx:id="recommandation" prefWidth="180"  GridPane.rowIndex="22" GridPane.columnIndex="1"/>
             <!-- Boutons -->
             <HBox spacing="10" alignment="CENTER" GridPane.rowIndex="24" GridPane.columnIndex="0" GridPane.columnSpan="4">
                 <children>

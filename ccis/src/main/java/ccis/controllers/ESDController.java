@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -127,6 +128,7 @@ public class ESDController {
         colVilleCommunite.setCellValueFactory(new PropertyValueFactory<>("ville"));
         colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
 colMontant.setCellValueFactory(new PropertyValueFactory<>("montant"));
+
 colMontant.setCellFactory(column -> new TableCell<DemarcheAdministratif, Double>() {
     @Override
     protected void updateItem(Double montant, boolean empty) {
@@ -181,53 +183,76 @@ colMontant.setCellFactory(column -> new TableCell<DemarcheAdministratif, Double>
 
     // Créer la ligne d'en-têtes
     Row headerRow = sheet.createRow(0);
-    String[] headers = {
-        "Date Contact", "Heure Contact", "Type Demande", "Type", "Objet Visite", "Montant",
-        "Nom et Prénom", "Fixe", "GSM", "Email", "Accepte Envoi CCIS", "Site Web",
-        "Adresse Siege", "Ville/Commune", "Dénomination", "Nom Représentant", "Forme Juridique",
-        "Date Depot", "Heure Depot", "Secteur Activité", "Activité", "Nom Conseiller CCIS",
-        "Qualité Conseiller CCIS", "Etat Dossier", "Suite Commande", "Observation",
-        "Date Délivrance", "Heure Délivrance"
-    };
 
-    for (int i = 0; i < headers.length; i++) {
-        headerRow.createCell(i).setCellValue(headers[i]);
-    }
+String[] headers = {
+    "Dénomination",
+    "Type de demmande",
+    "Forme juridique",
+    "Secteur Activité",
+    "Activité",
+    "Type",
+    "FIXE",
+    "GSM",
+    "Siège Sociale / Adresses",
+    "Ville / Communité",
+    "Email",
+    "Date de contact",
+    "Heure de contact",
+    "Objet de la visite",
+    "Montant",
+    "Nom et Prénom",
+    "Accepte Envoi CCIS",
+    "Site Web",
+    "Nom du représentant légal",
+    "Date de dépôt",
+    "Heure de dépôt",
+    "Nom et Prénom du conseiller CCIS",
+    "Qualité du conseiller CCIS",
+    "Etat du dossier fourni",
+    "Suite accordée à la commande",
+    "0bservation",
+    "Date de délivrance",
+    "Heure de délivrance"
+};
 
-    // Ajouter les données
-  List<DemarcheAdministratif> demarches = dao.getAllDemarches();
-  int rowNum = 1;
-  for (DemarcheAdministratif d : demarches) {
-      Row row = sheet.createRow(rowNum++);
-      row.createCell(0).setCellValue(d.getDateContact());
-      row.createCell(1).setCellValue(d.getHeureContact());
-      row.createCell(2).setCellValue(d.getTypeDemande());
-      row.createCell(3).setCellValue(d.getStatut());
-      row.createCell(4).setCellValue(d.getObjetVisite());
-      row.createCell(5).setCellValue(d.getMontant());
-       row.createCell(6).setCellValue(d.getNomPrenom());
-      row.createCell(7).setCellValue(d.getFixe());
-      row.createCell(8).setCellValue(d.getGsm());
-      row.createCell(9).setCellValue(d.getEmail());
-      row.createCell(10).setCellValue(d.getAccepteEnvoi());
-      row.createCell(11).setCellValue(d.getSiteWeb());
-      row.createCell(12).setCellValue(d.getAdresse());
-      row.createCell(13).setCellValue(d.getVille());
-      row.createCell(14).setCellValue(d.getDenomination());
-      row.createCell(15).setCellValue(d.getNomRepLegal());
-      row.createCell(16).setCellValue(d.getFormeJuridique());
-      row.createCell(17).setCellValue(d.getDateDepot());
-      row.createCell(18).setCellValue(d.getHeureDepot());
-      row.createCell(19).setCellValue(d.getSecteurActivite());
-      row.createCell(20).setCellValue(d.getActivite());
-      row.createCell(21).setCellValue(d.getNomPrenomCCIS());
-      row.createCell(22).setCellValue(d.getQualiteCCIS());
-      row.createCell(23).setCellValue(d.getEtatDossier());
-      row.createCell(24).setCellValue(d.getSuiteDemande());
-      row.createCell(25).setCellValue(d.getObservation());
-      row.createCell(26).setCellValue(d.getDateDelivrance());
-      row.createCell(27).setCellValue(d.getHeureDelivrance());
-  }
+for (int i = 0; i < headers.length; i++) {
+    headerRow.createCell(i).setCellValue(headers[i]);
+}
+
+// Ajouter les données
+List<DemarcheAdministratif> demarches = dao.getAllDemarches();
+int rowNum = 1;
+for (DemarcheAdministratif d : demarches) {
+    Row row = sheet.createRow(rowNum++);
+    row.createCell(0).setCellValue(d.getDenomination());
+    row.createCell(1).setCellValue(d.getTypeDemande());
+    row.createCell(2).setCellValue(d.getFormeJuridique());
+    row.createCell(3).setCellValue(d.getSecteurActivite());
+    row.createCell(4).setCellValue(d.getActivite());
+    row.createCell(5).setCellValue(d.getStatut());
+    row.createCell(6).setCellValue(d.getFixe() != null ? d.getFixe() : "");
+    row.createCell(7).setCellValue(d.getGsm() != null ? d.getGsm() : "");
+    row.createCell(8).setCellValue(d.getAdresse());
+    row.createCell(9).setCellValue(d.getVille());
+    row.createCell(10).setCellValue(d.getEmail());
+    row.createCell(11).setCellValue(d.getDateContact());
+    row.createCell(12).setCellValue(d.getHeureContact());
+    row.createCell(13).setCellValue(d.getObjetVisite());
+    row.createCell(14).setCellValue(d.getMontant() != null ? d.getMontant() : 0.0);
+    row.createCell(15).setCellValue(d.getNomPrenom());
+    row.createCell(16).setCellValue(d.getAccepteEnvoi());
+    row.createCell(17).setCellValue(d.getSiteWeb());
+    row.createCell(18).setCellValue(d.getNomRepLegal());
+    row.createCell(19).setCellValue(d.getDateDepot());
+    row.createCell(20).setCellValue(d.getHeureDepot());
+    row.createCell(21).setCellValue(d.getNomPrenomCCIS());
+    row.createCell(22).setCellValue(d.getQualiteCCIS());
+    row.createCell(23).setCellValue(d.getEtatDossier());
+    row.createCell(24).setCellValue(d.getSuiteDemande());
+    row.createCell(25).setCellValue(d.getObservation());
+    row.createCell(26).setCellValue(d.getDateDelivrance());
+    row.createCell(27).setCellValue(d.getHeureDelivrance());
+}
 
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Enregistrer le fichier généré");
@@ -314,23 +339,41 @@ private void importFromExcel(File file) {
         // Define mapping from Excel column name to Java object setter
         Map<String, BiConsumer<DemarcheAdministratif, String>> fieldMapping = new HashMap<>();
         fieldMapping.put("Dénomination", (d, v) -> d.setDenomination(v));
-        fieldMapping.put("Type de demmande", (d, v) -> d.setTypeDemande(v));
+        fieldMapping.put("Type de demmande", (d, v) -> {
+            if ("DemandeDoc".equalsIgnoreCase(v.trim())) {
+            d.setTypeDemande("Demande de document administratif");
+            } else if ("DemandeInfo".equalsIgnoreCase(v.trim())) {
+            d.setTypeDemande("Demande d’information /renseignement à propos d’un document administratif");
+            } else {
+            d.setTypeDemande(v);
+            }
+        });
         fieldMapping.put("Forme juridique", (d, v) -> d.setFormeJuridique(v));
         fieldMapping.put("Secteur Activité", (d, v) -> d.setSecteurActivite(v));
         fieldMapping.put("Activité", (d, v) -> d.setActivite(v));
         fieldMapping.put("Type", (d, v) -> d.setStatut(v));
         fieldMapping.put("FIXE", (d, v) -> d.setFixe(v));
         fieldMapping.put("GSM 1", (d, v) -> d.setGsm(v));
+        fieldMapping.put("GSM", (d, v) -> d.setGsm(v));
         fieldMapping.put("Siège Sociale / Adresses", (d, v) -> d.setAdresse(v));
         fieldMapping.put("Ville / Communité", (d, v) -> d.setVille(v));
-        fieldMapping.put("Interloculeur", (d, v) -> d.setInterlocuteur(v));
+        fieldMapping.put("Interlocuteur", (d, v) -> d.setInterlocuteur(v));
         fieldMapping.put("Email 1", (d, v) -> d.setEmail(v));
         fieldMapping.put("Date de contact", (d, v) -> d.setDateContact(v));
         fieldMapping.put("Heure de contact", (d, v) -> d.setHeureContact(v));
         fieldMapping.put("Objet de la visite", (d, v) -> d.setObjetVisite(v));
         fieldMapping.put("Montant", (d, v) -> d.setMontant(Double.parseDouble(v)));
+        fieldMapping.put("montant", (d, v) -> d.setMontant(Double.parseDouble(v)));
         fieldMapping.put("Nom et Prénom", (d, v) -> d.setNomPrenom(v));
-        fieldMapping.put("Accepte Envoi CCIS", (d, v) -> d.setAccepteEnvoi(v));
+        fieldMapping.put("Accepte Envoi CCIS", (d, v) -> {
+            if ("1".equals(v.trim())) {
+            d.setAccepteEnvoi("Oui");
+            } else if ("0".equals(v.trim())) {
+            d.setAccepteEnvoi("Non");
+            } else {
+            d.setAccepteEnvoi(v); // fallback to original value
+            }
+        });
         fieldMapping.put("Site Web", (d, v) -> d.setSiteWeb(v));
         fieldMapping.put("Nom du représentant légal", (d, v) -> d.setNomRepLegal(v));
         fieldMapping.put("Date de dépôt", (d, v) -> d.setDateDepot(v));
@@ -371,7 +414,7 @@ private void importFromExcel(File file) {
         alert.setTitle("Succès");
         alert.setHeaderText(null);
         alert.setContentText("L'importation a été effectuée avec succès!");
-
+loadDemarches();
     } catch (Exception e) {
         e.printStackTrace();
     }
@@ -379,45 +422,82 @@ private void importFromExcel(File file) {
 private String getCellAsString(Cell cell) {
     if (cell == null) return "";
     switch (cell.getCellType()) {
-        case STRING: 
-            return cell.getStringCellValue();
+        case STRING:
+            String value = cell.getStringCellValue();
+            // Try to detect Excel serial date format (e.g., "45000" or similar)
+            if (value.matches("^4[0-9]{4}$")) {
+                try {
+                    double excelDate = Double.parseDouble(value);
+                    java.util.Date date = DateUtil.getJavaDate(excelDate);
+                    return new SimpleDateFormat("yyyy-MM-dd").format(date);
+                } catch (Exception e) {
+                    // Not a valid Excel date, return as is
+                    return value;
+                }
+            }
+            return value;
         case NUMERIC:
             if (DateUtil.isCellDateFormatted(cell)) {
-                // Format dates properly
-                java.util.Date date = cell.getDateCellValue();
-                return new java.text.SimpleDateFormat("yyyy-MM-dd").format(date);
+                return new SimpleDateFormat("yyyy-MM-dd").format(cell.getDateCellValue());
             } else {
                 // Check if this is the Montant column
                 int columnIndex = cell.getColumnIndex();
                 String columnHeader = cell.getSheet().getRow(0).getCell(columnIndex).getStringCellValue();
-                if ("Montant".equals(columnHeader)) {
-                    // Use DecimalFormat for consistent 2 decimal places
+                if ("Montant".equalsIgnoreCase(columnHeader)) {
                     java.text.DecimalFormat df = new java.text.DecimalFormat("0.00");
                     return df.format(cell.getNumericCellValue());
                 }
-                // For other numeric values, return as is
-                return String.valueOf((int) cell.getNumericCellValue());
+                // If value looks like an Excel date serial (e.g., 45000), convert to date
+                double num = cell.getNumericCellValue();
+                if (num >= 40000 && num < 60000) { // Excel date serial range (approx 2009-2050)
+                    java.util.Date date = DateUtil.getJavaDate(num);
+                    return new SimpleDateFormat("yyyy-MM-dd").format(date);
+                }
+                // For other numeric values, return as int if possible
+                if (num == (int) num) {
+                    return String.valueOf((int) num);
+                } else {
+                    return String.valueOf(num);
+                }
             }
-        case BOOLEAN: 
+        case BOOLEAN:
             return String.valueOf(cell.getBooleanCellValue());
         case FORMULA:
             try {
                 if (DateUtil.isCellDateFormatted(cell)) {
                     java.util.Date date = cell.getDateCellValue();
-                    return new java.text.SimpleDateFormat("yyyy-MM-dd").format(date);
+                    return new SimpleDateFormat("yyyy-MM-dd").format(date);
                 }
-                // Check if formula result is in Montant column
                 int columnIndex = cell.getColumnIndex();
                 String columnHeader = cell.getSheet().getRow(0).getCell(columnIndex).getStringCellValue();
-                if ("Montant".equals(columnHeader)) {
+                if ("Montant".equalsIgnoreCase(columnHeader)) {
                     java.text.DecimalFormat df = new java.text.DecimalFormat("0.00");
                     return df.format(cell.getNumericCellValue());
                 }
-                return String.valueOf((int) cell.getNumericCellValue());
+                double num = cell.getNumericCellValue();
+                if (num >= 40000 && num < 60000) {
+                    java.util.Date date = DateUtil.getJavaDate(num);
+                    return new SimpleDateFormat("yyyy-MM-dd").format(date);
+                }
+                if (num == (int) num) {
+                    return String.valueOf((int) num);
+                } else {
+                    return String.valueOf(num);
+                }
             } catch (IllegalStateException e) {
-                return cell.getStringCellValue();
+                String valueFormula = cell.getStringCellValue();
+                if (valueFormula.matches("^4[0-9]{4}$")) {
+                    try {
+                        double excelDate = Double.parseDouble(valueFormula);
+                        java.util.Date date = DateUtil.getJavaDate(excelDate);
+                        return new SimpleDateFormat("yyyy-MM-dd").format(date);
+                    } catch (Exception ex) {
+                        return valueFormula;
+                    }
+                }
+                return valueFormula;
             }
-        default: 
+        default:
             return "";
     }
 }
@@ -425,5 +505,31 @@ private String getCellAsString(Cell cell) {
         String caseACocher(boolean value) {
             return value ? "✓" : "☐";
         }
+@FXML
+private void ecraser(ActionEvent event) {
+    // Demande confirmation à l'utilisateur
+    Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+    confirm.setTitle("Confirmation");
+    confirm.setHeaderText("Voulez-vous vraiment écraser toutes les démarches existantes ?");
+    confirm.setContentText("Cette action supprimera toutes les démarches et importera celles du fichier sélectionné.");
+    if (confirm.showAndWait().orElse(ButtonType.CANCEL) != ButtonType.OK) {
+        return;
+    }
 
+    // Supprimer toutes les démarches
+    dao.deleteAll();
+
+    // Sélectionner le fichier à importer
+    FileChooser fileChooser = new FileChooser();
+    fileChooser.setTitle("Sélectionner un fichier Excel");
+    fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel Files", "*.xlsx"));
+    File file = fileChooser.showOpenDialog(null);
+
+    if (file != null) {
+        importFromExcel(file);
+        // Recharger la table
+        loadDemarches();
+        showAlert("Succès", "Les démarches ont été écrasées et réimportées avec succès !");
+    }
+}
 }

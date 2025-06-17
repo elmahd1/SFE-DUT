@@ -29,7 +29,7 @@
                     <Menu text="Accueil">
                         <MenuItem text="Accueil" onAction="#home"/>
                     </Menu>
-                    <Menu text="Demarche Administratif">
+                    <Menu text="Demarche Administrative">
                         <MenuItem text="Fiche" onAction="#fa"/>
                         <MenuItem text="Etat suivi" onAction="#esd"/>
                         <MenuItem text="Extrait de l'annuaire" onAction="#ead"/>
@@ -46,6 +46,9 @@
                     <Menu text="Prospection Nationale">
                         <MenuItem text="Fiche" onAction="#fp"/>
                         <MenuItem text="Recapitulatif d'activites" onAction="#ra"/>
+                        <MenuItem text="Indicateur de performance" onAction="#ip"/>
+                        <MenuItem text ="Enquete satisfaction" onAction="#eqs" />
+                        <MenuItem text="Questionnaire d'indentification des besoins" onAction="#qib"/>
                     </Menu>
                     <!-- Right-aligned user section -->
                     <Menu text="Aide">

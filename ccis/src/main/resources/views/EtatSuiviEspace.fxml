@@ -13,12 +13,13 @@
         <TextField fx:id="searchField" promptText="Rechercher..." onKeyReleased="#onSearch" prefWidth="250" styleClass="search-field"/>
         <Button onAction="#onSearch" mnemonicParsing="false" text="Rechercher" styleClass="search-button"/>
         <Region HBox.hgrow="ALWAYS" />
-        <Button onAction="#exportD" mnemonicParsing="false" text="Exporter les démarches" styleClass="export-button"/>
-        <Button text="Importer (via Excel)" onAction="#handleImport" mnemonicParsing="false" styleClass="export-button"/>
+        <Button onAction="#exportD" mnemonicParsing="false" text="Exporter" styleClass="export-button"/>
+        <Button onAction="#ecraser" mnemonicParsing="false" text="Ecraser" styleClass="export-button"/>
+        <Button text="Ajouter" onAction="#handleImport" mnemonicParsing="false" styleClass="export-button"/>
     </HBox>
     
     <!-- TableView avec marge en haut pour laisser de la place à la barre de recherche -->
-    <TableView fx:id="tableView" layoutX="10" layoutY="50" prefWidth="1250" prefHeight="560" styleClass="table-view">
+    <TableView fx:id="tableView" layoutX="10" layoutY="50"  styleClass="table-view">
         <columns>
             <TableColumn fx:id="colDateContact" text="Date Contact" styleClass="table-column"/>
             <TableColumn fx:id="colHeureContact" text="Heure Contact" styleClass="table-column"/>

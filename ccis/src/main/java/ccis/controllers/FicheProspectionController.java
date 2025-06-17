@@ -298,7 +298,7 @@ private void clearError(Control control) {
             convertDocxToPdf(outputDocx, outputPdf);
 
             if (Desktop.isDesktopSupported()) {
-                Desktop.getDesktop().print(outputPdf);
+                Desktop.getDesktop().open(outputPdf);
             } else {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Succès");

@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.FileChooser;
+import javafx.util.Callback;
 
 import java.awt.Desktop;
 import java.io.File;
@@ -39,18 +40,18 @@ public class EADController {
     @FXML private TableColumn<DemarcheAdministratif, String> interlocuteurCol;
     @FXML private TableColumn<DemarcheAdministratif, String> emailCol;
     @FXML private TableColumn<DemarcheAdministratif, String> siteWebCol;
+    @FXML private TableColumn<DemarcheAdministratif, Void> actionCol;
 
     private final DemarcheAdministratifDao dao = new DemarcheAdministratifDao();
     private final ObservableList<DemarcheAdministratif> demarchesList = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
-
         configureColumns();
-        // Charger les données depuis la base
         loadDemarches();
     }
- private void configureColumns() {
+
+    private void configureColumns() {
         // Configure each column to display the appropriate property
         denominationCol.setCellValueFactory(new PropertyValueFactory<>("denomination"));
         typeCol.setCellValueFactory(new PropertyValueFactory<>("statut"));
@@ -63,43 +64,91 @@ public class EADController {
         villeCol.setCellValueFactory(new PropertyValueFactory<>("ville"));
         interlocuteurCol.setCellValueFactory(new PropertyValueFactory<>("nomPrenom"));
         emailCol.setCellValueFactory(new PropertyValueFactory<>("email"));
-        siteWebCol.setCellValueFactory(new PropertyValueFactory<>("siteWeb")); 
-}
-private void loadDemarches() {
-    List<DemarcheAdministratif> demarches = dao.getAllDemarches();
-
-    // Utiliser un Set pour éliminer les doublons
-    Set<String> uniqueKeys = new HashSet<>();
-    List<DemarcheAdministratif> filteredDemarches = new ArrayList<>();
-
-    for (DemarcheAdministratif demarche : demarches) {
-        // Créer une clé unique basée sur les champs spécifiques
-        String uniqueKey = demarche.getDenomination() + "|" +
-                           demarche.getFormeJuridique() + "|" +
-                           demarche.getSecteurActivite() + "|" +
-                           demarche.getActivite() + "|" +
-                           demarche.getVille();
-
-        // Ajouter uniquement si la clé n'existe pas déjà
-        if (uniqueKeys.add(uniqueKey)) {
-            filteredDemarches.add(demarche);
-        }
+        siteWebCol.setCellValueFactory(new PropertyValueFactory<>("siteWeb"));
+        
+        // Configure action column with delete button
+        actionCol.setCellFactory(new Callback<TableColumn<DemarcheAdministratif, Void>, TableCell<DemarcheAdministratif, Void>>() {
+            @Override
+            public TableCell<DemarcheAdministratif, Void> call(TableColumn<DemarcheAdministratif, Void> param) {
+                return new TableCell<DemarcheAdministratif, Void>() {
+                    private final Button deleteButton = new Button("Supprimer");
+                    
+                    {
+                        deleteButton.getStyleClass().add("delete-button");
+                        deleteButton.setOnAction(event -> {
+                            DemarcheAdministratif item = getTableView().getItems().get(getIndex());
+                            handleDeleteFromTable(item);
+                        });
+                    }
+                    
+                    @Override
+                    protected void updateItem(Void item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                        } else {
+                            setGraphic(deleteButton);
+                        }
+                    }
+                };
+            }
+        });
     }
 
-    // Charger les données filtrées dans le tableau
-    demarchesList.setAll(filteredDemarches);
-    tableView.setItems(demarchesList);
-}
+    private void loadDemarches() {
+        List<DemarcheAdministratif> demarches = dao.getAllDemarches();
+        
+        // Remove duplicates based on unique key
+        List<DemarcheAdministratif> uniqueDemarches = removeDuplicates(demarches);
+        
+        // Load filtered data into table
+        demarchesList.setAll(uniqueDemarches);
+        tableView.setItems(demarchesList);
+    }
+
+    private List<DemarcheAdministratif> removeDuplicates(List<DemarcheAdministratif> demarches) {
+        Set<String> uniqueKeys = new HashSet<>();
+        List<DemarcheAdministratif> filteredDemarches = new ArrayList<>();
+
+        for (DemarcheAdministratif demarche : demarches) {
+            // Create unique key based on specific fields
+            String uniqueKey = createUniqueKey(demarche);
+            
+            // Add only if key doesn't already exist
+            if (uniqueKeys.add(uniqueKey)) {
+                filteredDemarches.add(demarche);
+            }
+        }
+        
+        return filteredDemarches;
+    }
+
+    private String createUniqueKey(DemarcheAdministratif demarche) {
+        return (demarche.getDenomination() != null ? demarche.getDenomination() : "") + "|" +
+               (demarche.getFormeJuridique() != null ? demarche.getFormeJuridique() : "") + "|" +
+               (demarche.getSecteurActivite() != null ? demarche.getSecteurActivite() : "") + "|" +
+               (demarche.getActivite() != null ? demarche.getActivite() : "") + "|" +
+               (demarche.getVille() != null ? demarche.getVille() : "");
+    }
+
+    private void handleDeleteFromTable(DemarcheAdministratif demarche) {
+        Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmAlert.setTitle("Confirmer la suppression");
+        confirmAlert.setHeaderText("Supprimer de la table");
+        confirmAlert.setContentText("Êtes-vous sûr de vouloir supprimer cette ligne de la table d'affichage ?");
+        
+        confirmAlert.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                demarchesList.remove(demarche);
+                showAlert("Suppression réussie", "La ligne a été supprimée de la table d'affichage.");
+            }
+        });
+    }
 
     @FXML
-    private void handleDelete() {
-        DemarcheAdministratif selectedDemarche = tableView.getSelectionModel().getSelectedItem();
-        if (selectedDemarche != null) {
-            dao.deleteDemarche(selectedDemarche.getId());
-            demarchesList.remove(selectedDemarche);
-        } else {
-            showAlert("Aucune sélection", "Veuillez sélectionner une démarche à supprimer.");
-        }
+    private void handleRefresh() {
+        loadDemarches();
+        showAlert("Actualisation", "Les données ont été actualisées depuis la base de données.");
     }
 
     private void showAlert(String title, String content) {
@@ -108,12 +157,18 @@ private void loadDemarches() {
         alert.setContentText(content);
         alert.showAndWait();
     }
+
     @FXML
     private void exportEA() {
+        if (demarchesList.isEmpty()) {
+            showAlert("Aucune donnée", "Il n'y a aucune donnée à exporter.");
+            return;
+        }
+
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Démarche Administratif");
     
-        // Créer la ligne d'en-têtes
+        // Create header row
         Row headerRow = sheet.createRow(0);
         headerRow.createCell(0).setCellValue("Dénomination");
         headerRow.createCell(1).setCellValue("Type");
@@ -128,44 +183,23 @@ private void loadDemarches() {
         headerRow.createCell(10).setCellValue("Email");
         headerRow.createCell(11).setCellValue("Site Web");
     
-        // Récupérer les données depuis la base
-        List<DemarcheAdministratif> demarches = dao.getAllDemarches();
-    
-        // Utiliser un Set pour éliminer les doublons
-        Set<String> uniqueKeys = new HashSet<>();
-        List<DemarcheAdministratif> filteredDemarches = new ArrayList<>();
-    
-        for (DemarcheAdministratif demarche : demarches) {
-            // Créer une clé unique basée sur les champs spécifiques
-            String uniqueKey = demarche.getDenomination() + "|" +
-                               demarche.getFormeJuridique() + "|" +
-                               demarche.getSecteurActivite() + "|" +
-                               demarche.getActivite() + "|" +
-                               demarche.getVille();
-    
-            // Ajouter uniquement si la clé n'existe pas déjà
-            if (uniqueKeys.add(uniqueKey)) {
-                filteredDemarches.add(demarche);
-            }
-        }
-    
-        // Ajouter les données filtrées dans le fichier Excel
+        // Export only the data currently displayed in the table (without duplicates)
         int rowNum = 1;
-        for (DemarcheAdministratif demarche : filteredDemarches) {
+        for (DemarcheAdministratif demarche : demarchesList) {
             Row row = sheet.createRow(rowNum++);
     
-            row.createCell(0).setCellValue(demarche.getDenomination());
-            row.createCell(1).setCellValue(demarche.getStatut());
-            row.createCell(2).setCellValue(demarche.getFormeJuridique());
-            row.createCell(3).setCellValue(demarche.getSecteurActivite());
-            row.createCell(4).setCellValue(demarche.getActivite());
-            row.createCell(5).setCellValue(demarche.getGsm());
-            row.createCell(6).setCellValue(demarche.getFixe());
-            row.createCell(7).setCellValue(demarche.getAdresse());
-            row.createCell(8).setCellValue(demarche.getVille());
-            row.createCell(9).setCellValue(demarche.getNomPrenom());
-            row.createCell(10).setCellValue(demarche.getEmail());
-            row.createCell(11).setCellValue(demarche.getSiteWeb());
+            row.createCell(0).setCellValue(demarche.getDenomination() != null ? demarche.getDenomination() : "");
+            row.createCell(1).setCellValue(demarche.getStatut() != null ? demarche.getStatut() : "");
+            row.createCell(2).setCellValue(demarche.getFormeJuridique() != null ? demarche.getFormeJuridique() : "");
+            row.createCell(3).setCellValue(demarche.getSecteurActivite() != null ? demarche.getSecteurActivite() : "");
+            row.createCell(4).setCellValue(demarche.getActivite() != null ? demarche.getActivite() : "");
+            row.createCell(5).setCellValue(demarche.getGsm() != null ? demarche.getGsm() : "");
+            row.createCell(6).setCellValue(demarche.getFixe() != null ? demarche.getFixe() : "");
+            row.createCell(7).setCellValue(demarche.getAdresse() != null ? demarche.getAdresse() : "");
+            row.createCell(8).setCellValue(demarche.getVille() != null ? demarche.getVille() : "");
+            row.createCell(9).setCellValue(demarche.getNomPrenom() != null ? demarche.getNomPrenom() : "");
+            row.createCell(10).setCellValue(demarche.getEmail() != null ? demarche.getEmail() : "");
+            row.createCell(11).setCellValue(demarche.getSiteWeb() != null ? demarche.getSiteWeb() : "");
         }
     
         FileChooser fileChooser = new FileChooser();
@@ -173,25 +207,30 @@ private void loadDemarches() {
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel Files", "*.xlsx"));
         fileChooser.setInitialDirectory(new File("C:/fichiers application ccis/demarche administratif"));
         fileChooser.setInitialFileName("Extrait annuaire Demarche Administratif.xlsx");
-        File output= fileChooser.showSaveDialog(null);
+        File output = fileChooser.showSaveDialog(null);
+        
         if (output == null) {
-            // User cancelled the save dialog
             return;
         }
 
-        // Sauvegarder le fichier Excel
         try (FileOutputStream fileOut = new FileOutputStream(output)) {
             workbook.write(fileOut);
            
-        if (Desktop.isDesktopSupported()) {
-            Desktop.getDesktop().open(output);
-        }else{
-             showAlert("Exportation réussie", "Les données ont été exportées avec succès : " + output.getAbsolutePath());
-        }
+            if (Desktop.isDesktopSupported()) {
+                Desktop.getDesktop().open(output);
+            } else {
+                showAlert("Exportation réussie", "Les données ont été exportées avec succès : " + output.getAbsolutePath());
+            }
         
         } catch (IOException e) {
             e.printStackTrace();
             showAlert("Erreur d'exportation", "Une erreur s'est produite lors de l'exportation des données.");
+        } finally {
+            try {
+                workbook.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

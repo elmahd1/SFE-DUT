@@ -168,4 +168,13 @@ public Long count() {
         p.setSuiteADonner(rs.getString("sad"));
         return p;
     }
+    public void deleteAll() {
+    String sql = "DELETE FROM prospection";
+    try (Connection conn = JDBCConnection.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+        stmt.executeUpdate();
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
 }

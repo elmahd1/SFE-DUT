@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<ScrollPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="ccis.controllers.EnqueteSatisfactionController"
+            fitToWidth="true"
+            hbarPolicy="NEVER"
+            vbarPolicy="AS_NEEDED"
+            stylesheets="@/styles/fiche.css"
+            prefHeight="600.0" prefWidth="1265.0">
+    <content>
+        <GridPane hgap="16" vgap="8" style="-fx-padding: 16;">
+            <columnConstraints>
+                <ColumnConstraints minWidth="180"/>
+                <ColumnConstraints minWidth="220"/>
+                <ColumnConstraints minWidth="180"/>
+                <ColumnConstraints minWidth="220"/>
+            </columnConstraints>
+
+            <!-- Title -->
+            <Label styleClass="form-title" text="Annexe 12 : Enquête de satisfaction M6A12" GridPane.columnSpan="4" GridPane.rowIndex="0" />
+
+            <!-- Header row for all questions -->
+            <TextField fx:id="nom" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+            <Label text="Pas du tout satisfait" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+            <Label text="Neutre" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+            <Label text="Tout à fait satisfait" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
+
+            <!-- Ligne 1 -->
+            <Label text="La clarté des informations fournies avant la prospection وضوح المعلومات المقدمة قبل الاستكشاف التجاري " GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+            <TextField fx:id="input12" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+            <TextField fx:id="input13" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
+            <TextField fx:id="input14" GridPane.columnIndex="3" GridPane.rowIndex="2"/>
+
+            <!-- Ligne 2 -->
+            <Label text="La pertinence des partenaires potentiels identifiés مدى ملاءمة الشركاء المحتملين الذين تم تحديدهم " GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+            <TextField fx:id="input22" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+            <TextField fx:id="input23" GridPane.columnIndex="2" GridPane.rowIndex="3"/>
+            <TextField fx:id="input24" GridPane.columnIndex="3" GridPane.rowIndex="3"/>
+
+            <!-- Ligne 3 -->
+            <Label text="Le respect des délais prévus pour la prospection الالتزام بالمواعيد المحددة للاستكشاف التجاري " GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+            <TextField fx:id="input32" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+            <TextField fx:id="input33" GridPane.columnIndex="2" GridPane.rowIndex="4"/>
+            <TextField fx:id="input34" GridPane.columnIndex="3" GridPane.rowIndex="4"/>
+
+            <!-- Ligne 4 -->
+            <Label text="Le suivi des prospects après le premier contact متابعة العملاء المحتملين بعد الاتصال الأول " GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+            <TextField fx:id="input42" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+            <TextField fx:id="input43" GridPane.columnIndex="2" GridPane.rowIndex="5"/>
+            <TextField fx:id="input44" GridPane.columnIndex="3" GridPane.rowIndex="5"/>
+
+            <!-- Ligne 5 -->
+            <Label text="La disponibilité et la réactivité de l'équipe de prospection توفر فريق الاستكشاف التجاري وسرعة استجابتهم" GridPane.columnIndex="0" GridPane.rowIndex="6"/>
+            <TextField fx:id="input52" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+            <TextField fx:id="input53" GridPane.columnIndex="2" GridPane.rowIndex="6"/>
+            <TextField fx:id="input54" GridPane.columnIndex="3" GridPane.rowIndex="6"/>
+
+            <!-- Ligne 6 -->
+            <Label text="La qualité de la communication entre vous et l'équipe de prospection جودة التواصل بينكم وبين فريق الاستكشاف التجاري " GridPane.columnIndex="0" GridPane.rowIndex="7"/>
+            <TextField fx:id="input62" GridPane.columnIndex="1" GridPane.rowIndex="7"/>
+            <TextField fx:id="input63" GridPane.columnIndex="2" GridPane.rowIndex="7"/>
+            <TextField fx:id="input64" GridPane.columnIndex="3" GridPane.rowIndex="7"/>
+
+            <!-- Ligne 7 -->
+            <Label text="Le respect des engagements pris durant la prospection الالتزام بالوعود المقدمة أثناء عملية الاستكشاف التجاري " GridPane.columnIndex="0" GridPane.rowIndex="8"/>
+            <TextField fx:id="input72" GridPane.columnIndex="1" GridPane.rowIndex="8"/>
+            <TextField fx:id="input73" GridPane.columnIndex="2" GridPane.rowIndex="8"/>
+            <TextField fx:id="input74" GridPane.columnIndex="3" GridPane.rowIndex="8"/>
+
+            <!-- Ligne 8 -->
+            <Label text="La prospection a-t-elle permis de générer des leads qualifiés ? هل أسفرت عملية الاستكشاف التجاري عن توليد عملاء محتملين مؤهلين؟ " GridPane.columnIndex="0" GridPane.rowIndex="9"/>
+            <TextField fx:id="input82" GridPane.columnIndex="1" GridPane.rowIndex="9"/>
+            <TextField fx:id="input83" GridPane.columnIndex="2" GridPane.rowIndex="9"/>
+            <TextField fx:id="input84" GridPane.columnIndex="3" GridPane.rowIndex="9"/>
+
+                        <!-- Ligne 9 -->
+            <Label text="Les objectifs commerciaux fixés ont-ils été atteints? هل تم تحقيق الأهداف التجارية المحددة؟ " GridPane.columnIndex="0" GridPane.rowIndex="10"/>
+            <TextField fx:id="input92" GridPane.columnIndex="1" GridPane.rowIndex="10"/>
+            <TextField fx:id="input93" GridPane.columnIndex="2" GridPane.rowIndex="10"/>
+            <TextField fx:id="input94" GridPane.columnIndex="3" GridPane.rowIndex="10"/>
+
+                        <!-- Ligne 10 -->
+            <Label text="a-t-elle amélioré VOS opportunités commerciales? هل حسنت هذه الخدمة الاستكشاف التجاري من فرصك التجارية؟  " GridPane.columnIndex="0" GridPane.rowIndex="11"/>
+            <TextField fx:id="input102" GridPane.columnIndex="1" GridPane.rowIndex="11"/>
+            <TextField fx:id="input103" GridPane.columnIndex="2" GridPane.rowIndex="11"/>
+            <TextField fx:id="input104" GridPane.columnIndex="3" GridPane.rowIndex="11"/>
+
+                        <!-- Ligne 11 -->
+            <Label text="Recommandations/suggestions توصيات اقتراحات " GridPane.columnIndex="0" GridPane.rowIndex="12"/>
+            <TextField fx:id="input112" GridPane.columnIndex="1" GridPane.rowIndex="12"/>
+            <TextField fx:id="input113" GridPane.columnIndex="2" GridPane.rowIndex="12"/>
+            <TextField fx:id="input114" GridPane.columnIndex="3" GridPane.rowIndex="12"/>
+
+            <!-- Bouton Générer -->
+            <Button text="Générer" onAction="#generer" GridPane.columnIndex="3" GridPane.rowIndex="13"/>
+        </GridPane>
+    </content>
+</ScrollPane>

@@ -6,19 +6,20 @@
 <AnchorPane stylesheets="@/styles/ES.css" xmlns:fx="http://javafx.com/fxml"  fx:controller="ccis.controllers.ESDController" styleClass="main-container" >
      <VBox spacing="8" AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.bottomAnchor="0">
  <HBox styleClass="title-bar">
-    <Label text="État Suivi Demande Administrative" styleClass="form-title"/>
+    <Label text="État Suivi Demarche Administrative"  styleClass="form-title"/>
 </HBox>
     <!-- Barre de recherche et boutons en haut -->
     <HBox layoutX="10" layoutY="10" spacing="10" alignment="CENTER_LEFT">
         <TextField fx:id="searchField" promptText="Rechercher..." onKeyReleased="#onSearch" prefWidth="250" styleClass="search-field"/>
         <Button onAction="#onSearch" mnemonicParsing="false" text="Rechercher" styleClass="search-button"/>
         <Region HBox.hgrow="ALWAYS" />
-        <Button onAction="#exportD" mnemonicParsing="false" text="Exporter les démarches" styleClass="export-button"/>
-        <Button text="Importer (via Excel)" mnemonicParsing="false" onAction="#handleImport" styleClass="export-button"/>
+        <Button onAction="#exportD" mnemonicParsing="false" text="Exporter" styleClass="export-button"/>
+        <Button onAction="#ecraser" mnemonicParsing="false" text="Ecraser" styleClass="export-button"/>
+        <Button text="Ajouter" mnemonicParsing="false" onAction="#handleImport" styleClass="export-button"/>
     </HBox>
     
     <!-- TableView avec marge en haut pour laisser de la place à la barre de recherche -->
-    <TableView fx:id="tableView" layoutX="10" layoutY="50" prefWidth="1250" prefHeight="560" styleClass="table-view">
+    <TableView fx:id="tableView" layoutX="10" layoutY="50" styleClass="table-view">
         <columns>
             <TableColumn fx:id="colDateContact" text="Date Contact" styleClass="table-column"/>
             <TableColumn fx:id="colHeureContact" text="Heure Contact" styleClass="table-column"/>

@@ -233,7 +233,7 @@ String forme ="";
             // Count formeJuridique
             if (!item.getFormeJuridique().equals("SARL") &&
             !item.getFormeJuridique().equals("SA") &&
-            !item.getFormeJuridique().equals("PP(Personne physique)")) {
+            !item.getFormeJuridique().equals("PP (Personne physique)")) {
             forme = "Autre";
         } else {
             forme = item.getFormeJuridique();
@@ -273,49 +273,64 @@ String forme ="";
             }
         }
 
-        // PieChart 1: Objet Visite
-        chart1.getData().clear();
-        chart1.setTitle("distribution par prestation fournie");
-        
-        // Create data for Table 1
-        ObservableList<ObjetVisiteData> table1Data = FXCollections.observableArrayList();
-        
-        for (Map.Entry<String, Integer> entry : objetCounts.entrySet()) {
-            double percent = (entry.getValue() * 100.0) / total;
-            chart1.getData().add(new PieChart.Data(entry.getKey() + " (" + String.format("%.1f", percent) + "%):"+entry.getValue(), entry.getValue()));
-            
-            // Add to table1
-            table1Data.add(new ObjetVisiteData(entry.getKey(), entry.getValue(), percent));
-        }
-         table1Data.add(new ObjetVisiteData("Total", total, 100.0));
-        // Set Table 1 data
-        table1.setItems(table1Data);
+       ObservableList<ObjetVisiteData> table1Data = FXCollections.observableArrayList();
+chart1.getData().clear();
+chart1.setTitle("distribution par prestation fournie");
 
-        // PieChart 3: Forme Juridique
-        chart3.getData().clear();
-        chart3.setTitle("Répartition par Forme Juridique");
-        
-        // Create data for Table 3
-        ObservableList<FormeJuridiqueData> table3Data = FXCollections.observableArrayList();
-        
-        for (Map.Entry<String, Integer> entry : formeCounts.entrySet()) {
-            double percent = (entry.getValue() * 100.0) / total;
-            chart3.getData().add(new PieChart.Data(entry.getKey() + " (" + String.format("%.1f", percent) + "%):"+entry.getValue(), entry.getValue()));
-            
-            // Add to table3
-            table3Data.add(new FormeJuridiqueData(entry.getKey(), entry.getValue(), percent));
-        }
-        table3Data.add(new FormeJuridiqueData("Total", total, 100.0));
+// Afficher d'abord les objets normaux
+for (Map.Entry<String, Integer> entry : objetCounts.entrySet()) {
+    String key = entry.getKey();
+    if ("Autre".equalsIgnoreCase(key) || "Total".equalsIgnoreCase(key)) continue;
+    double percent = (entry.getValue() * 100.0) / total;
+    chart1.getData().add(new PieChart.Data(key + " (" + String.format("%.1f", percent) + "%):" + entry.getValue(), entry.getValue()));
+    table1Data.add(new ObjetVisiteData(key, entry.getValue(), percent));
+}
+// Puis "Autre" si présent
+if (objetCounts.containsKey("Autre")) {
+    int value = objetCounts.get("Autre");
+    double percent = (value * 100.0) / total;
+    chart1.getData().add(new PieChart.Data("Autre (" + String.format("%.1f", percent) + "%):" + value, value));
+    table1Data.add(new ObjetVisiteData("Autre", value, percent));
+}
+// Puis "Total"
+table1Data.add(new ObjetVisiteData("Total", total, 100.0));
 
-        // Set Table 3 data
-        table3.setItems(table3Data);
+// Set Table 1 data
+table1.setItems(table1Data);
+
+
+       // Table 3 & PieChart 3: Forme Juridique
+ObservableList<FormeJuridiqueData> table3Data = FXCollections.observableArrayList();
+chart3.getData().clear();
+chart3.setTitle("Répartition par Forme Juridique");
+
+// Afficher d'abord les formes normales
+for (Map.Entry<String, Integer> entry : formeCounts.entrySet()) {
+    String key = entry.getKey();
+    if ("Autre".equalsIgnoreCase(key) || "Total".equalsIgnoreCase(key)) continue;
+    double percent = (entry.getValue() * 100.0) / total;
+    chart3.getData().add(new PieChart.Data(key + " (" + String.format("%.1f", percent) + "%):" + entry.getValue(), entry.getValue()));
+    table3Data.add(new FormeJuridiqueData(key, entry.getValue(), percent));
+}
+// Puis "Autre" si présent
+if (formeCounts.containsKey("Autre")) {
+    int value = formeCounts.get("Autre");
+    double percent = (value * 100.0) / total;
+    chart3.getData().add(new PieChart.Data("Autre (" + String.format("%.1f", percent) + "%):" + value, value));
+    table3Data.add(new FormeJuridiqueData("Autre", value, percent));
+}
+// Puis "Total"
+table3Data.add(new FormeJuridiqueData("Total", total, 100.0));
+
+// Set Table 3 data
+table3.setItems(table3Data);
 
         // BarChart 2: Délai moyen en heures by objet
         chart2.getData().clear();
         chart2.setTitle("Délai Moyen par Objet de Visite");
 
         XYChart.Series<String, Number> delaiSeries = new XYChart.Series<>();
-        delaiSeries.setName("Délai Moyen (heures)");
+        delaiSeries.setName("Délai Moyen (par minutes)");
         
         // Create data for Table 2
         ObservableList<ObjetVisiteDetailData> table2Data = FXCollections.observableArrayList();
@@ -327,12 +342,12 @@ String forme ="";
             // Délai
             long delaiMinutes = objetDelaiTotal.getOrDefault(objet, 0L);
             int count = objetDelaiCount.getOrDefault(objet, 0);
-            double delaiMoyenHeures = count > 0 ? (delaiMinutes / 60.0) / count : 0;
+            double delaiMoyen = count > 0 ? delaiMinutes  / count : 0;
             double pourcentageDelai = (delaiMinutes * 100.0) / (totalMinutes > 0 ? totalMinutes : 1);
-            delaiSeries.getData().add(new XYChart.Data<>(objet, delaiMoyenHeures));
+            delaiSeries.getData().add(new XYChart.Data<>(objet, delaiMoyen));
             
             // Add to table2
-            table2Data.add(new ObjetVisiteDetailData(objet, delaiMoyenHeures, pourcentageDelai));
+            table2Data.add(new ObjetVisiteDetailData(objet, delaiMoyen, pourcentageDelai));
         }
         
         chart2.getData().addAll(delaiSeries);
@@ -358,10 +373,10 @@ for (String objet : objetCounts.keySet()) {
     totalDelaiCount += objetDelaiCount.getOrDefault(objet, 0);
 }
 
-double totalDelaiMoyen = totalDelaiCount > 0 ? (totalDelaiMinutes / 60.0) / totalDelaiCount : 0;
+double totalDelaiMoyen = totalDelaiCount > 0 ? totalDelaiMinutes  / totalDelaiCount : 0;
 
 // Ajoute la ligne "Total" avec la moyenne globale et 100%
-table2Data.add(new ObjetVisiteDetailData("Total", totalDelaiMoyen, 100.0));
+table2Data.add(new ObjetVisiteDetailData("Delai moyen total", totalDelaiMoyen, 100.0));
         // Set Table 2 data
         table2.setItems(table2Data);
         // Set axes labels

@@ -34,4 +34,7 @@ private void loadPage(String fxmlPath) {
 
     @FXML private void fp()   { loadPage("/views/FicheProspection.fxml"); }
     @FXML private void ra()   { loadPage("/views/recapitulatif.fxml"); }
+    @FXML private void ip()   { loadPage("/views/IndicateurPerformance.fxml"); }
+    @FXML private void eqs()   { loadPage("/views/EnqueteSatisfaction.fxml"); }
+    @FXML private void qib()   { loadPage("/views/IdentificationBesoin.fxml"); }
 }

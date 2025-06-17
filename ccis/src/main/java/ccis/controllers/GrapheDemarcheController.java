@@ -68,7 +68,7 @@ public class GrapheDemarcheController {
     @FXML
     private TableColumn<ObjetVisiteData, Double> percentageColumn;
 @FXML private TableColumn<DelaiMoyenData, String> objetVisiteDelaiColumn;
-@FXML private TableColumn<DelaiMoyenData, Double> delaiMoyenColumn;
+@FXML private TableColumn<DelaiMoyenData, String> delaiMoyenColumn;
 @FXML private TableColumn<DelaiMoyenData, Double> pourcentageDelaiColumn;
     @FXML
     private TableView<ObjetVisiteDetailData> table2;
@@ -165,19 +165,39 @@ public class GrapheDemarcheController {
     }
     public static class DelaiMoyenData {
     private final String objetVisite;
-    private final double delaiMoyen;
+    private final String delaiMoyen; // Changed to String for formatted display
     private final double pourcentageDelai;
 
-    public DelaiMoyenData(String objetVisite, double delaiMoyen, double pourcentageDelai) {
+    public DelaiMoyenData(String objetVisite, String delaiMoyen, double pourcentageDelai) {
         this.objetVisite = objetVisite;
         this.delaiMoyen = delaiMoyen;
         this.pourcentageDelai = pourcentageDelai;
     }
 
     public String getObjetVisite() { return objetVisite; }
-    public double getDelaiMoyen() { return delaiMoyen; }
+    public String getDelaiMoyen() { return delaiMoyen; }
     public double getPourcentageDelai() { return pourcentageDelai; }
 }
+
+    // Helper method to format delay in hours
+    private String formatDelayInHours(long minutes) {
+        if (minutes < 60) {
+            return minutes + " min";
+        } else {
+            long hours = minutes / 60;
+            long remainingMinutes = minutes % 60;
+            if (remainingMinutes == 0) {
+                return hours + "h";
+            } else {
+                return hours + "h" + String.format("%02d", remainingMinutes);
+            }
+        }
+    }
+
+    // Helper method to convert minutes to decimal hours for chart display
+    private double minutesToDecimalHours(long minutes) {
+        return Math.round((minutes / 60.0) * 10.0) / 10.0; // Round to 1 decimal place
+    }
 
     @FXML
     public void initialize() {
@@ -253,15 +273,15 @@ public class GrapheDemarcheController {
         });
 
         objetVisiteDelaiColumn.setCellValueFactory(new PropertyValueFactory<>("objetVisite"));
-delaiMoyenColumn.setCellValueFactory(new PropertyValueFactory<>("delaiMoyen"));
-pourcentageDelaiColumn.setCellValueFactory(new PropertyValueFactory<>("pourcentageDelai"));
-pourcentageDelaiColumn.setCellFactory(column -> new TableCell<DelaiMoyenData, Double>() {
-    @Override
-    protected void updateItem(Double item, boolean empty) {
-        super.updateItem(item, empty);
-        setText(empty || item == null ? null : String.format("%.1f%%", item));
-    }
-});
+        delaiMoyenColumn.setCellValueFactory(new PropertyValueFactory<>("delaiMoyen"));
+        pourcentageDelaiColumn.setCellValueFactory(new PropertyValueFactory<>("pourcentageDelai"));
+        pourcentageDelaiColumn.setCellFactory(column -> new TableCell<DelaiMoyenData, Double>() {
+            @Override
+            protected void updateItem(Double item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty || item == null ? null : String.format("%.1f%%", item));
+            }
+        });
     }
     
 void loadData() {
@@ -296,7 +316,6 @@ void loadData() {
                 forme = item.getFormeJuridique();
             }
             formeCounts.put(forme, formeCounts.getOrDefault(forme, 0) + 1);
-
             // Calculate delay and montant
             try {
                 String d1 = item.getDateDepot();
@@ -306,9 +325,10 @@ void loadData() {
                 double montant = Math.round(item.getMontant() * 100.0) / 100.0;
                 totalMontant += montant;
                 objetMontants.put(objet, objetMontants.getOrDefault(objet, 0.0) + montant);
-                
+
                 if (d1 == null || t1 == null || d2 == null || t2 == null ||
                     d1.isEmpty() || t1.isEmpty() || d2.isEmpty() || t2.isEmpty()) {
+                    // Default: 2h00
                     long defaultMinutes = 120;
                     totalMinutes += defaultMinutes;
                     objetDelaiTotal.put(objet, objetDelaiTotal.getOrDefault(objet, 0L) + defaultMinutes);
@@ -327,6 +347,7 @@ void loadData() {
                 objetDelaiTotal.put(objet, objetDelaiTotal.getOrDefault(objet, 0L) + minutes);
                 objetDelaiCount.put(objet, objetDelaiCount.getOrDefault(objet, 0) + 1);
             } catch (Exception e) {
+                // Default: 2h00
                 long defaultMinutes = 120;
                 totalMinutes += defaultMinutes;
                 objetDelaiTotal.put(objet, objetDelaiTotal.getOrDefault(objet, 0L) + defaultMinutes);
@@ -365,13 +386,20 @@ table1Data.add(new ObjetVisiteData("Total", totalObjetVisite, totalPercentageObj
         ObservableList<FormeJuridiqueData> table3Data = FXCollections.observableArrayList();
         
         
-        for (Map.Entry<String, Integer> entry : formeCounts.entrySet()) {
-            double percent = (entry.getValue() * 100.0) / total;
-            chart3.getData().add(new PieChart.Data(entry.getKey() + " (" + String.format("%.1f", percent) + "%):"+entry.getValue(), entry.getValue()));
-            
-            // Add to table3
-            table3Data.add(new FormeJuridiqueData(entry.getKey(), entry.getValue(), percent));
-        }
+for (Map.Entry<String, Integer> entry : formeCounts.entrySet()) {
+    String key = entry.getKey();
+    if ("Autre".equalsIgnoreCase(key) || "Total".equalsIgnoreCase(key)) continue;
+    double percent = (entry.getValue() * 100.0) / total;
+    chart3.getData().add(new PieChart.Data(key + " (" + String.format("%.1f", percent) + "%):" + entry.getValue(), entry.getValue()));
+    table3Data.add(new FormeJuridiqueData(key, entry.getValue(), percent));
+}
+// Puis "Autre" si présent
+if (formeCounts.containsKey("Autre")) {
+    int value = formeCounts.get("Autre");
+    double percent = (value * 100.0) / total;
+    chart3.getData().add(new PieChart.Data("Autre (" + String.format("%.1f", percent) + "%):" + value, value));
+    table3Data.add(new FormeJuridiqueData("Autre", value, percent));
+}
         // Calcul du total pour table3
 int totalNombreVisite = table3Data.stream().mapToInt(FormeJuridiqueData::getNombreVisite).sum();
 double totalPercentageForme = table3Data.stream().mapToDouble(FormeJuridiqueData::getPercentage).sum();
@@ -383,7 +411,7 @@ table3Data.add(new FormeJuridiqueData("Total", totalNombreVisite, totalPercentag
 
         // BarChart 2: Délai moyen en heures by objet
         chart2.getData().clear();
-        chart2.setTitle("Délai Moyen par Objet de Visite");
+        chart2.setTitle("Délai Moyen par Objet de Visite (en heures)");
 
 
         XYChart.Series<String, Number> montantSeries = new XYChart.Series<>();
@@ -405,36 +433,39 @@ table3Data.add(new FormeJuridiqueData("Total", totalNombreVisite, totalPercentag
             // Délai
             long delaiMinutes = objetDelaiTotal.getOrDefault(objet, 0L);
             int count = objetDelaiCount.getOrDefault(objet, 0);
-            double delaiMoyenHeures = count > 0 ? (delaiMinutes / 60.0) / count : 0;
+            long delaiMoyenMinutes = count > 0 ? delaiMinutes / count : 0;
+            double delaiMoyenHeures = minutesToDecimalHours(delaiMoyenMinutes);
+            String delaiFormatted = formatDelayInHours(delaiMoyenMinutes);
             double pourcentageDelai = (delaiMinutes * 100.0) / (totalMinutes > 0 ? totalMinutes : 1);
             delaiSeries.getData().add(new XYChart.Data<>(objet, delaiMoyenHeures));
-            
+
             // Add to table2
             table2Data.add(new ObjetVisiteDetailData(objet, montantTotal,  
                                                     pourcentageMontant));
-            table4Data.add(new DelaiMoyenData(objet, delaiMoyenHeures, pourcentageDelai));
+            table4Data.add(new DelaiMoyenData(objet, delaiFormatted, pourcentageDelai));
         }
         // Calcul du total pour table2
-double totalMontant2 = table2Data.stream().mapToDouble(ObjetVisiteDetailData::getMontant).sum()/table2Data.size();
+double totalMontant2 = table2Data.stream().mapToDouble(ObjetVisiteDetailData::getMontant).sum();
 double totalPourcentageMontant = table2Data.stream().mapToDouble(ObjetVisiteDetailData::getPourcentageMontant).sum();
-Double totalDelaiMoyen = table4Data.stream().mapToDouble(DelaiMoyenData::getDelaiMoyen).sum()/table4Data.size();
+long totalDelaiMoyenMinutes = totalMinutes / (total > 0 ? total : 1);
+String totalDelaiFormatted = formatDelayInHours(totalDelaiMoyenMinutes);
 double totalPourcentageDelai = table4Data.stream().mapToDouble(DelaiMoyenData::getPourcentageDelai).sum();
 // Ajouter la ligne de total
 table2Data.add(new ObjetVisiteDetailData("Total", totalMontant2, totalPourcentageMontant));
-     table4Data.add(new DelaiMoyenData("Total", totalDelaiMoyen, totalPourcentageDelai));
+     table4Data.add(new DelaiMoyenData("Délai moyen total", totalDelaiFormatted, totalPourcentageDelai));
 
 chart2.getData().add(delaiSeries);
         chart4.getData().add(montantSeries);
 
 for (XYChart.Series<String, Number> series : chart2.getData()) {
     for (XYChart.Data<String, Number> data5 : series.getData()) {
-        Label label = new Label(data5.getYValue().toString());
+        double hours = data5.getYValue().doubleValue();
+        long minutes = (long) (hours * 60);
+        String formattedLabel = formatDelayInHours(minutes);
+        Label label = new Label(formattedLabel);
         StackPane node = (StackPane) data5.getNode();
-
         node.getChildren().add(label);
-
-        // Style optionnel pour le label
-        label.setStyle("-fx-font-size: 20px; -fx-text-fill: white;");
+        label.setStyle("-fx-font-size: 12px; -fx-text-fill: white;");
         StackPane.setAlignment(label, Pos.TOP_CENTER);
     }
 }

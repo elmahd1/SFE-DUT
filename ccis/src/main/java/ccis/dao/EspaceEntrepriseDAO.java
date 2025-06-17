@@ -11,7 +11,7 @@ public class EspaceEntrepriseDAO {
 
     // Create operation
     public void create(EspaceEntreprise espaceEntreprise) {
-        String sql = "INSERT INTO espace_entreprise (date_contact, heure_contact, objet_visite, nom_prenom, statut, telephone_fixe, telephone_gsm, email, accepte_envoi_ccis, adresse, ville, denomination, code_ice, nom_representant_legal, site_web, forme_juridique, taille_entreprise, secteur_activite, activite, nom_prenom_conseiller_ccis, qualite_conseiller_ccis, date_depart, heure_depart) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO espace_entreprise (date_contact, heure_contact, objet_visite, nom_prenom, statut, telephone_fixe, telephone_gsm, email, accepte_envoi_ccis, adresse, ville, denomination, code_ice, nom_representant_legal, site_web, forme_juridique, taille_entreprise, secteur_activite, activite, nom_prenom_conseiller_ccis, qualite_conseiller_ccis, date_depart, heure_depart, recommandation) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection connection = JDBCConnection.getConnection(); 
              PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -24,7 +24,7 @@ public class EspaceEntrepriseDAO {
                 stmt.setString(6, espaceEntreprise.getFixe());
                 stmt.setString(7, espaceEntreprise.getGsm());
                 stmt.setString(8, espaceEntreprise.getEmail());
-                stmt.setString(9, espaceEntreprise.getAccepteEnvoi()); // convert String to boolean
+                stmt.setString(9, espaceEntreprise.getAccepteEnvoi());
                 stmt.setString(10, espaceEntreprise.getAdresse());
                 stmt.setString(11, espaceEntreprise.getVille());
                 stmt.setString(12, espaceEntreprise.getDenomination());
@@ -39,6 +39,7 @@ public class EspaceEntrepriseDAO {
                 stmt.setString(21, espaceEntreprise.getQualiteCCIS());
                 stmt.setString(22, espaceEntreprise.getDateDepart());
                 stmt.setString(23, espaceEntreprise.getHeureDepart());
+                stmt.setString(24, espaceEntreprise.getRecommandation());
               
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -81,6 +82,7 @@ public class EspaceEntrepriseDAO {
                 espaceEntreprise.setDateDepart(rs.getString("date_depart"));
                 espaceEntreprise.setHeureContact(rs.getString("heure_contact"));
                 espaceEntreprise.setHeureDepart(rs.getString("heure_depart"));
+                espaceEntreprise.setRecommandation(rs.getString("recommandation"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -91,7 +93,7 @@ public class EspaceEntrepriseDAO {
 
     // Update operation
     public void update(EspaceEntreprise espaceEntreprise) {
-        String sql = "UPDATE espace_entreprise SET date_contact = ?, heure_contact = ?, objet_visite = ?, nom_prenom = ?, statut = ?, telephone_fixe = ?, telephone_gsm = ?, email = ?, accepte_envoi_ccis = ?, adresse = ?, ville = ?, denomination = ?, code_ice = ?, nom_representant_legal = ?, site_web = ?, forme_juridique = ?, taille_entreprise = ?, secteur_activite = ?, activite = ?, nom_prenom_conseiller_ccis = ?, qualite_conseiller_ccis = ?, date_depart = ?, heure_depart = ? WHERE id = ?";
+        String sql = "UPDATE espace_entreprise SET date_contact = ?, heure_contact = ?, objet_visite = ?, nom_prenom = ?, statut = ?, telephone_fixe = ?, telephone_gsm = ?, email = ?, accepte_envoi_ccis = ?, adresse = ?, ville = ?, denomination = ?, code_ice = ?, nom_representant_legal = ?, site_web = ?, forme_juridique = ?, taille_entreprise = ?, secteur_activite = ?, activite = ?, nom_prenom_conseiller_ccis = ?, qualite_conseiller_ccis = ?, date_depart = ?, heure_depart = ?, recommandation=? WHERE id = ?";
 
         try (Connection connection = JDBCConnection.getConnection(); 
              PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -104,7 +106,7 @@ public class EspaceEntrepriseDAO {
                 stmt.setString(6, espaceEntreprise.getFixe());
                 stmt.setString(7, espaceEntreprise.getGsm());
                 stmt.setString(8, espaceEntreprise.getEmail());
-                stmt.setString(9, (espaceEntreprise.getAccepteEnvoi()));
+                stmt.setString(9, espaceEntreprise.getAccepteEnvoi());
                 stmt.setString(10, espaceEntreprise.getAdresse());
                 stmt.setString(11, espaceEntreprise.getVille());
                 stmt.setString(12, espaceEntreprise.getDenomination());
@@ -119,8 +121,9 @@ public class EspaceEntrepriseDAO {
                 stmt.setString(21, espaceEntreprise.getQualiteCCIS());
                 stmt.setString(22, espaceEntreprise.getDateDepart());
                 stmt.setString(23, espaceEntreprise.getHeureDepart());
-                stmt.setInt(26, espaceEntreprise.getId());
-                
+                stmt.setString(24, espaceEntreprise.getRecommandation());
+                stmt.setInt(25, espaceEntreprise.getId());
+
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -174,6 +177,7 @@ public class EspaceEntrepriseDAO {
                 espaceEntreprise.setDateDepart(rs.getString("date_depart"));
                 espaceEntreprise.setHeureContact(rs.getString("heure_contact"));
                 espaceEntreprise.setHeureDepart(rs.getString("heure_depart"));
+                espaceEntreprise.setRecommandation(rs.getString("recommandation"));
                 espaceEntreprises.add(espaceEntreprise);
             }
         } catch (SQLException e) {
@@ -183,15 +187,15 @@ public class EspaceEntrepriseDAO {
         return espaceEntreprises;
     }
 
-    public long count() {
+    public int count() {
         String sql = "SELECT COUNT(*) FROM espace_entreprise";
-        long count = 0;
+        int count = 0;
 
         try (Connection connection = JDBCConnection.getConnection(); 
              PreparedStatement stmt = connection.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
             if (rs.next()) {
-                count = rs.getLong(1);
+                count = rs.getInt(1);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -199,4 +203,46 @@ public class EspaceEntrepriseDAO {
 
         return count;
     }
+    public void deleteAll() {
+    String sql = "DELETE FROM espace_entreprise";
+    try (Connection conn = JDBCConnection.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+        stmt.executeUpdate();
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+
+    public int countByType(String string) {
+    String sql = "SELECT COUNT(*) FROM espace_entreprise WHERE objet_visite= ?";
+    int count = 0;
+    try (Connection connection = JDBCConnection.getConnection(); 
+         PreparedStatement stmt = connection.prepareStatement(sql)) {
+        stmt.setString(1, string);
+        ResultSet rs = stmt.executeQuery();
+        if (rs.next()) {
+            count = rs.getInt(1);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return count;
+    }
+
+    public int countByFormeJuridique(String string) {
+    String sql = "SELECT COUNT(*) FROM espace_entreprise WHERE forme_juridique= ?";
+    int count = 0;
+    try (Connection connection = JDBCConnection.getConnection(); 
+         PreparedStatement stmt = connection.prepareStatement(sql)) {
+        stmt.setString(1, string);
+        ResultSet rs = stmt.executeQuery();
+        if (rs.next()) {
+            count = rs.getInt(1);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return count;
+    }
+
 }

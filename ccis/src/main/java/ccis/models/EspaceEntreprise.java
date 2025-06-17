@@ -51,6 +51,8 @@ public class EspaceEntreprise {
     private String dateDepart;
 
     private String heureDepart;
+
+    private String recommandation;
     
     // Getters and Setters
 
@@ -206,5 +208,11 @@ public class EspaceEntreprise {
       public void setHeureContact(String heureContact){
          this.heureContact=heureContact ;
       }
+    public String getRecommandation() {
+        return recommandation;
+    }
+    public void setRecommandation(String recommandation) {
+        this.recommandation = recommandation;
+    }
     
 }

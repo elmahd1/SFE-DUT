@@ -48,7 +48,7 @@
                         <padding>
                             <Insets top="15" right="15" bottom="15" left="15" />
                         </padding>
-                        <Label text="Répartition par Objet de Visite" styleClass="section-title">
+                        <Label text="" styleClass="section-title">
                             <font>
                                 <Font name="System Bold" size="16.0" />
                             </font>
@@ -73,7 +73,7 @@
                         <padding>
                             <Insets top="15" right="15" bottom="15" left="15" />
                         </padding>
-                        <Label text="Répartition par Forme Juridique" styleClass="section-title">
+                        <Label text="" styleClass="section-title">
                             <font>
                                 <Font name="System Bold" size="16.0" />
                             </font>
@@ -99,7 +99,7 @@
                     <padding>
                         <Insets top="15" right="15" bottom="15" left="15" />
                     </padding>
-                    <Label text="Délais moyens par Objet de Visite" styleClass="section-title">
+                    <Label text="" styleClass="section-title">
                         <font>
                             <Font name="System Bold" size="16.0" />
                         </font>
@@ -129,7 +129,7 @@
                      <TableView fx:id="table4" prefHeight="200">
                         <columns>
                             <TableColumn fx:id="objetVisiteDelaiColumn" text="Objet de Visite" prefWidth="250"/>
-                            <TableColumn fx:id="delaiMoyenColumn" text="Délai Moyen (heures)" prefWidth="200"/>
+                            <TableColumn fx:id="delaiMoyenColumn" text="Délai Moyen (par heures)" prefWidth="200"/>
                             <TableColumn fx:id="pourcentageDelaiColumn" text="Pourcentage Délai" prefWidth="180"/>
                         </columns>
                     </TableView>

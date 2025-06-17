@@ -19,6 +19,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -147,53 +149,72 @@ colQualiteConseillerCcis.setCellValueFactory(new PropertyValueFactory<>("qualite
     @FXML
     private void exportD(){
           Workbook workbook = new XSSFWorkbook();
-    Sheet sheet = workbook.createSheet("Espace Entreprise");
+// ...existing code...
+Sheet sheet = workbook.createSheet("Espace Entreprise");
 
-    // Créer la ligne d'en-têtes
-    Row headerRow = sheet.createRow(0);
-    String[] headers = {
-        "Date Contact", "Heure Contact", "Type Demande", "Type", "Objet Visite", 
-        "Nom et Prénom",  "Fixe", "GSM", "Email", "Accepte Envoi CCIS", "Site Web",
-        "Adresse Siege", "Ville/Commune", "Dénomination", "Code ICE", "Nom Représentant", "Forme Juridique",
-         "Secteur Activité", "Activité", "Nom Conseiller CCIS",
-        "Qualité Conseiller CCIS", 
-         "Date Départ", "Heure Départ"
-    };
+// Créer la ligne d'en-têtes
+Row headerRow = sheet.createRow(0);
+String[] headers = {
+    "Dénomination",
+    "Forme Juridique",
+    "Secteur Activité",
+    "Activité",
+    "Téléphone Fixe",
+    "Téléphone GSM",
+    "Adresse",
+    "Ville",
+    "Email",
+    "Date de contact",
+    "Heure de contact",
+    "Objet de la visite",
+    "Nom et Prénom",
+    "Accepte Envoi CCIS",
+    "Site Web",
+    "Nom du Représentant Légal",
+    "Nom et Prénom Conseiller CCIS",
+    "Qualité Conseiller CCIS",
+    "Date de Départ",
+    "Heure de Départ",
+    "Code ICE",
+    "Taille Entreprise",
+    "Statut",
+    "Recommandation"
+};
 
-    for (int i = 0; i < headers.length; i++) {
-        headerRow.createCell(i).setCellValue(headers[i]);
-    }
+for (int i = 0; i < headers.length; i++) {
+    headerRow.createCell(i).setCellValue(headers[i]);
+}
 
-    // Ajouter les données
-  List<EspaceEntreprise> demarches = dao.getAll();
-  int rowNum = 1;
-  for (EspaceEntreprise d : demarches) {
-      Row row = sheet.createRow(rowNum++);
-      row.createCell(0).setCellValue(d.getDateContact());
-      row.createCell(1).setCellValue(d.getHeureContact());
-        row.createCell(2).setCellValue(d.getObjetVisite());
-      row.createCell(3).setCellValue(d.getStatut());
-      row.createCell(4).setCellValue(d.getObjetVisite());
-      row.createCell(5).setCellValue(d.getNomPrenom());
-        row.createCell(6).setCellValue(d.getFixe());
-        row.createCell(7).setCellValue(d.getGsm());
-        row.createCell(8).setCellValue(d.getEmail());
-        row.createCell(9).setCellValue(d.getAccepteEnvoi());
-        row.createCell(10).setCellValue(d.getSiteWeb());
-        row.createCell(11).setCellValue(d.getAdresse());
-        row.createCell(12).setCellValue(d.getVille());
-        row.createCell(13).setCellValue(d.getDenomination());
-        row.createCell(14).setCellValue(d.getCodeICE());
-        row.createCell(15).setCellValue(d.getNomRepLegal());
-        row.createCell(16).setCellValue(d.getFormeJuridique());
-        row.createCell(17).setCellValue(d.getSecteurActivite());
-        row.createCell(18).setCellValue(d.getActivite());
-        row.createCell(19).setCellValue(d.getNomPrenomCCIS());
-        row.createCell(20).setCellValue(d.getQualiteCCIS());
-        row.createCell(21).setCellValue(d.getDateDepart()); 
-        row.createCell(22).setCellValue(d.getHeureDepart());
-  }
-
+// Ajouter les données
+List<EspaceEntreprise> demarches = dao.getAll();
+int rowNum = 1;
+for (EspaceEntreprise d : demarches) {
+    Row row = sheet.createRow(rowNum++);
+    row.createCell(0).setCellValue(d.getDenomination());
+    row.createCell(1).setCellValue(d.getFormeJuridique());
+    row.createCell(2).setCellValue(d.getSecteurActivite());
+    row.createCell(3).setCellValue(d.getActivite());
+    row.createCell(4).setCellValue(d.getFixe());
+    row.createCell(5).setCellValue(d.getGsm());
+    row.createCell(6).setCellValue(d.getAdresse());
+    row.createCell(7).setCellValue(d.getVille());
+    row.createCell(8).setCellValue(d.getEmail());
+    row.createCell(9).setCellValue(d.getDateContact());
+    row.createCell(10).setCellValue(d.getHeureContact());
+    row.createCell(11).setCellValue(d.getObjetVisite());
+    row.createCell(12).setCellValue(d.getNomPrenom());
+    row.createCell(13).setCellValue(d.getAccepteEnvoi());
+    row.createCell(14).setCellValue(d.getSiteWeb());
+    row.createCell(15).setCellValue(d.getNomRepLegal());
+    row.createCell(16).setCellValue(d.getNomPrenomCCIS());
+    row.createCell(17).setCellValue(d.getQualiteCCIS());
+    row.createCell(18).setCellValue(d.getDateDepart());
+    row.createCell(19).setCellValue(d.getHeureDepart());
+    row.createCell(20).setCellValue(d.getCodeICE());
+    row.createCell(21).setCellValue(d.getTailleEntreprise());
+    row.createCell(22).setCellValue(d.getStatut());
+    row.createCell(23).setCellValue(d.getRecommandation());
+}
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Enregistrer le fichier généré");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel Files", "*.xlsx"));
@@ -279,7 +300,16 @@ private void importFromExcel(File file) {
         // Define mapping from Excel column name to Java object setter
         Map<String, BiConsumer<EspaceEntreprise, String>> fieldMapping = new HashMap<>();
         fieldMapping.put("Dénomination", (d, v) -> d.setDenomination(v));
-        fieldMapping.put("Forme Juridique", (d, v) -> d.setFormeJuridique(v));
+        fieldMapping.put("Forme Juridique", (d, v) -> {
+            if ("PP(Personne physique)".equals(v) ) {
+            d.setFormeJuridique("PP (Personne physique)");
+            }else if("Autoentrepreneur".equals(v)){
+            d.setFormeJuridique("Auto-entrepreneur");
+            }
+             else {
+            d.setFormeJuridique(v);
+            }
+        });
         fieldMapping.put("Secteur Activité", (d, v) -> d.setSecteurActivite(v));
         fieldMapping.put("Activité", (d, v) -> d.setActivite(v));
         fieldMapping.put("Téléphone Fixe", (d, v) -> d.setFixe(v));
@@ -291,7 +321,15 @@ private void importFromExcel(File file) {
         fieldMapping.put("Heure de contact", (d, v) -> d.setHeureContact(v));
         fieldMapping.put("Objet de la visite", (d, v) -> d.setObjetVisite(v));
         fieldMapping.put("Nom et Prénom", (d, v) -> d.setNomPrenom(v));
-        fieldMapping.put("Accepte Envoi CCIS", (d, v) -> d.setAccepteEnvoi(v));
+        fieldMapping.put("Accepte Envoi CCIS",(d, v) -> {
+            if ("1".equals(v.trim())) {
+            d.setAccepteEnvoi("Oui");
+            } else if ("0".equals(v.trim())) {
+            d.setAccepteEnvoi("Non");
+            } else {
+            d.setAccepteEnvoi(v); // fallback to original value
+            }
+        });
         fieldMapping.put("Site Web", (d, v) -> d.setSiteWeb(v));
         fieldMapping.put("Nom du Représentant Légal", (d, v) -> d.setNomRepLegal(v));
        fieldMapping.put("Nom et Prénom Conseiller CCIS", (d, v) -> d.setNomPrenomCCIS(v));
@@ -301,6 +339,7 @@ private void importFromExcel(File file) {
         fieldMapping.put("Code ICE", (d, v) -> d.setCodeICE(v));
         fieldMapping.put("Taille Entreprise", (d, v) -> d.setTailleEntreprise(v));
         fieldMapping.put("Statut", (d, v) -> d.setStatut(v));
+        fieldMapping.put("Recommandation", (d, v) -> d.setRecommandation(v));
 
         for (int i = 1; i <= sheet.getLastRowNum(); i++) {
             Row row = sheet.getRow(i);
@@ -324,7 +363,7 @@ private void importFromExcel(File file) {
 
             new EspaceEntrepriseDAO().create(d);
         }
-
+loadEspaces();
         System.out.println("Importation terminée avec succès.");
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Succès");
@@ -339,21 +378,89 @@ private void importFromExcel(File file) {
 private String getCellAsString(Cell cell) {
     if (cell == null) return "";
     switch (cell.getCellType()) {
-        case STRING: return cell.getStringCellValue();
+        case STRING:
+            String str = cell.getStringCellValue();
+            // Try to parse Excel serial date if it looks like "45xxx"
+            if (str.matches("45\\d{3,}")) {
+                try {
+                    double excelDate = Double.parseDouble(str);
+                    Date date = DateUtil.getJavaDate(excelDate);
+                    return new SimpleDateFormat("yyyy-MM-dd").format(date);
+                } catch (Exception e) {
+                    // fallback to original string
+                }
+            }
+            return str;
         case NUMERIC:
             if (DateUtil.isCellDateFormatted(cell)) {
-                return cell.getDateCellValue().toString();
+                return new SimpleDateFormat("yyyy-MM-dd").format(cell.getDateCellValue());
             } else {
-                return String.valueOf(cell.getNumericCellValue());
+                double num = cell.getNumericCellValue();
+                // If the number looks like an Excel date serial (e.g., 45xxx)
+                if (num >= 45000 && num < 60000) {
+                    try {
+                        Date date = DateUtil.getJavaDate(num);
+                        return new SimpleDateFormat("yyyy-MM-dd").format(date);
+                    } catch (Exception e) {
+                        // fallback to numeric value
+                    }
+                }
+                // Remove .0 if integer
+                if (num == (long) num) {
+                    return String.valueOf((long) num);
+                }
+                return String.valueOf(num);
             }
-        case BOOLEAN: return String.valueOf(cell.getBooleanCellValue());
+        case BOOLEAN:
+            return String.valueOf(cell.getBooleanCellValue());
         case FORMULA:
             try {
-                return cell.getStringCellValue(); // or cell.getNumericCellValue() depending
+                return cell.getStringCellValue();
             } catch (IllegalStateException e) {
-                return String.valueOf(cell.getNumericCellValue());
+                try {
+                    double num = cell.getNumericCellValue();
+                    // Handle Excel date serial in formula result
+                    if (num >= 45000 && num < 60000) {
+                        Date date = DateUtil.getJavaDate(num);
+                        return new SimpleDateFormat("yyyy-MM-dd").format(date);
+                    }
+                    if (num == (long) num) {
+                        return String.valueOf((long) num);
+                    }
+                    return String.valueOf(num);
+                } catch (Exception ex) {
+                    return "";
+                }
             }
-        default: return "";
+        default:
+            return "";
+    }
+}
+@FXML
+private void ecraser(ActionEvent event) {
+    // Demande confirmation à l'utilisateur
+    Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+    confirm.setTitle("Confirmation");
+    confirm.setHeaderText("Voulez-vous vraiment écraser toutes les informations existantes ?");
+    confirm.setContentText("Cette action supprimera toutes les démarches et importera celles du fichier sélectionné.");
+    if (confirm.showAndWait().orElse(ButtonType.CANCEL) != ButtonType.OK) {
+        return;
+    }
+
+    // Supprimer toutes les informations
+    dao.deleteAll();
+
+    // Sélectionner le fichier à importer
+    FileChooser fileChooser = new FileChooser();
+    fileChooser.setTitle("Sélectionner un fichier Excel");
+    fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel Files", "*.xlsx"));
+    File file = fileChooser.showOpenDialog(null);
+
+    if (file != null) {
+        importFromExcel(file);
+        // Recharger la table
+        loadEspaces();
+        showAlert("Succès", "Les informations ont été écrasées et réimportées avec succès !");
     }
 }
 }

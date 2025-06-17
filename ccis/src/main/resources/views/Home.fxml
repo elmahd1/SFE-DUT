@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.geometry.Insets?>
 
 <BorderPane xmlns="http://javafx.com/javafx/21"
@@ -14,11 +14,10 @@
 
     <!-- Header -->
     <top>
-    
         <HBox alignment="CENTER_LEFT" spacing="20" BorderPane.alignment="CENTER">
-        <!-- Title -->
+            <!-- Title -->
             <Label text="Accueil" styleClass="home-title" />
-
+            
             <Region HBox.hgrow="ALWAYS" />
             <Label fx:id="dateTimeLabel" styleClass="date-time" />
         </HBox>
@@ -29,11 +28,20 @@
         <HBox spacing="40" alignment="CENTER">
             <!-- Démarche Administratif Card -->
             <VBox styleClass="dashboard-card, blue-card" spacing="10">
-                <VBox spacing="5">
-                    <Text text="Démarche Administratif" styleClass="card-title"/>
-                    <Label fx:id="demarcheCount" styleClass="count-blue"/>
-                    <Text text="Dossiers en cours de traitement" styleClass="card-description"/>
-                </VBox>
+                <!-- Image Header -->
+                <HBox alignment="CENTER" spacing="10">
+
+                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                        <Text text="Démarche Administrative" styleClass="card-title"/>
+                        <Label fx:id="demarcheCount" styleClass="count-blue"/>
+                        <Text text="Dossiers traités" styleClass="card-description"/>
+                    </VBox>
+                </HBox>
+                <ImageView fitWidth="250" fitHeight="250" preserveRatio="true">
+                        <image>
+                            <Image url="@/images/demarche.png" />
+                        </image>
+                    </ImageView>
                 <Region VBox.vgrow="ALWAYS" />
                 <HBox alignment="CENTER_RIGHT">
                     <Button text="Détails" styleClass="action-button" />
@@ -42,11 +50,20 @@
 
             <!-- Espace Entreprise Card -->
             <VBox styleClass="dashboard-card, orange-card" spacing="10">
-                <VBox spacing="5">
-                    <Text text="Espace Entreprise" styleClass="card-title"/>
-                    <Label fx:id="entrepriseCount" styleClass="count-orange"/>
-                    <Text text="Entreprises enregistrées" styleClass="card-description"/>
-                </VBox>
+                <!-- Image Header -->
+                <HBox alignment="CENTER" spacing="10">
+
+                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                        <Text text="Espace Entreprise" styleClass="card-title"/>
+                        <Label fx:id="entrepriseCount" styleClass="count-orange"/>
+                        <Text text="Entreprises accueillies" styleClass="card-description"/>
+                    </VBox>
+                </HBox>
+                <ImageView fitWidth="250" fitHeight="250" preserveRatio="true">
+                        <image>
+                            <Image url="@/images/entreprise.png" />
+                        </image>
+                    </ImageView>
                 <Region VBox.vgrow="ALWAYS" />
                 <HBox alignment="CENTER_RIGHT">
                     <Button text="Détails" styleClass="action-button-secondary" />
@@ -55,11 +72,20 @@
 
             <!-- Prospection Card -->
             <VBox styleClass="dashboard-card, green-card" spacing="10">
-                <VBox spacing="5">
-                    <Text text="Prospection" styleClass="card-title"/>
-                    <Label fx:id="prospectionCount" styleClass="count-green"/>
-                    <Text text="Entreprises en prospection" styleClass="card-description"/>
-                </VBox>
+                <!-- Image Header -->
+                <HBox alignment="CENTER" spacing="10">
+
+                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                        <Text text="Prospection nationale" styleClass="card-title"/>
+                        <Label fx:id="prospectionCount" styleClass="count-green"/>
+                        <Text text="Entreprises en prospection" styleClass="card-description"/>
+                    </VBox>
+                </HBox>
+                <ImageView fitWidth="250" fitHeight="250" preserveRatio="true">
+                        <image>
+                            <Image url="@/images/map2.jpg" />
+                        </image>
+                    </ImageView>
                 <Region VBox.vgrow="ALWAYS" />
                 <HBox alignment="CENTER_RIGHT">
                     <Button text="Détails" styleClass="action-button-green" />
@@ -67,22 +93,11 @@
             </VBox>
         </HBox>
     </center>
-
-    <!-- Quick Actions and Footer -->
+    
     <bottom>
         <VBox spacing="10" BorderPane.alignment="BOTTOM_CENTER">
-            <!-- Quick Actions Section -->
-            <!-- <VBox spacing="15">
-                <Text text="Actions Rapides" styleClass="section-header"/>
-                <HBox spacing="20">
-                    <Button text="Nouvelle Démarche" styleClass="action-button" />
-                    <Button text="Nouvelle Entreprise" styleClass="action-button-secondary" />
-                    <Button text="Rapports" styleClass="action-button" />
-                </HBox>
-            </VBox> -->
-            <!-- Status Footer -->
             <HBox styleClass="footer" alignment="BOTTOM_CENTER">
-                <Label text="CCIS - Système de Gestion © 2025" styleClass="status-label"/>
+                <Label text="CCIS Marrakech Safi - Système de Gestion DA - EE - PN © 2025" styleClass="status-label"/>
             </HBox>
         </VBox>
     </bottom>

@@ -6,6 +6,9 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.AbstractMap;
+
 public class DemarcheAdministratifDao {
 
     // Create (Insert)
@@ -244,5 +247,96 @@ preparedStatement.setDouble(25, formattedMontant);
         return count;
     }
 
- 
+ // Table 2: Nombre de ressortissants par objet de visite
+public List<Map.Entry<String, Integer>> getObjetVisiteCounts() {
+    List<Map.Entry<String, Integer>> result = new ArrayList<>();
+    String sql = "SELECT type_demande, COUNT(*) FROM demarche_administratif GROUP BY type_demande";
+    try (Connection conn = JDBCConnection.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql);
+         ResultSet rs = stmt.executeQuery()) {
+        while (rs.next()) {
+            result.add(new AbstractMap.SimpleEntry<>(rs.getString(1), rs.getInt(2)));
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return result;
+}
+
+// Table 3: Nombre de demandes acceptées par type de document
+public List<Map.Entry<String, Integer>> getTypeDocumentCounts() {
+    List<Map.Entry<String, Integer>> result = new ArrayList<>();
+    String sql = "SELECT objet_visite, COUNT(*) FROM demarche_administratif GROUP BY objet_visite";
+    try (Connection conn = JDBCConnection.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql);
+         ResultSet rs = stmt.executeQuery()) {
+        while (rs.next()) {
+            result.add(new AbstractMap.SimpleEntry<>(rs.getString(1), rs.getInt(2)));
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return result;
+}
+
+// Table 4: Etat de traitement des demandes (acceptées/rejetées)
+public List<Map.Entry<String, Integer>> getEtatTraitementCounts() {
+    List<Map.Entry<String, Integer>> result = new ArrayList<>();
+    String sql = "SELECT suite_accordee_commande, COUNT(*) FROM demarche_administratif GROUP BY suite_accordee_commande";
+    try (Connection conn = JDBCConnection.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql);
+         ResultSet rs = stmt.executeQuery()) {
+        while (rs.next()) {
+            result.add(new AbstractMap.SimpleEntry<>(rs.getString(1), rs.getInt(2)));
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return result;
+}
+
+// Table 5: Recettes générées par document administratif
+public List<Map.Entry<String, Float>> getRecettesParDocument() {
+    List<Map.Entry<String, Float>> result = new ArrayList<>();
+    String sql = "SELECT objet_visite, SUM(montant) FROM demarche_administratif GROUP BY objet_visite";
+    try (Connection conn = JDBCConnection.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql);
+         ResultSet rs = stmt.executeQuery()) {
+        while (rs.next()) {
+            result.add(new AbstractMap.SimpleEntry<>(rs.getString(1), rs.getFloat(2)));
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return result;
+}
+public void deleteAll() {
+    String sql = "DELETE FROM demarche_administratif";
+    try (Connection conn = JDBCConnection.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+        stmt.executeUpdate();
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+public int countByType(String type) {
+    String sql = "SELECT COUNT(*) FROM demarche_administratif WHERE type_demande = ?";
+    try (Connection conn = JDBCConnection.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+        stmt.setString(1, type);
+        ResultSet rs = stmt.executeQuery();
+        if (rs.next()) return rs.getInt(1);
+    } catch (Exception e) { e.printStackTrace(); }
+    return 0;
+}
+
+public float sumMontant() {
+    String sql = "SELECT SUM(montant) FROM demarche_administratif";
+    try (Connection conn = JDBCConnection.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql);
+         ResultSet rs = stmt.executeQuery()) {
+        if (rs.next()) return rs.getFloat(1);
+    } catch (Exception e) { e.printStackTrace(); }
+    return 0f;
+}
 }

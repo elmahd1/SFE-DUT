@@ -23,8 +23,8 @@
                 <ColumnConstraints minWidth="200"/> -->
             </columnConstraints>
 <Label text="dates de début et fin de la période couverte" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-<DatePicker fx:id="date1" GridPane.columnIndex="1" GridPane.rowIndex="3" promptText="debut de la periode couverte"/>
-<DatePicker fx:id="date2" GridPane.columnIndex="2" GridPane.rowIndex="3" promptText="fin de la periode couverte"/>
+<DatePicker fx:id="date1" GridPane.columnIndex="0" GridPane.rowIndex="3" promptText="debut de la periode couverte"/>
+<DatePicker fx:id="date2" GridPane.columnIndex="1" GridPane.rowIndex="3" promptText="fin de la periode couverte"/>
 <DatePicker fx:id="date3" GridPane.columnIndex="0" GridPane.rowIndex="4" promptText="Date d’élaboration"/>
 <Label prefWidth="300" text="SUIVI DE PERFORMANCE Back Office" GridPane.columnIndex="0" GridPane.rowIndex="5" styleClass="title-label"/>
 <TableView prefHeight="200" prefWidth="900" fx:id="bo" GridPane.columnIndex="0" GridPane.rowIndex="6" styleClass="table-view" editable="true">
@@ -33,7 +33,7 @@
         <TableColumn fx:id="col2" text="Fréquence" prefWidth="150"/>
         <TableColumn fx:id="col3" text="Objectif" prefWidth="150"/>
         <TableColumn fx:id="col4" text="Tolérance" prefWidth="150"/>
-        <TableColumn fx:id="col5" text="Méthode de calcul" prefWidth="150"/>
+        <TableColumn fx:id="col5" text="Réalisations" prefWidth="150"/>
         <TableColumn fx:id="col6" text="Responsabilité et suivi" prefWidth="150"/>
     </columns>
 </TableView>
@@ -60,7 +60,7 @@
 </BarChart>
 
 <Label text="Indicateurs d’activité de l'espace entreprise" GridPane.columnIndex="0" GridPane.rowIndex="10" styleClass="title-label"/>
-<Label prefWidth="300" text="SUIVI DE PERFORMANCE Back Office" GridPane.columnIndex="0" GridPane.rowIndex="11" styleClass="title-label"/>
+<Label prefWidth="300" text="SUIVI DE PERFORMANCE Front Office" GridPane.columnIndex="0" GridPane.rowIndex="11" styleClass="title-label"/>
 
 <TableView prefHeight="180" prefWidth="900" fx:id="fo" GridPane.columnIndex="0" GridPane.rowIndex="12" styleClass="table-view" editable="true">
     <columns>
@@ -68,7 +68,7 @@
         <TableColumn fx:id="col12" text="Fréquence" prefWidth="150"/>
         <TableColumn fx:id="col13" text="Objectif n-1" prefWidth="150"/>
         <TableColumn fx:id="col14" text="Tolérance" prefWidth="150"/>
-        <TableColumn fx:id="col15" text="Méthode de calcul" prefWidth="150"/>
+        <TableColumn fx:id="col15" text="Réalisations" prefWidth="150"/>
         <TableColumn fx:id="col16" text="Responsabilité" prefWidth="150"/>
     </columns>
 </TableView>
@@ -93,6 +93,6 @@
 </BarChart>
 
 <TextArea fx:id="rapportTextArea" promptText="Analyse des donnees" GridPane.columnSpan="4" GridPane.rowIndex="15" wrapText="true" editable="true" prefHeight="200"/>
-<Button onAction="generateRap" text="Générer le rapport" GridPane.columnIndex="0" GridPane.rowIndex="16"/>        </GridPane>
+<Button onAction="#generateRap" text="Générer le rapport" GridPane.columnIndex="0" GridPane.rowIndex="16"/>        </GridPane>
     </content>
 </ScrollPane>

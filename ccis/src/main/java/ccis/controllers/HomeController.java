@@ -25,7 +25,7 @@ public class HomeController {
         java.nio.file.Path baseDir = java.nio.file.Paths.get("C:/fichiers application ccis");
         if (!java.nio.file.Files.exists(baseDir)) {
             try {
-                java.nio.file.Files.createDirectories(baseDir.resolve("demarche administrative"));
+                java.nio.file.Files.createDirectories(baseDir.resolve("demarche administratif"));
                 java.nio.file.Files.createDirectories(baseDir.resolve("espace entreprise"));
                 java.nio.file.Files.createDirectories(baseDir.resolve("prospection"));
             } catch (IOException e) {

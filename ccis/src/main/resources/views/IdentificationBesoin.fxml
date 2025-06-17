@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<ScrollPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="ccis.controllers.IdentificationBesoinController"
+            fitToWidth="true"
+            hbarPolicy="NEVER"
+            vbarPolicy="AS_NEEDED"
+            stylesheets="@/styles/fiche.css"
+            prefHeight="600.0" prefWidth="1250.0">
+    <content>
+     <GridPane hgap="12" vgap="8" style="-fx-padding: 16;">
+    <columnConstraints>
+        <ColumnConstraints minWidth="180"/>
+        <ColumnConstraints minWidth="300"/>
+        <ColumnConstraints minWidth="180"/>
+        <ColumnConstraints minWidth="300"/>
+    </columnConstraints>
+
+    <!-- Titre -->
+    <Label text="Questionnaire d'identification des besoins M6A1" styleClass="form-title"
+           GridPane.columnSpan="4" GridPane.rowIndex="0" GridPane.columnIndex="0" style="-fx-font-size: 30px; -fx-alignment: center;"/>
+
+    <!-- Informations de l’entreprise -->
+    <Label text="Informations de l’entreprise " styleClass="form-title" GridPane.rowIndex="1" GridPane.columnIndex="0" GridPane.columnSpan="4"/>
+    <Label text="Nom de l'entreprise :" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+    <TextField fx:id="nom_entreprise" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+    <Label text="اسم الشركة :" GridPane.rowIndex="2" GridPane.columnIndex="2"/>
+    <TextField fx:id="اسمالشركة" GridPane.rowIndex="2" GridPane.columnIndex="3"/>
+
+    <Label text="Adresse :" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+    <TextField fx:id="adresse" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+    <Label text="العنوان :" GridPane.rowIndex="3" GridPane.columnIndex="2"/>
+    <TextField fx:id="العنوان" GridPane.rowIndex="3" GridPane.columnIndex="3"/>
+
+    <Label text="Téléphone :" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+    <TextField fx:id="telephone1" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+    <Label text="الهاتف :" GridPane.rowIndex="4" GridPane.columnIndex="2"/>
+    <TextField fx:id="telephone_ar" GridPane.rowIndex="4" GridPane.columnIndex="3"/>
+
+    <Label text="E-mail :" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+    <TextField fx:id="email1" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+    <Label text="البريد الإلكتروني :" GridPane.rowIndex="5" GridPane.columnIndex="2"/>
+    <TextField fx:id="email_ar" GridPane.rowIndex="5" GridPane.columnIndex="3"/>
+
+    <!-- Personne à contacter -->
+    <Label text="Personne à contacter " styleClass="form-title" GridPane.rowIndex="6" GridPane.columnIndex="0" GridPane.columnSpan="4"/>
+    <Label text="Nom et prénom :" GridPane.rowIndex="7" GridPane.columnIndex="0"/>
+    <TextField fx:id="nom_prenom" GridPane.rowIndex="7" GridPane.columnIndex="1"/>
+    <Label text="اسم الكامل :" GridPane.rowIndex="7" GridPane.columnIndex="2"/>
+    <TextField fx:id="اسمالكامل" GridPane.rowIndex="7" GridPane.columnIndex="3"/>
+
+    <Label text="Fonction :" GridPane.rowIndex="8" GridPane.columnIndex="0"/>
+    <TextField fx:id="fonction" GridPane.rowIndex="8" GridPane.columnIndex="1"/>
+    <Label text="الوظيفة :" GridPane.rowIndex="8" GridPane.columnIndex="2"/>
+    <TextField fx:id="الوظيفة" GridPane.rowIndex="8" GridPane.columnIndex="3"/>
+
+    <Label text="Téléphone :" GridPane.rowIndex="9" GridPane.columnIndex="0"/>
+    <TextField fx:id="telephone2" GridPane.rowIndex="9" GridPane.columnIndex="1"/>
+    <Label text="الهاتف :" GridPane.rowIndex="9" GridPane.columnIndex="2"/>
+    <TextField fx:id="telephone2_ar" GridPane.rowIndex="9" GridPane.columnIndex="3"/>
+
+    <Label text="E-mail :" GridPane.rowIndex="10" GridPane.columnIndex="0"/>
+    <TextField fx:id="email2" GridPane.rowIndex="10" GridPane.columnIndex="1"/>
+    <Label text="البريد الإلكتروني :" GridPane.rowIndex="10" GridPane.columnIndex="2"/>
+    <TextField fx:id="email2_ar" GridPane.rowIndex="10" GridPane.columnIndex="3"/>
+
+    <!-- Actions de prospection -->
+    <Label text="Actions de prospection" styleClass="form-title" GridPane.rowIndex="11" GridPane.columnIndex="0" GridPane.columnSpan="4"/>
+    <Label text="Avez-vous déjà réalisé des actions de prospection nationale ou internationale?" GridPane.rowIndex="12" GridPane.columnIndex="0"/>
+    <CheckBox fx:id="actionoui" text="Oui" GridPane.rowIndex="12" GridPane.columnIndex="1"/>
+    <CheckBox fx:id="actionnon" text="Non" GridPane.rowIndex="12" GridPane.columnIndex="2"/>
+
+    <Label text="Si oui, quelles régions/pays ?" GridPane.rowIndex="13" GridPane.columnIndex="0"/>
+    <TextField fx:id="action" GridPane.rowIndex="13" GridPane.columnIndex="1" GridPane.columnSpan="3"/>
+
+    <Label text="Outils/canaux utilisés :" GridPane.rowIndex="14" GridPane.columnIndex="0"/>
+    <CheckBox fx:id="pd" text="Prospection directe" GridPane.rowIndex="14" GridPane.columnIndex="1"/>
+    <CheckBox fx:id="psf" text="Salons/foires" GridPane.rowIndex="14" GridPane.columnIndex="2"/>
+    <CheckBox fx:id="pel" text="Plateforme en ligne" GridPane.rowIndex="14" GridPane.columnIndex="3"/>
+    <CheckBox fx:id="rc" text="Réseaux commerciaux" GridPane.rowIndex="15" GridPane.columnIndex="1"/>
+    <CheckBox fx:id="pc" text="Partenariat commerciaux" GridPane.rowIndex="15" GridPane.columnIndex="2"/>
+    <CheckBox fx:id="autre" text="Autre" GridPane.rowIndex="15" GridPane.columnIndex="3"/>
+    <TextField fx:id="autrep" promptText="Précisez" GridPane.rowIndex="16" GridPane.columnIndex="1" GridPane.columnSpan="3"/>
+
+    <!-- Motivations -->
+    <Label text="Motivations pour la prospection :" GridPane.rowIndex="17" GridPane.columnIndex="0"/>
+    <CheckBox fx:id="m1" text="Augmenter le portefeuille clients" GridPane.rowIndex="17" GridPane.columnIndex="1"/>
+    <CheckBox fx:id="m2" text="Atteindre de nouveaux marchés" GridPane.rowIndex="17" GridPane.columnIndex="2"/>
+    <CheckBox fx:id="m3" text="Augmenter la visibilité" GridPane.rowIndex="17" GridPane.columnIndex="3"/>
+    <CheckBox fx:id="m4" text="Diversifier les clients" GridPane.rowIndex="18" GridPane.columnIndex="1"/>
+    <CheckBox fx:id="m5" text="Autre" GridPane.rowIndex="18" GridPane.columnIndex="2"/>
+    <TextField fx:id="m5p" promptText="Précisez" GridPane.rowIndex="18" GridPane.columnIndex="3"/>
+
+    <Label text="Marchés à prospecter :" GridPane.rowIndex="19" GridPane.columnIndex="0"/>
+    <TextField fx:id="marche" GridPane.rowIndex="19" GridPane.columnIndex="1" GridPane.columnSpan="3"/>
+
+    <Label text="Commentaires / Suggestions :" GridPane.rowIndex="20" GridPane.columnIndex="0"/>
+    <TextArea fx:id="comentaire" GridPane.rowIndex="20" GridPane.columnIndex="1" GridPane.columnSpan="3" prefRowCount="2"/>
+
+    <!-- Bouton Générer -->
+    <Button text="Générer le fichier" onAction="#generate" GridPane.rowIndex="21" GridPane.columnIndex="3"/>
+</GridPane>
+    </content>
+</ScrollPane>

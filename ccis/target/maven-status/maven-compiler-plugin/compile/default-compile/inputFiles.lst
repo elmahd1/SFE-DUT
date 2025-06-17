@@ -3,6 +3,7 @@ C:\SFE\SFE-DUT\ccis\src\main\java\ccis\config\JDBCConnection.java
 C:\SFE\SFE-DUT\ccis\src\main\java\ccis\controllers\DemarcheFicheController.java
 C:\SFE\SFE-DUT\ccis\src\main\java\ccis\controllers\EADController.java
 C:\SFE\SFE-DUT\ccis\src\main\java\ccis\controllers\EAEController.java
+C:\SFE\SFE-DUT\ccis\src\main\java\ccis\controllers\EnqueteSatisfactionController.java
 C:\SFE\SFE-DUT\ccis\src\main\java\ccis\controllers\ESDController.java
 C:\SFE\SFE-DUT\ccis\src\main\java\ccis\controllers\ESEController.java
 C:\SFE\SFE-DUT\ccis\src\main\java\ccis\controllers\EspaceFicheController.java
@@ -10,6 +11,8 @@ C:\SFE\SFE-DUT\ccis\src\main\java\ccis\controllers\FicheProspectionController.ja
 C:\SFE\SFE-DUT\ccis\src\main\java\ccis\controllers\GrapheDemarcheController.java
 C:\SFE\SFE-DUT\ccis\src\main\java\ccis\controllers\GrapheEspaceController.java
 C:\SFE\SFE-DUT\ccis\src\main\java\ccis\controllers\HomeController.java
+C:\SFE\SFE-DUT\ccis\src\main\java\ccis\controllers\IdentificationBesoinController.java
+C:\SFE\SFE-DUT\ccis\src\main\java\ccis\controllers\IndicateurPerformanceController.java
 C:\SFE\SFE-DUT\ccis\src\main\java\ccis\controllers\MainController.java
 C:\SFE\SFE-DUT\ccis\src\main\java\ccis\controllers\MenuController.java
 C:\SFE\SFE-DUT\ccis\src\main\java\ccis\controllers\RapportDemarcheController.java

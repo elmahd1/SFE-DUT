@@ -37,7 +37,30 @@
 
             <!-- Objet Visite -->
             <Label text="Objet Visite" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-            <VBox fx:id="objetVisiteContainer" spacing="5" GridPane.rowIndex="3" GridPane.columnIndex="1" GridPane.columnSpan="3"/>
+            <VBox  spacing="5" GridPane.rowIndex="3" GridPane.columnIndex="1" GridPane.columnSpan="3">
+    <children>
+        <HBox spacing="10">
+            <CheckBox fx:id="objet1" text="Attestation professionnelle"/>
+            <TextField fx:id="m1" promptText="Montant" prefWidth="100"/>
+        </HBox>
+        <HBox spacing="10">
+            <CheckBox fx:id="objet2" text="Carte professionnelle"/>
+            <TextField fx:id="m2" promptText="Montant" prefWidth="100"/>
+        </HBox>
+        <HBox spacing="10">
+            <CheckBox fx:id="objet3" text="Visa des documents commerciaux"/>
+            <TextField fx:id="m3" promptText="Montant" prefWidth="100"/>
+        </HBox>
+        <HBox spacing="10">
+            <CheckBox fx:id="objet4" text="Visa des factures"/>
+            <TextField fx:id="m4" promptText="Montant" prefWidth="100"/>
+        </HBox>
+        <HBox spacing="10">
+            <CheckBox fx:id="objet5" text="Certificat d’origine"/>
+            <TextField fx:id="m5" promptText="Montant" prefWidth="100"/>
+        </HBox>
+    </children>
+            </VBox>
 
             <Label text ="IDENTIFICATION DU DEMANDEUR :" styleClass="form-title" GridPane.rowIndex="4" GridPane.columnSpan="1"/>
 
@@ -82,7 +105,7 @@
             <Label text="Date de dépôt" GridPane.rowIndex="13" GridPane.columnIndex="0"/>
             <DatePicker fx:id="dateDepot" prefWidth="180" GridPane.rowIndex="13" GridPane.columnIndex="1"/>
             <Label text="Heure de dépôt" GridPane.rowIndex="13" GridPane.columnIndex="2"/>
-            <TextField fx:id="heureDepot" prefWidth="180" GridPane.rowIndex="13" GridPane.columnIndex="3"/>
+            <TextField fx:id="heureDepot" promptText="HH:MM" prefWidth="180" GridPane.rowIndex="13" GridPane.columnIndex="3"/>
 
             <!-- Secteur d'activité / Activité -->
             <Label text="Secteur d'activité" GridPane.rowIndex="14" GridPane.columnIndex="0"/>
@@ -110,7 +133,7 @@
             <Label text="Date de délivrance" GridPane.rowIndex="18" GridPane.columnIndex="0"/>
             <DatePicker fx:id="dateDelivrance" prefWidth="180" GridPane.rowIndex="18" GridPane.columnIndex="1"/>
             <Label text="Heure de délivrance" GridPane.rowIndex="18" GridPane.columnIndex="2"/>
-            <TextField fx:id="heureDelivrance" prefWidth="180" GridPane.rowIndex="18" GridPane.columnIndex="3"/>
+            <TextField fx:id="heureDelivrance" promptText="HH:MM" prefWidth="180" GridPane.rowIndex="18" GridPane.columnIndex="3"/>
 
             <!-- Buttons -->
             <HBox spacing="10" alignment="CENTER" GridPane.rowIndex="19" GridPane.columnIndex="0" GridPane.columnSpan="4">

@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,7 +39,6 @@ import ccis.dao.EspaceEntrepriseDAO;
 
     @FXML private DatePicker dateContact;
     @FXML private TextField heureContact;
-    @FXML private ComboBox<String> objetVisite;
     @FXML private CheckBox accepteEnvoiCCIS;
     @FXML private TextField nomPrenom;
     @FXML private TextField telephoneFix;
@@ -58,8 +58,12 @@ import ccis.dao.EspaceEntrepriseDAO;
     @FXML private TextField heureDepart;
     @FXML private ComboBox<String> statut;
     @FXML private TextField codeICE;
-    @FXML private TextField tailleEntreprise;
-
+    @FXML private ComboBox<String> tailleEntreprise;
+    @FXML private CheckBox objet1;
+    @FXML private CheckBox objet2;
+    @FXML private CheckBox objet3;
+    @FXML private CheckBox objet4;
+    @FXML private TextField recommandation;
 
 
  private DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -84,7 +88,8 @@ import ccis.dao.EspaceEntrepriseDAO;
             "PP (Personne physique)",
             "Auto-entrepreneur",
             "SARL", 
-            "SA"
+            "SA",
+            "Autre"
             
         );
         formeJuridique.setItems(formeJuridiqueOptions);
@@ -93,8 +98,7 @@ import ccis.dao.EspaceEntrepriseDAO;
                 // Statut ComboBox
                 ObservableList<String> statutOptions = FXCollections.observableArrayList(
                     "Entrepreneur", 
-                    "Porteur de projet",
-                    "Autre"
+                    "Porteur de projet"
                 );
                 statut.setItems(statutOptions);
                 statut.setEditable(true);
@@ -107,22 +111,21 @@ import ccis.dao.EspaceEntrepriseDAO;
         );
         secteurActivite.setItems(secteurActiviteOptions);
 
- 
-
-        
-     
-
         ObservableList<String> objetVisiteList = FXCollections.observableArrayList(
             "Programmes d'appui / aide aux entreprises",
             "Demarches administratives",
             "Annuaire des entreprises",
             "Repertoire de contact des administrations"
         );
-        objetVisite.setItems(objetVisiteList);
         accepteEnvoiCCIS.setSelected(true);
         dateContact.setValue(java.time.LocalDate.now());
         dateDepart.setValue(java.time.LocalDate.now());
-
+tailleEntreprise.setItems(FXCollections.observableArrayList(
+            "Micro",
+            "Petite",
+            "Moyenne",
+            "Grande"
+        ));
         dateContact.valueProperty().addListener((observable, oldValue, newValue) -> {
             dateDepart.setValue(newValue); 
         }); 
@@ -144,8 +147,8 @@ import ccis.dao.EspaceEntrepriseDAO;
             showError(heureContact, "L'heure de contact est requise");
             isValid = false;
         }
-        if (objetVisite.getValue() == null) {
-            showError(objetVisite, "L'objet de la visite est requis");
+        if (!objet1.isSelected() && !objet2.isSelected() && !objet3.isSelected() && !objet4.isSelected()) {
+            showError(objet1, "L'objet de la visite est requis");
             isValid = false;
         }
         if (nomPrenom.getText().isEmpty()) {
@@ -188,7 +191,7 @@ import ccis.dao.EspaceEntrepriseDAO;
             showError(statut, "Le statut est requis");
             isValid = false;
         }
-        if (tailleEntreprise.getText().isEmpty()) {
+        if (tailleEntreprise.getValue() == null || tailleEntreprise.getValue().isEmpty()) {
             showError(tailleEntreprise, "La taille de l'entreprise est requise");
             isValid = false;
         }
@@ -196,13 +199,19 @@ import ccis.dao.EspaceEntrepriseDAO;
             showError(dateDepart, "La date de départ est requise");
             isValid = false;
         }
+    // Récupérer les objets de visite cochés
+    List<String> objetsVisite = new ArrayList<>();
+    if (objet1.isSelected()) objetsVisite.add(objet1.getText());
+    if (objet2.isSelected()) objetsVisite.add(objet2.getText());
+    if (objet3.isSelected()) objetsVisite.add(objet3.getText());
+    if (objet4.isSelected()) objetsVisite.add(objet4.getText());
 
        
 if (isValid) {
     try {
 
         EspaceEntreprise espace = new EspaceEntreprise();
-        
+      for (String objet : objetsVisite) {  
         // Required fields validation
         if (dateContact.getValue() == null) {
             throw new IllegalArgumentException("La date de contact est obligatoire");
@@ -224,9 +233,8 @@ if (isValid) {
             throw new IllegalArgumentException("Format d'email invalide");
         }
         espace.setEmail(email.getText());
-        
+        espace.setObjetVisite(objet);
         // Set other fields with null checks
-        espace.setObjetVisite(objetVisite.getValue() != null ? objetVisite.getValue() : "");
         espace.setFixe(telephoneFix.getText() != null ? telephoneFix.getText() : "");
         espace.setGsm(telephoneGSM.getText() != null ? telephoneGSM.getText() : "");
         espace.setSiteWeb(siteweb.getText() != null ? siteweb.getText() : "");
@@ -248,10 +256,10 @@ if (isValid) {
         espace.setAccepteEnvoi(accepteEnvoiCCIS.isSelected() ? "Oui" : "Non");
         espace.setStatut(null != statut.getValue() ? statut.getValue() : "");
         espace.setCodeICE(null != codeICE.getText() ? codeICE.getText() : "");
-        espace.setTailleEntreprise(null != tailleEntreprise.getText() ? tailleEntreprise.getText() : "");
-
+        espace.setTailleEntreprise(null != tailleEntreprise.getValue() ? tailleEntreprise.getValue() : "");
+espace.setRecommandation(recommandation.getText() != null ? recommandation.getText() : "");
        dao.create(espace);
-       
+    }
           // Show success message
           Alert alert = new Alert(Alert.AlertType.INFORMATION);
           alert.setTitle("Succès");
@@ -280,7 +288,10 @@ else {
         private void clearForm() {
             dateContact.setValue(null);
             heureContact.clear();
-            objetVisite.getSelectionModel().clearSelection();
+            objet1.setSelected(false);
+            objet2.setSelected(false);
+            objet3.setSelected(false);
+            objet4.setSelected(false);
             accepteEnvoiCCIS.setSelected(false);
             nomPrenom.clear();
             telephoneFix.clear();
@@ -406,7 +417,7 @@ public void handlePrint() {
         
         // Open the generated PDF file
          if (Desktop.isDesktopSupported()) {
-             Desktop.getDesktop().print(outputPdf);
+             Desktop.getDesktop().open(outputPdf);
          }
          else {
              // Show success message
@@ -497,10 +508,10 @@ private Map<String, String> createReplacementMap() {
      // Fill the Word template with data
         replacements.put("{heure_contact}", heureContact.getText() != null ? heureContact.getText() : "");
         replacements.put("{date_contact}", dateContact.getValue() != null ? dateContact.getValue().toString() : "");
-        replacements.put("{objet1}", caseACocher("Programmes d'appui / aide aux entreprises".equals(objetVisite.getValue())));
-        replacements.put("{objet2}", caseACocher("Demarches administratives".equals(objetVisite.getValue())));
-        replacements.put("{objet3}", caseACocher("Annuaire des entreprises".equals(objetVisite.getValue())));
-        replacements.put("{objet4}", caseACocher("Repertoire de contact des administrations".equals(objetVisite.getValue())));
+replacements.put("{objet1}", caseACocher(objet1.isSelected()));
+replacements.put("{objet2}", caseACocher(objet2.isSelected()));
+replacements.put("{objet3}", caseACocher(objet3.isSelected()));
+replacements.put("{objet4}", caseACocher(objet4.isSelected()));
         replacements.put("{nom_prenom}", nomPrenom.getText() != null ? nomPrenom.getText() : "");
         replacements.put("{status1}", caseACocher("Entrepreneur".equals(statut.getValue())));
         replacements.put("{status2}", caseACocher("Porteur de projet".equals(statut.getValue())));
@@ -520,9 +531,9 @@ private Map<String, String> createReplacementMap() {
         replacements.put("{forme3}", caseACocher("SARL".equals(formeJuridique.getValue())));
         replacements.put("{forme4}", caseACocher("SA".equals(formeJuridique.getValue())));
         replacements.put("{autre_forme_juridique}", "Autre".equals(formeJuridique.getValue()) ? formeJuridique.getEditor().getText() : "");
-        replacements.put("{taille1}", caseACocher("Petite".equals(tailleEntreprise.getText()) || "Micro".equals(tailleEntreprise.getText())));
-        replacements.put("{taille2}", caseACocher("Moyenne".equals(tailleEntreprise.getText())));
-        replacements.put("{taille3}", caseACocher("Grande".equals(tailleEntreprise.getText())));
+        replacements.put("{taille1}", caseACocher("Petite".equals(tailleEntreprise.getValue()) || "Micro".equals(tailleEntreprise.getValue())));
+        replacements.put("{taille2}", caseACocher("Moyenne".equals(tailleEntreprise.getValue())));
+        replacements.put("{taille3}", caseACocher("Grande".equals(tailleEntreprise.getValue())));
         replacements.put("{secteur1}", caseACocher("Industrie".equals(secteurActivite.getValue())));
         replacements.put("{secteur2}", caseACocher("Commerce".equals(secteurActivite.getValue())));
         replacements.put("{secteur3}", caseACocher("Services".equals(secteurActivite.getValue())));

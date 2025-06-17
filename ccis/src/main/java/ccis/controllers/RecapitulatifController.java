@@ -245,7 +245,7 @@ fillTableWithProspections(doc, prospections);
         
         // Open the generated PDF file
          if (Desktop.isDesktopSupported()) {
-             Desktop.getDesktop().print(outputPdf);
+             Desktop.getDesktop().open(outputPdf);
          }else {
                 showAlert("Exportation réussie", "Le document a été généré avec succès." + outputPdf.getAbsolutePath());
          }
